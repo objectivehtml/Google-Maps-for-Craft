@@ -1,0 +1,12 @@
+<!doctype {{doctype}}>
+<html>
+	<body>
+		{{#if message}}
+		<div>Hello world! {{message}}</div>
+		{{/if}}
+
+		{{#each messages}}
+		<p>{{.}}</p>
+		{{/each}}
+	</body>
+</html>

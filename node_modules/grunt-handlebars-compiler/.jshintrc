@@ -1,0 +1,21 @@
+{
+	"passfail": false,
+	"maxerr": 100,
+	"predef": [],
+	"browser": false,
+	"node": true,
+	"devel": true,
+	"es5": true,
+	"asi": false,
+	"curly": true,
+	"eqeqeq": true,
+	"eqnull": true,
+	"evil": false,
+	"immed": true,
+	"latedef": false,
+	"newcap": true,
+	"noempty": true,
+	"onevar": true,
+	"trailing": false,
+	"indent": 4
+}

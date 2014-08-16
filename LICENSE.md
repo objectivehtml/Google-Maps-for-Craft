@@ -1,6 +1,6 @@
 # Google Maps for Craft License Agreement
 
-This license is a legal agreement between you and Objective HTML for the use of Google Maps for Craft (v3.x and higher) Software (the "Software"). By downloading any version of Google Maps for Craft you agree to be bound by the terms and conditions of this license. Objective HTML reserves the right to alter this agreement at any time, for any reason, without notice.
+This license is a legal agreement between you and Objective HTML for the use of Google Maps for Craft Software (the "Software"). By downloading any version of Google Maps for Craft you agree to be bound by the terms and conditions of this license. Objective HTML reserves the right to alter this agreement at any time, for any reason, without notice.
 
 Google Maps for Craft is not affiliated with Google, Inc., Craft, or Pixel & Tonic, Inc in any way. The Software does not claim ownership of Google Maps or any of the associated products. The Software is merely a way to use Google Maps on your Craft site.
 
@@ -14,9 +14,7 @@ Users may use the Software for any personal, commercial, and non-commercial purp
 
 All users must also comply the terms of services of Google Maps API.
 
-Users must be running Craft v2.4 or higher.
-
-Users that use the default Map Icons must also comply to their terms.
+Users must be running Craft CMS v2 or higher.
 
 ## Display of Copyright Notices
 

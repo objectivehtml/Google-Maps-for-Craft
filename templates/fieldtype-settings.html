@@ -1,0 +1,55 @@
+{% import "_includes/forms" as forms %}
+
+<div class="field">
+	<div class="heading">
+		<label>Map Preview</label>
+
+		<div class="instructions">
+			<p>Set the default map center and zoom level by dragging and zooming the map.<br>
+			Or just set the values using the form fields below.</p>
+		</div>
+
+		<div class="oh-google-map"></div>
+	</div>
+</div>
+
+{{ forms.textField({
+	label: "Default Map Center"|t,
+    instructions: "The default center coordinate of the map within the field type."|t,
+	id: 'defaultMapCenter',
+	name: 'defaultMapCenter',
+	value: settings.defaultMapCenter,
+	translatable: true,
+	errors: settings.getErrors('defaultMapCenter')
+}) }}
+
+{{ forms.textField({
+	label: "Default Map Zoom"|t,
+    instructions: "The default zoom level of the map within the field type."|t,
+	id: 'defaultMapZoom',
+	name: 'defaultMapZoom',
+	value: settings.defaultMapZoom,
+	translatable: true,
+	errors: settings.getErrors('defaultMapZoom')
+}) }}
+
+{{ forms.textField({
+	label: "Default Map Width"|t,
+    instructions: "The default width level of the map within the field type."|t,
+	id: 'defaultMapWidth',
+	name: 'defaultMapWidth',
+	value: settings.defaultMapWidth,
+	translatable: true,
+	errors: settings.getErrors('defaultMapWidth')
+}) }}
+
+{{ forms.textField({
+	label: "Default Map Height"|t,
+    instructions: "The default height of the map within the field type."|t,
+	id: 'defaultMapHeight',
+	name: 'defaultMapHeight',
+	value: settings.defaultMapHeight,
+	translatable: true,
+	errors: settings.getErrors('defaultMapHeight')
+}) }}
+

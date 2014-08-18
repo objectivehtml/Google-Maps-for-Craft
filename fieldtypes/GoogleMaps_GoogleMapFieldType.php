@@ -37,7 +37,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
                         }
                     }
 
-                    unset($data->markers[$index]);
+                    $data->removeMarker($index);
                 }
                 else
                 {
@@ -63,6 +63,19 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
                     $location->save();
 
                     $marker->locationId = $location->id;
+                }
+            }
+
+            foreach($data->polygons as $index => $polygon)
+            {
+                if(isset($polygon->deleted))
+                {
+                    $data->removePolygon($index);
+                }
+                else
+                {
+                    $polygon->elementId = $this->element->id;
+                    $polygon->isNew = false;
                 }
             }
         }
@@ -160,11 +173,81 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
         craft()->templates->includeJs("new GoogleMaps.Fieldtype('#$namespacedId-field .oh-google-maps-wrapper', {
             fieldname: '$name',
-            savedData: ".(!empty($value) ? $value->toJson() : "false")."
+            savedData: ".(!empty($value) ? $value->toJson() : "false").",
+            width: '".$this->getSettings()->defaultMapWidth."',
+            height: '".$this->getSettings()->defaultMapHeight."',
+            center: '".$this->getSettings()->defaultMapCenter."',
+            zoom: ".$this->getSettings()->defaultMapZoom."
         })");
 
         return craft()->templates->render('googlemaps/fieldtype', array(
-            
         ));
+    }
+
+    public function getSettingsHtml()
+    {
+        craft()->googleMaps_templates->scripts();
+
+        $coord = explode(',', $this->getSettings()->defaultMapCenter);
+
+        craft()->templates->includeJs("$(document).ready(function() {
+            var canvas = $('.oh-google-map');
+
+            canvas.css({
+                width: '{$this->getSettings()->defaultMapWidth}',
+                height: '{$this->getSettings()->defaultMapHeight}'
+            });
+
+            var map = new GoogleMaps.Map(canvas.get(0), {
+                lat: ".(isset($coord[0]) ? $coord[0] : 0).",
+                lng: ".(isset($coord[1]) ? $coord[1] : 0).",
+                options: {
+                    zoom: {$this->getSettings()->defaultMapZoom},
+                },
+                onCenterChanged: function() {
+                    var center = this.getCenter();
+
+                    $('#types-GoogleMaps_GoogleMap-defaultMapCenter').val(center.lat()+','+center.lng());
+                },
+                onZoomChanged: function() {
+                    $('#types-GoogleMaps_GoogleMap-defaultMapZoom').val(this.getZoom());
+                }
+            });
+
+            $('#types-GoogleMaps_GoogleMap-defaultMapZoom').blur(function() {
+                map.setZoom(parseInt($(this).val()));
+            });
+
+            $('#types-GoogleMaps_GoogleMap-defaultMapCenter').blur(function() {
+                var coord = $(this).val().split(',');
+
+                map.setCenter(coord[0], coord[1]);
+            });
+
+            $('#types-GoogleMaps_GoogleMap-defaultMapWidth').blur(function() {
+                canvas.css('width', $(this).val());
+                map.redraw();
+            });
+
+            $('#types-GoogleMaps_GoogleMap-defaultMapHeight').blur(function() {
+                canvas.css('height', $(this).val());
+                map.redraw();
+            });
+        });
+        ");
+
+        return craft()->templates->render('googlemaps/fieldtype-settings', array(
+            'settings' => $this->getSettings()
+        ));
+    }
+
+    protected function defineSettings()
+    {
+        return array(
+            'defaultMapCenter' => array(AttributeType::String, 'min' => 0, 'default' => '0,0'),
+            'defaultMapZoom' => array(AttributeType::Number, 'default' => '10'),
+            'defaultMapWidth' => array(AttributeType::String, 'default' => '100%'),
+            'defaultMapHeight' => array(AttributeType::String, 'default' => '400px'),
+        );
     }
 }

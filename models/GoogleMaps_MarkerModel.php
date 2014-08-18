@@ -90,8 +90,11 @@ class GoogleMaps_MarkerModel extends BaseModel
             'lat'   => array(AttributeType::Number, 'default' => 0),
             'lng'   => array(AttributeType::Number, 'default' => 0),
             'content'   => array(AttributeType::String, 'default' => ''),
+            'customContent'   => array(AttributeType::Mixed, 'default' => false),
             'address'   => array(AttributeType::String, 'default' => ''),
             'addressComponents'   => array(AttributeType::Mixed, 'default' => array()),
+            'locationId'   => array(AttributeType::Mixed, 'default' => false),
+            'elementId'   => array(AttributeType::Mixed, 'default' => false),
         );
     }
 

@@ -5132,6 +5132,7 @@
     // Internal helper method to verify whether the view hasn't been destroyed
     _ensureViewIsIntact: function() {
       if (this.isDestroyed) {
+        console.log(this);
         var err = new Error('Cannot use a view thats already been destroyed.');
         err.name = 'ViewDestroyedError';
         throw err;
@@ -9577,6 +9578,180 @@ var __module0__ = (function(__dependency1__, __dependency2__, __dependency3__, _
   return __module0__;
 })();
 
+
+$.fn.simpleColorPicker = function(options) {
+	var defaults = {
+		colorsPerLine: 8,
+		colors: ['#000000', '#444444', '#666666', '#999999', '#cccccc', '#eeeeee', '#f3f3f3', '#ffffff'
+				, '#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#9900ff', '#ff00ff'
+				, '#f4cccc', '#fce5cd', '#fff2cc', '#d9ead3', '#d0e0e3', '#cfe2f3', '#d9d2e9', '#ead1dc'
+				, '#ea9999', '#f9cb9c', '#ffe599', '#b6d7a8', '#a2c4c9', '#9fc5e8', '#b4a7d6', '#d5a6bd'
+				, '#e06666', '#f6b26b', '#ffd966', '#93c47d', '#76a5af', '#6fa8dc', '#8e7cc3', '#c27ba0'
+				, '#cc0000', '#e69138', '#f1c232', '#6aa84f', '#45818e', '#3d85c6', '#674ea7', '#a64d79'
+				, '#990000', '#b45f06', '#bf9000', '#38761d', '#134f5c', '#0b5394', '#351c75', '#741b47'
+				, '#660000', '#783f04', '#7f6000', '#274e13', '#0c343d', '#073763', '#20124d', '#4C1130'],
+		showEffect: '',
+		hideEffect: '',
+		onChangeColor: false
+	};
+
+	var opts = $.extend(defaults, options);
+
+	return this.each(function() {
+		var txt = $(this), $color = $('<div class="color" />');
+
+		txt.wrap('<div class="relative color-picker-wrapper"></div>');
+		txt.parent().append($color);
+
+		var colorsMarkup = '';
+
+		var prefix = txt.attr('id').replace(/-/g, '') + '_';
+
+		for(var i = 0; i < opts.colors.length; i++){
+			var item = opts.colors[i];
+
+			var breakLine = '';
+			if (i % opts.colorsPerLine == 0)
+				breakLine = 'clear: both; ';
+
+			if (i > 0 && breakLine && $.browser && $.browser.msie && $.browser.version <= 7) {
+				breakLine = '';
+				colorsMarkup += '<li style="float: none; clear: both; overflow: hidden; background-color: #fff; display: block; height: 1px; line-height: 1px; font-size: 1px; margin-bottom: -2px;"></li>';
+			}
+
+			colorsMarkup += '<li id="' + prefix + 'color-' + i + '" class="color-box" style="' + breakLine + 'background-color: ' + item + '" title="' + item + '"></li>';
+		}
+
+		var box = $('<div id="' + prefix + 'color-picker" class="color-picker"><ul>' + colorsMarkup + '</ul><div style="clear: both;"></div></div>');
+		var isDown = false;
+
+		box.insertAfter(txt);
+
+		box.hide();
+
+		box.find('li.color-box').on('mouseup', function() {
+			isDown = false;
+			$(this).click();
+		});
+
+		box.find('li.color-box').on('mousedown', function() {
+			isDown = true;
+		});
+
+		box.find('li.color-box').click(function() {
+			if (txt.is('input')) {
+				txt.val(opts.colors[this.id.substr(this.id.indexOf('-') + 1)]);
+				txt.blur();
+			}
+			if ($.isFunction(defaults.onChangeColor)) {
+				defaults.onChangeColor.call(txt, opts.colors[this.id.substr(this.id.indexOf('-') + 1)]);
+			}
+			hideBox(box);
+		});
+
+		$('body').on('click', function() {
+			hideBox(box);
+		});
+
+		$color.click(function() {
+			setTimeout(function() {
+				showBox(box);
+			}, 10);
+		});
+
+		txt.on('blur', function() {
+			setTimeout(function() {
+				if(!isDown) {
+					hideBox(box);
+				}
+			}, 100);
+		});
+
+		box.click(function(event) {
+			event.stopPropagation();
+		});
+
+		var positionAndShowBox = function(box) {
+			/*
+			var pos = txt.offset();
+			var left = pos.left + txt.outerWidth() - box.outerWidth();
+			if (left < pos.left) left = pos.left
+			box.css({ left: left, top: (pos.top + txt.outerHeight()) });
+		*/
+			showBox(box);
+		}
+
+		txt.click(function(event) {
+			event.stopPropagation();
+			if (!txt.is('input')) {
+				// element is not an input so probably a link or div which requires the color box to be shown
+				positionAndShowBox(box);
+			}
+		});
+
+		txt.focus(function() {
+			positionAndShowBox(box);
+		});
+
+		function hideBox(box) {
+			if (opts.hideEffect == 'fade')
+				box.fadeOut();
+			else if (opts.hideEffect == 'slide')
+				box.slideUp();
+			else
+				box.hide();
+
+			updateColor();
+		}
+
+		function updateColor() {
+			$color.css('background-color', txt.val());
+		}
+
+		function showBox(box) {
+			if (opts.showEffect == 'fade')
+				box.fadeIn();
+			else if (opts.showEffect == 'slide')
+				box.slideDown();
+			else
+				box.show();
+		}
+
+		updateColor();
+	});
+};
+/*
+
+$.Link (part of noUiSlider) - WTFPL */
+(function(c){function m(a,c,d){if((a[c]||a[d])&&a[c]===a[d])throw Error("(Link) '"+c+"' can't match '"+d+"'.'");}function r(a){void 0===a&&(a={});if("object"!==typeof a)throw Error("(Format) 'format' option must be an object.");var h={};c(u).each(function(c,n){if(void 0===a[n])h[n]=A[c];else if(typeof a[n]===typeof A[c]){if("decimals"===n&&(0>a[n]||7<a[n]))throw Error("(Format) 'format.decimals' option must be between 0 and 7.");h[n]=a[n]}else throw Error("(Format) 'format."+n+"' must be a "+typeof A[c]+
+".");});m(h,"mark","thousand");m(h,"prefix","negative");m(h,"prefix","negativeBefore");this.r=h}function k(a,h){"object"!==typeof a&&c.error("(Link) Initialize with an object.");return new k.prototype.p(a.target||function(){},a.method,a.format||{},h)}var u="decimals mark thousand prefix postfix encoder decoder negative negativeBefore to from".split(" "),A=[2,".","","","",function(a){return a},function(a){return a},"-","",function(a){return a},function(a){return a}];r.prototype.a=function(a){return this.r[a]};
+r.prototype.L=function(a){function c(a){return a.split("").reverse().join("")}a=this.a("encoder")(a);var d=this.a("decimals"),n="",k="",m="",r="";0===parseFloat(a.toFixed(d))&&(a="0");0>a&&(n=this.a("negative"),k=this.a("negativeBefore"));a=Math.abs(a).toFixed(d).toString();a=a.split(".");this.a("thousand")?(m=c(a[0]).match(/.{1,3}/g),m=c(m.join(c(this.a("thousand"))))):m=a[0];this.a("mark")&&1<a.length&&(r=this.a("mark")+a[1]);return this.a("to")(k+this.a("prefix")+n+m+r+this.a("postfix"))};r.prototype.w=
+function(a){function c(a){return a.replace(/[\-\/\\\^$*+?.()|\[\]{}]/g,"\\$&")}var d;if(null===a||void 0===a)return!1;a=this.a("from")(a);a=a.toString();d=a.replace(RegExp("^"+c(this.a("negativeBefore"))),"");a!==d?(a=d,d="-"):d="";a=a.replace(RegExp("^"+c(this.a("prefix"))),"");this.a("negative")&&(d="",a=a.replace(RegExp("^"+c(this.a("negative"))),"-"));a=a.replace(RegExp(c(this.a("postfix"))+"$"),"").replace(RegExp(c(this.a("thousand")),"g"),"").replace(this.a("mark"),".");a=this.a("decoder")(parseFloat(d+
+a));return isNaN(a)?!1:a};k.prototype.K=function(a,h){this.method=h||"html";this.j=c(a.replace("-tooltip-","")||"<div/>")[0]};k.prototype.H=function(a){this.method="val";this.j=document.createElement("input");this.j.name=a;this.j.type="hidden"};k.prototype.G=function(a){function h(a,c){return[c?null:a,c?a:null]}var d=this;this.method="val";this.target=a.on("change",function(a){d.B.val(h(c(a.target).val(),d.t),{link:d,set:!0})})};k.prototype.p=function(a,h,d,k){this.g=d;this.update=!k;if("string"===
+typeof a&&0===a.indexOf("-tooltip-"))this.K(a,h);else if("string"===typeof a&&0!==a.indexOf("-"))this.H(a);else if("function"===typeof a)this.target=!1,this.method=a;else{if(a instanceof c||c.zepto&&c.zepto.isZ(a)){if(!h){if(a.is("input, select, textarea")){this.G(a);return}h="html"}if("function"===typeof h||"string"===typeof h&&a[h]){this.method=h;this.target=a;return}}throw new RangeError("(Link) Invalid Link.");}};k.prototype.write=function(a,c,d,k){if(!this.update||!1!==k)if(this.u=a,this.F=a=
+this.format(a),"function"===typeof this.method)this.method.call(this.target[0]||d[0],a,c,d);else this.target[this.method](a,c,d)};k.prototype.q=function(a){this.g=new r(c.extend({},a,this.g instanceof r?this.g.r:this.g))};k.prototype.J=function(a){this.B=a};k.prototype.I=function(a){this.t=a};k.prototype.format=function(a){return this.g.L(a)};k.prototype.A=function(a){return this.g.w(a)};k.prototype.p.prototype=k.prototype;c.Link=k})(window.jQuery||window.Zepto);/*
+
+$.fn.noUiSlider - WTFPL - refreshless.com/nouislider/ */
+(function(c){function m(e){return"number"===typeof e&&!isNaN(e)&&isFinite(e)}function r(e){return c.isArray(e)?e:[e]}function k(e,b){e.addClass(b);setTimeout(function(){e.removeClass(b)},300)}function u(e,b){return 100*b/(e[1]-e[0])}function A(e,b){if(b>=e.d.slice(-1)[0])return 100;for(var a=1,c,f,d;b>=e.d[a];)a++;c=e.d[a-1];f=e.d[a];d=e.c[a-1];c=[c,f];return d+u(c,0>c[0]?b+Math.abs(c[0]):b-c[0])/(100/(e.c[a]-d))}function a(e,b){if(100<=b)return e.d.slice(-1)[0];for(var a=1,c,f,d;b>=e.c[a];)a++;c=
+e.d[a-1];f=e.d[a];d=e.c[a-1];c=[c,f];return 100/(e.c[a]-d)*(b-d)*(c[1]-c[0])/100+c[0]}function h(a,b){for(var c=1,g;(a.dir?100-b:b)>=a.c[c];)c++;if(a.m)return g=a.c[c-1],c=a.c[c],b-g>(c-g)/2?c:g;a.h[c-1]?(g=a.h[c-1],c=a.c[c-1]+Math.round((b-a.c[c-1])/g)*g):c=b;return c}function d(a,b){if(!m(b))throw Error("noUiSlider: 'step' is not numeric.");a.h[0]=b}function n(a,b){if("object"!==typeof b||c.isArray(b))throw Error("noUiSlider: 'range' is not an object.");if(void 0===b.min||void 0===b.max)throw Error("noUiSlider: Missing 'min' or 'max' in 'range'.");
+c.each(b,function(b,g){var d;"number"===typeof g&&(g=[g]);if(!c.isArray(g))throw Error("noUiSlider: 'range' contains invalid value.");d="min"===b?0:"max"===b?100:parseFloat(b);if(!m(d)||!m(g[0]))throw Error("noUiSlider: 'range' value isn't numeric.");a.c.push(d);a.d.push(g[0]);d?a.h.push(isNaN(g[1])?!1:g[1]):isNaN(g[1])||(a.h[0]=g[1])});c.each(a.h,function(b,c){if(!c)return!0;a.h[b]=u([a.d[b],a.d[b+1]],c)/(100/(a.c[b+1]-a.c[b]))})}function E(a,b){"number"===typeof b&&(b=[b]);if(!c.isArray(b)||!b.length||
+2<b.length)throw Error("noUiSlider: 'start' option is incorrect.");a.b=b.length;a.start=b}function I(a,b){a.m=b;if("boolean"!==typeof b)throw Error("noUiSlider: 'snap' option must be a boolean.");}function J(a,b){if("lower"===b&&1===a.b)a.i=1;else if("upper"===b&&1===a.b)a.i=2;else if(!0===b&&2===a.b)a.i=3;else if(!1===b)a.i=0;else throw Error("noUiSlider: 'connect' option doesn't match handle count.");}function D(a,b){switch(b){case "horizontal":a.k=0;break;case "vertical":a.k=1;break;default:throw Error("noUiSlider: 'orientation' option is invalid.");
+}}function K(a,b){if(2<a.c.length)throw Error("noUiSlider: 'margin' option is only supported on linear sliders.");a.margin=u(a.d,b);if(!m(b))throw Error("noUiSlider: 'margin' option must be numeric.");}function L(a,b){switch(b){case "ltr":a.dir=0;break;case "rtl":a.dir=1;a.i=[0,2,1,3][a.i];break;default:throw Error("noUiSlider: 'direction' option was not recognized.");}}function M(a,b){if("string"!==typeof b)throw Error("noUiSlider: 'behaviour' must be a string containing options.");var c=0<=b.indexOf("snap");
+a.n={s:0<=b.indexOf("tap")||c,extend:0<=b.indexOf("extend"),v:0<=b.indexOf("drag"),fixed:0<=b.indexOf("fixed"),m:c}}function N(a,b,d){a.o=[b.lower,b.upper];a.g=b.format;c.each(a.o,function(a,e){if(!c.isArray(e))throw Error("noUiSlider: 'serialization."+(a?"upper":"lower")+"' must be an array.");c.each(e,function(){if(!(this instanceof c.Link))throw Error("noUiSlider: 'serialization."+(a?"upper":"lower")+"' can only contain Link instances.");this.I(a);this.J(d);this.q(b.format)})});a.dir&&1<a.b&&a.o.reverse()}
+function O(a,b){var f={c:[],d:[],h:[!1],margin:0},g;g={step:{e:!1,f:d},start:{e:!0,f:E},connect:{e:!0,f:J},direction:{e:!0,f:L},range:{e:!0,f:n},snap:{e:!1,f:I},orientation:{e:!1,f:D},margin:{e:!1,f:K},behaviour:{e:!0,f:M},serialization:{e:!0,f:N}};a=c.extend({connect:!1,direction:"ltr",behaviour:"tap",orientation:"horizontal"},a);a.serialization=c.extend({lower:[],upper:[],format:{}},a.serialization);c.each(g,function(c,d){if(void 0===a[c]){if(d.e)throw Error("noUiSlider: '"+c+"' is required.");
+return!0}d.f(f,a[c],b)});f.style=f.k?"top":"left";return f}function P(a,b){var d=c("<div><div/></div>").addClass(f[2]),g=["-lower","-upper"];a.dir&&g.reverse();d.children().addClass(f[3]+" "+f[3]+g[b]);return d}function Q(a,b){b.j&&(b=new c.Link({target:c(b.j).clone().appendTo(a),method:b.method,format:b.g},!0));return b}function R(a,b){var d,f=[];for(d=0;d<a.b;d++){var k=f,h=d,m=a.o[d],n=b[d].children(),r=a.g,s=void 0,v=[],s=new c.Link({},!0);s.q(r);v.push(s);for(s=0;s<m.length;s++)v.push(Q(n,m[s]));
+k[h]=v}return f}function S(a,b,c){switch(a){case 1:b.addClass(f[7]);c[0].addClass(f[6]);break;case 3:c[1].addClass(f[6]);case 2:c[0].addClass(f[7]);case 0:b.addClass(f[6])}}function T(a,b){var c,d=[];for(c=0;c<a.b;c++)d.push(P(a,c).appendTo(b));return d}function U(a,b){b.addClass([f[0],f[8+a.dir],f[4+a.k]].join(" "));return c("<div/>").appendTo(b).addClass(f[1])}function V(d,b,m){function g(){return t[["width","height"][b.k]]()}function n(a){var b,c=[q.val()];for(b=0;b<a.length;b++)q.trigger(a[b],
+c)}function u(d,p,e){var g=d[0]!==l[0][0]?1:0,H=x[0]+b.margin,k=x[1]-b.margin;e&&1<l.length&&(p=g?Math.max(p,H):Math.min(p,k));100>p&&(p=h(b,p));p=Math.max(Math.min(parseFloat(p.toFixed(7)),100),0);if(p===x[g])return 1===l.length?!1:p===H||p===k?0:!1;d.css(b.style,p+"%");d.is(":first-child")&&d.toggleClass(f[17],50<p);x[g]=p;b.dir&&(p=100-p);c(y[g]).each(function(){this.write(a(b,p),d.children(),q)});return!0}function B(a,b,c){c||k(q,f[14]);u(a,b,!1);n(["slide","set","change"])}function w(a,c,d,e){a=
+a.replace(/\s/g,".nui ")+".nui";c.on(a,function(a){var c=q.attr("disabled");if(q.hasClass(f[14])||void 0!==c&&null!==c)return!1;a.preventDefault();var c=0===a.type.indexOf("touch"),p=0===a.type.indexOf("mouse"),F=0===a.type.indexOf("pointer"),g,k,l=a;0===a.type.indexOf("MSPointer")&&(F=!0);a.originalEvent&&(a=a.originalEvent);c&&(g=a.changedTouches[0].pageX,k=a.changedTouches[0].pageY);if(p||F)F||void 0!==window.pageXOffset||(window.pageXOffset=document.documentElement.scrollLeft,window.pageYOffset=
+document.documentElement.scrollTop),g=a.clientX+window.pageXOffset,k=a.clientY+window.pageYOffset;l.C=[g,k];l.cursor=p;a=l;a.l=a.C[b.k];d(a,e)})}function C(a,c){var b=c.b||l,d,e=!1,e=100*(a.l-c.start)/g(),f=b[0][0]!==l[0][0]?1:0;var k=c.D;d=e+k[0];e+=k[1];1<b.length?(0>d&&(e+=Math.abs(d)),100<e&&(d-=e-100),d=[Math.max(Math.min(d,100),0),Math.max(Math.min(e,100),0)]):d=[d,e];e=u(b[0],d[f],1===b.length);1<b.length&&(e=u(b[1],d[f?0:1],!1)||e);e&&n(["slide"])}function s(a){c("."+f[15]).removeClass(f[15]);
+a.cursor&&c("body").css("cursor","").off(".nui");G.off(".nui");q.removeClass(f[12]);n(["set","change"])}function v(a,b){1===b.b.length&&b.b[0].children().addClass(f[15]);a.stopPropagation();w(z.move,G,C,{start:a.l,b:b.b,D:[x[0],x[l.length-1]]});w(z.end,G,s,null);a.cursor&&(c("body").css("cursor",c(a.target).css("cursor")),1<l.length&&q.addClass(f[12]),c("body").on("selectstart.nui",!1))}function D(a){var d=a.l,e=0;a.stopPropagation();c.each(l,function(){e+=this.offset()[b.style]});e=d<e/2||1===l.length?
+0:1;d-=t.offset()[b.style];d=100*d/g();B(l[e],d,b.n.m);b.n.m&&v(a,{b:[l[e]]})}function E(a){var c=(a=a.l<t.offset()[b.style])?0:100;a=a?0:l.length-1;B(l[a],c,!1)}var q=c(d),x=[-1,-1],t,y,l;if(q.hasClass(f[0]))throw Error("Slider was already initialized.");t=U(b,q);l=T(b,t);y=R(b,l);S(b.i,q,l);(function(a){var b;if(!a.fixed)for(b=0;b<l.length;b++)w(z.start,l[b].children(),v,{b:[l[b]]});a.s&&w(z.start,t,D,{b:l});a.extend&&(q.addClass(f[16]),a.s&&w(z.start,q,E,{b:l}));a.v&&(b=t.find("."+f[7]).addClass(f[10]),
+a.fixed&&(b=b.add(t.children().not(b).children())),w(z.start,b,v,{b:l}))})(b.n);d.vSet=function(){var a=Array.prototype.slice.call(arguments,0),d,e,g,h,m,s,t=r(a[0]);"object"===typeof a[1]?(d=a[1].set,e=a[1].link,g=a[1].update,h=a[1].animate):!0===a[1]&&(d=!0);b.dir&&1<b.b&&t.reverse();h&&k(q,f[14]);a=1<l.length?3:1;1===t.length&&(a=1);for(m=0;m<a;m++)h=e||y[m%2][0],h=h.A(t[m%2]),!1!==h&&(h=A(b,h),b.dir&&(h=100-h),!0!==u(l[m%2],h,!0)&&c(y[m%2]).each(function(a){if(!a)return s=this.u,!0;this.write(s,
+l[m%2].children(),q,g)}));!0===d&&n(["set"]);return this};d.vGet=function(){var a,c=[];for(a=0;a<b.b;a++)c[a]=y[a][0].F;return 1===c.length?c[0]:b.dir?c.reverse():c};d.destroy=function(){c.each(y,function(){c.each(this,function(){this.target&&this.target.off(".nui")})});c(this).off(".nui").removeClass(f.join(" ")).empty();return m};q.val(b.start)}function W(a){if(!this.length)throw Error("noUiSlider: Can't initialize slider on empty selection.");var b=O(a,this);return this.each(function(){V(this,
+b,a)})}function X(a){return this.each(function(){var b=c(this).val(),d=this.destroy(),f=c.extend({},d,a);c(this).noUiSlider(f);d.start===f.start&&c(this).val(b)})}function B(){return this[0][arguments.length?"vSet":"vGet"].apply(this[0],arguments)}var G=c(document),C=c.fn.val,z=window.navigator.pointerEnabled?{start:"pointerdown",move:"pointermove",end:"pointerup"}:window.navigator.msPointerEnabled?{start:"MSPointerDown",move:"MSPointerMove",end:"MSPointerUp"}:{start:"mousedown touchstart",move:"mousemove touchmove",
+end:"mouseup touchend"},f="noUi-target noUi-base noUi-origin noUi-handle noUi-horizontal noUi-vertical noUi-background noUi-connect noUi-ltr noUi-rtl noUi-dragable  noUi-state-drag  noUi-state-tap noUi-active noUi-extended noUi-stacking".split(" ");c.fn.val=function(){var a=arguments,b=c(this[0]);return arguments.length?this.each(function(){(c(this).hasClass(f[0])?B:C).apply(c(this),a)}):(b.hasClass(f[0])?B:C).call(b)};c.noUiSlider={Link:c.Link};c.fn.noUiSlider=function(a,b){return(b?X:W).call(this,
+a)}})(window.jQuery||window.Zepto);
+
 (function() {
 var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
 templates['button-bar'] = template(function (Handlebars,depth0,helpers,partials,data) {
@@ -9641,6 +9816,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 
   return "<h2>Delete Marker?</h2>\n\n<p>Are you sure you want to delete this marker?</p>\n\n<footer>\n	<button type=\"submit\" class=\"btn submit\">Delete Marker</button>\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
+  });
+
+templates['delete-polygon-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<h2>Delete Polygon?</h2>\n\n<p>Are you sure you want to delete this polygon?</p>\n\n<footer>\n	<button type=\"submit\" class=\"btn submit\">Delete Polygon</button>\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
   });
 
 templates['edit-marker-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
@@ -9739,15 +9923,155 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"oh-google-map-window\"></div>\n\n<div class=\"oh-google-map-controls\"></div>\n\n<div class=\"oh-google-map-zoom-control\">\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-zoom-in\">&plus;</a>\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-zoom-out\">&minus;</a>\n</div>\n\n<div class=\"oh-google-map\"></div>\n\n<textarea name=\"fields[";
+  buffer += "<div class=\"oh-google-map-window\" style=\"max-height:";
+  if (helper = helpers.height) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.height); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "; overflow:auto;\"></div>\n\n<div class=\"oh-google-map-controls\"></div>\n\n<div class=\"oh-google-map-zoom-control\">\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-zoom-in\">&plus;</a>\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-zoom-out\">&minus;</a>\n</div>\n\n<div class=\"oh-google-map\" style=\"width:";
+  if (helper = helpers.width) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.width); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "; height:";
+  if (helper = helpers.height) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.height); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\"></div>\n\n<textarea name=\"fields[";
   if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "]\" class=\"field-data\" style=\"display:none\">";
-  if (helper = helpers.savedData) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.savedData); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+    + "]\" class=\"field-data\" style=\"display:none\"></textarea>";
+  return buffer;
+  });
+
+templates['polygon-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  
+  return "\n	<h2>Add Polygon</h2>\n";
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "\n	<h2>Edit Polygon</h2>\n";
+  }
+
+function program5(depth0,data) {
+  
+  
+  return "Show Details";
+  }
+
+function program7(depth0,data) {
+  
+  
+  return "Hide Details";
+  }
+
+function program9(depth0,data) {
+  
+  
+  return "style=\"display:none\"";
+  }
+
+function program11(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n			<div class=\"oh-google-map-tag\" title=\"";
+  if (helper = helpers.lat) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.lat); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</textarea>";
+    + ",";
+  if (helper = helpers.lng) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.lng); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n				<span>Point ";
+  if (helper = helpers.count) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.count); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n				<a href=\"#\" class=\"remove\"><span>&times;</span></a>\n			</div>\n			";
+  return buffer;
+  }
+
+function program13(depth0,data) {
+  
+  
+  return "\n		<button type=\"submit\" class=\"btn submit\">Save Polygon</button>\n	";
+  }
+
+function program15(depth0,data) {
+  
+  
+  return "\n		<button type=\"submit\" class=\"btn submit\">Save Changes</button>\n	";
+  }
+
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<nav class=\"oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up\">\n	<ul>\n		<li><a class=\"oh-google-map-tab-trigger active\" href=\"#oh-points-tab\">Points</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-content-tab\">Content</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-options-tab\">Options</a></li>\n	</ul>\n</nav>\n\n<div id=\"oh-points-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	<p><span class=\"oh-google-map-small-text\"><a href=\"#\" class=\"toggle-details\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.hideDetails), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.hideDetails), options) : helperMissing.call(depth0, "not", (depth0 && depth0.hideDetails), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a></span></p>\n\n	<div class=\"details\" ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.hideDetails), {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n		<p class=\"oh-google-map-small-text\">To add points to the polygon, you can either double click the map or add enter coordinates or addresses manually.</p>\n\n		<div class=\"points oh-google-map-tags\">\n			";
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.points), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.points), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n		</div>\n	</div>\n\n	<div class=\"point-field\">\n		<input type=\"text\" name=\"point\" value=\"\" class=\"text\" placeholder=\"Enter a coordinate or address\" style=\"width:45%;\" /> <a class=\"btn add-point\" style=\"margin-left:10px;\">+ Add Point</a>\n	</div>\n\n</div>\n\n<div id=\"oh-content-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Title</label>\n				<input type=\"text\" name=\"title\" id=\"poly-title\" value=\"";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"text fullwidth\" />\n			</div>\n		</div>\n	</div>\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Content</label>\n				<textarea name=\"content\" id=\"poly-content\" class=\"text fullwidth\">";
+  if (helper = helpers.content) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.content); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<div id=\"oh-options-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-color\">Stroke Color</label>\n				<input type=\"text\" name=\"strokeColor\" id=\"stroke-color\" value=\"";
+  if (helper = helpers.strokeColor) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeColor); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"simple-color-picker text fullwidth\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-color\">Fill Color</label>\n				<input type=\"text\" name=\"fillColor\" id=\"fill-color\" value=\"";
+  if (helper = helpers.fillColor) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fillColor); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"simple-color-picker text fullwidth\" />\n			</div>\n		</div>\n	</div>\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-opacity\" class=\"oh-google-map-small-margin-bottom\">Stroke Opacity</label>\n				<div class=\"slider\" data-value=\"";
+  if (helper = helpers.strokeOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-start=\".6\" data-step=\".1\" data-min=\"0\" data-max=\"1\"></div>\n				<input type=\"hidden\" name=\"strokeOpacity\" id=\"stroke-opacity\" value=\"";
+  if (helper = helpers.strokeOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"fill-opacity\" class=\"oh-google-map-small-margin-bottom\">Fill Opacity</label>\n				<div class=\"slider\" data-value=\"";
+  if (helper = helpers.fillOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fillOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-start=\".6\" data-step=\".1\" data-min=\"0\" data-max=\"1\"></div>\n				<input type=\"hidden\" name=\"fillOpacity\" id=\"fill-opacity\" value=\"";
+  if (helper = helpers.fillOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fillOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n			</div>\n		</div>\n	</div>\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-opacity\" class=\"oh-google-map-small-margin-bottom\">Stroke Weight</label>\n				<div class=\"slider\" data-value=\"";
+  if (helper = helpers.strokeWeight) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeWeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-start=\"3\" data-step=\"1\" data-min=\"0\" data-max=\"10\"></div>\n				<input type=\"hidden\" name=\"strokeWeight\" id=\"stroke-weight\" value=\"";
+  if (helper = helpers.strokeWeight) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeWeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n		</div>\n	</div>\n\n</div>\n\n<footer>\n	";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(13, program13, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n	";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
   return buffer;
   });
 }());
@@ -9798,10 +10122,16 @@ var GoogleMaps = {
 			content: $el
 		});
 	
+		var coord = options.center.split(',');
+
 		App.addInitializer(function() {
 			var map = new GoogleMaps.Views.Map({
 				fieldname: options.fieldname,
-				savedData: options.savedData
+				savedData: options.savedData,
+				width: options.width,
+				height: options.height,
+				position: new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1])),
+				zoom: options.zoom
 			});
 
 			App.content.show(map);
@@ -9829,6 +10159,761 @@ var GoogleMaps = {
 
 }());
 */
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Models.Base = Backbone.Model.extend({
+
+		initialize: function(options) {
+			_.each(options, function(option, i) {
+				if(_.isFunction(option)) {
+					this[i] = option;
+				}
+			});
+
+			this.set(options);			
+		},
+
+		toJSON: function() {
+			var json = Backbone.Model.prototype.toJSON.call(this);
+
+			delete json.api;
+			delete json.map;
+			delete json.infowindow;
+
+			return json;
+		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Models.Marker = GoogleMaps.Models.Base.extend({
+
+		api: false,
+
+		map: false,
+
+		address: null,
+
+		addressComponents: null,
+
+		content: null,
+
+		customContent: false,
+
+		deleted: false,
+
+		icon: null,
+
+		infowindow: false,
+
+		isNew: false,
+
+		lat: 0,
+
+		lng: 0,
+
+		title: null,
+		
+		elementId: null,
+		
+		locationId: null,
+
+		initialize: function(options) {
+			GoogleMaps.Models.Base.prototype.initialize.call(this, options);
+
+			if(!this.get('infowindow')) {
+				this.set('infowindow', new google.maps.InfoWindow({
+					maxWidth: 300,
+					content: this.buildInfoWindowContent()
+				}));
+			}
+
+			this.get('api').setMap(this.get('map').api);
+
+			this.bindEvents();
+		},
+		
+		buildInfoWindowContent: function() {
+			var content = this.get('content');
+			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
+
+			var t = this, latLng = this.get('api').getPosition();
+
+			_return.push([
+					'<div class="oh-google-map-infowindow-actions">',
+						'<a href="#" class="edit">Edit</a> | ',
+						'<a href="#" class="delete">Delete</a>',
+					'</div>',
+				'</div>'
+			].join(''));
+
+			var $content = $(_return.join(''));
+
+			$content.find('.edit').click(function(e) {
+
+				t.get('map').api.setCenter(latLng);
+				t.get('map').api.panBy(0, -150);
+
+				var view = new GoogleMaps.Views.BaseForm({
+					model: new Backbone.Model({
+						title: t.get('title'),
+						content: t.get('content')
+					}),
+					template: GoogleMaps.Template('edit-marker-form'),								
+					onShow: function() {
+						setTimeout(function() {
+							view.$el.find('input').focus();
+						}, 250);
+					},
+					submit: function() {
+						t.set('title', view.$el.find('input').val());
+						t.set('content', view.$el.find('textarea').val());
+						t.set('customContent', true);
+						t.get('infowindow').setContent(t.buildInfoWindowContent());
+						t.get('map').hideModal();
+						t.get('map').updateHiddenField();
+					},
+					cancel: function() {
+						t.get('map').hideModal();
+					}
+				});
+
+				t.get('map').showModal(view);
+
+				e.preventDefault();
+			});
+
+			$content.find('.delete').click(function(e) {
+				t.get('map').api.setCenter(latLng);
+				t.get('map').api.panBy(0, -150);
+
+				var view = new GoogleMaps.Views.BaseForm({
+					template: GoogleMaps.Template('delete-marker-form'),
+					submit: function() {
+						t.get('api').setMap(null);
+						t.set('deleted', true);
+						t.get('map').hideModal();
+						t.get('map').updateHiddenField();
+					},
+					cancel: function() {
+						t.get('map').hideModal();
+					}
+				});
+
+				t.get('map').showModal(view);
+
+				e.preventDefault();
+			});
+
+			return $content.get(0);
+		},
+
+		getAnimation: function() {
+			return this.get('api').getAnimation();
+		},
+
+		getClickable: function() {
+			return this.get('api').getClickable();
+		},
+
+		getCursor: function() {
+			return this.get('api').getCursor();
+		},
+
+		getDraggable: function() {
+			return this.get('api').getDraggable();
+		},
+
+		getIcon: function() {
+			return this.get('api').getIcon();
+		},
+
+		getMap: function() {
+			return this.get('api').getMap();
+		},
+
+		getOpacity: function() {
+			return this.get('api').getOpacity();
+		},
+
+		getPosition: function() {
+			return this.get('api').getPosition();
+		},
+
+		getShape: function() {
+			return this.get('api').getShape()
+		},
+
+		getTitle: function() {
+			return this.get('api').getTitle();
+		},
+
+		getVisible: function() {
+			return this.get('api').getVisible();
+		},
+
+		getZIndex: function() {
+			return this.get('api').getZIndex();
+		},
+
+		setAnimation: function(value) {
+			this.get('api').setAnimation(value);
+		},
+
+		setClickable: function(value) {
+			this.get('api').setClickable(value);
+		},
+		
+		setCursor: function(value) {
+			this.get('api').setCursor(value);
+		},
+		
+		setDraggable: function(value) {
+			this.get('api').setDraggable(value);
+		},
+		
+		setIcon: function(value) {
+			this.get('api').setIcon(value);
+		},
+		
+		setMap: function(value) {
+			this.get('api').setMap(value);
+		},
+		
+		setOpacity: function(value) {
+			this.get('api').setOpacity(value);
+		},
+		
+		setOptions: function(value) {
+			this.get('api').setOptions(value);
+		},
+		
+		setPosition: function(value) {
+			this.get('api').setPosition(value);
+		},
+		
+		setShape: function(value) {
+			this.get('api').setShape(value);
+		},
+		
+		setTitle: function(value) {
+			this.get('api').setTitle(value);
+		},
+		
+		setVisible: function(value) {
+			this.get('api').setVisible(value);
+		},
+		
+		setZIndex: function(value) {
+			this.get('api').setZIndex(value);
+		},
+
+		toJSON: function() {
+			var json = Backbone.Model.prototype.toJSON.call(this);
+
+			var position = this.get('api').getPosition();
+
+			json.lat = position.lat();
+			json.lng = position.lng();
+
+			delete json.api;
+			delete json.map;
+			delete json.infowindow;
+
+			return json;
+		},
+
+		bindEvents: function() {
+			var t = this;
+
+			google.maps.event.addListener(this.get('api'), 'animation_changed', function() {
+				t.onAnimationChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'click', function() {
+				t.onClick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'cursor_changed', function() {
+				t.onCursorChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'dblclick', function() {
+				t.onDblclick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'drag', function() {
+				t.onDrag.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'dragend', function() {
+				t.onDragend.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'draggable_changed', function() {
+				t.onDraggableChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'dragstart', function() {
+				t.onDragstart.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'flat_changed', function() {
+				t.onFlatChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'icon_changed', function() {
+				t.onIconChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mousemove', function() {
+				t.onMousemove.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mouseout', function() {
+				t.onMouseout.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mouseover', function() {
+				t.onMouseover.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'mouseup', function() {
+				t.onMouseup.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'position_changed', function() {
+				t.onPositionChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'rightclick', function() {
+				t.onRightclick.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'shape_changed', function() {
+				t.onShapeChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'tilt_changed', function() {
+				t.onTiltChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'visible_changed', function() {
+				t.onVisibleChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'zindex_changed', function() {
+				t.onZindexChanged.apply(t, arguments);
+			});
+		},
+
+		onAnimationChanged: function() {},
+
+		onClick: function() {
+			this.get('map').closeInfowindows();
+			this.get('infowindow').open(this.get('map').api, this.get('api'));
+		},
+
+		onCursorChanged: function() {},
+
+		onDblclick: function() {},
+
+		onDrag: function() {},
+
+		onDragend: function(e) {
+			var t = this;
+
+			this.get('map').geocoder.geocode({location: e.latLng}, function(results, status) {
+				var content = t.get('content') ? t.get('content') : t.get('address').split(',').join('<br>');
+
+				if(status == 'OK') {
+					t.set('address', results[0].formatted_address);
+					t.set('addressComponents', results[0].address_components);
+				}
+				else {
+					t.set('address', null);
+					t.set('addressComponents', null);
+				}
+
+				if(!t.get('customContent')) {
+					t.set('content', t.get('address').split(',').join('<br>'));
+					t.get('infowindow').setContent(t.buildInfoWindowContent());
+				}
+
+				t.get('map').updateHiddenField();
+			});
+		},
+
+		onDraggableChanged: function() {},
+
+		onDragstart: function() {},
+
+		onFlatChanged: function() {},
+
+		onIconChanged: function() {},
+
+		onMousemove: function() {},
+
+		onMouseout: function() {},
+
+		onMouseover: function() {},
+
+		onMouseup: function() {},
+
+		onPositionChanged: function() {},
+
+		onRightclick: function() {},
+
+		onShapeChanged: function() {},
+
+		onTiltChanged: function() {},
+
+		onVisibleChanged: function() {},
+
+		onZindexChanged: function() {}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Models.Polygon = GoogleMaps.Models.Base.extend({
+
+		api: false,
+
+		map: false,
+
+		infowindow: false,
+
+		editable: false,
+
+		draggable: false,
+
+		title: null,
+
+		content: null,
+
+		points: [],
+
+		strokeColor: '#000000',
+
+		strokeWeight: 3,
+
+		strokeOpacity: 0.6,
+
+		fillColor: '#666666',
+
+		fillOpacity: 0.6,
+
+		initialize: function(options) {
+
+			if(!options.strokeColor) {
+				options.strokeColor = this.strokeColor;
+			}
+
+			if(!options.strokeOpacity) {
+				options.strokeOpacity = this.strokeOpacity;
+			}
+
+			if(!options.strokeWeight) {
+				options.strokeWeight = this.strokeWeight;
+			}
+
+			if(!options.fillColor) {
+				options.fillColor = this.fillColor;
+			}
+
+			if(!options.fillOpacity) {
+				options.fillOpacity = this.fillOpacity;
+			}
+
+			GoogleMaps.Models.Base.prototype.initialize.call(this, options);
+
+			var points = [];
+
+			_.each(this.get('points'), function(point) {
+				points.push(new google.maps.LatLng(point.lat, point.lng));
+			});
+
+			options.strokeColor = this.get('strokeColor');
+			options.strokeWeight = this.get('strokeWeight');
+			options.strokeOpacity = this.get('strokeOpacity');
+			options.fillColor = this.get('fillColor');
+			options.fillOpacity = this.get('fillOpacity');
+			options.paths = points;
+			options.map = this.get('map').api;
+			options.zIndex = this.get('map').polygons.length;
+
+			this.set('api', new google.maps.Polygon(options));
+
+			if(!this.get('infowindow')) {
+				this.set('infowindow', new google.maps.InfoWindow({
+					maxWidth: 300,
+					content: this.buildInfoWindowContent()
+				}));
+			}
+
+			this.bindEvents();
+		},
+		
+		buildInfoWindowContent: function() {
+			var content = this.get('content');
+			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
+
+			var t = this;
+
+			_return.push([
+					'<div class="oh-google-map-infowindow-actions">',
+						'<a href="#" class="edit">Edit</a> | ',
+						'<a href="#" class="delete">Delete</a>',
+					'</div>',
+				'</div>'
+			].join(''));
+
+			var $content = $(_return.join(''));
+
+			$content.find('.edit').click(function(e) {
+				
+				var view = new GoogleMaps.Views.PolygonForm({
+					api: t.get('api'),
+					map: t.get('map'),
+					model: t
+				});
+
+
+				t.get('map').showModal(view);
+
+				/*
+				t.get('map').api.setCenter(latLng);
+				t.get('map').api.panBy(0, -150);
+
+				var view = new GoogleMaps.Views.BaseForm({
+					model: new Backbone.Model({
+						title: t.get('title'),
+						content: t.get('content')
+					}),
+					template: GoogleMaps.Template('edit-marker-form'),								
+					onShow: function() {
+						setTimeout(function() {
+							view.$el.find('input').focus();
+						}, 250);
+					},
+					submit: function() {
+						t.set('title', view.$el.find('input').val());
+						t.set('content', view.$el.find('textarea').val());
+						t.set('customContent', true);
+						t.get('infowindow').setContent(t.buildInfoWindowContent());
+						t.get('map').hideModal();
+						t.get('map').updateHiddenField();
+					},
+					cancel: function() {
+						t.get('map').hideModal();
+					}
+				});
+
+				t.get('map').showModal(view);
+				*/
+
+				e.preventDefault();
+			});
+
+			$content.find('.delete').click(function(e) {
+				/*
+				t.get('map').api.setCenter(latLng);
+				t.get('map').api.panBy(0, -150);
+
+				*/
+
+				var view = new GoogleMaps.Views.BaseForm({
+					template: GoogleMaps.Template('delete-polygon-form'),
+					submit: function() {
+						t.get('api').setMap(null);
+						t.get('infowindow').close();
+						t.set('deleted', true);
+						t.get('map').hideModal();
+						t.get('map').updateHiddenField();
+					},
+					cancel: function() {
+						t.get('map').hideModal();
+					}
+				});
+
+				t.get('map').showModal(view);
+
+				e.preventDefault();
+			});
+
+			return $content.get(0);
+		},
+
+		getDraggable: function() {
+			return this.get('api').getDraggable();
+		},
+
+		getEditable: function() {
+			return this.get('api').getEditable();
+		},
+
+		getMap: function() {
+			return this.get('api').getMap();
+		},
+
+		getPath: function() {
+			return this.get('api').getPath();
+		},
+
+		getPaths: function() {
+			return this.get('api').getPaths();
+		},
+
+		getVisible: function() {
+			return this.get('api').getVisible();
+		},
+
+		setDraggable: function(value) {
+			this.get('api').setDraggable(value);
+		},
+
+		setEditable: function(value) {
+			this.get('api').setEditable(value);
+		},
+		
+		setMap: function(value) {
+			//this.get('api').setMap(value);
+		},
+		
+		setOptions: function(value) {
+			this.get('api').setOptions(value);
+		},
+		
+		setPath: function(value) {
+			this.get('api').setPath(value);
+		},
+		
+		setPaths: function(value) {
+			this.get('api').setPaths(value);
+		},
+
+		setPoints: function(value) {
+			var points = [];
+
+			_.each(value, function(point) {
+				points.push(new google.maps.LatLng(point.lat, point.lng));
+			});
+
+			this.setPath(points);
+		},
+		
+		setVisible: function(value) {
+			this.get('api').setVisible(value);
+		},
+		
+		toJSON: function() {
+			var json = GoogleMaps.Models.Base.prototype.toJSON.call(this);
+			var points = [];
+
+
+			if(this.get('api').getPath()) {
+				_.each(this.get('api').getPath().getArray(), function(latLng) {
+					points.push({
+						lat: latLng.lat(),
+						lng: latLng.lng()
+					});
+				});
+			}
+
+			json.points = points;
+
+			return json;
+		},
+
+		bindEvents: function() {
+			var t = this;
+
+			google.maps.event.addListener(this.get('api'), 'click', function() {
+				t.onClick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'dblclick', function() {
+				t.onDblclick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'drag', function() {
+				t.onDrag.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'dragend', function() {
+				t.onDragend.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'dragstart', function() {
+				t.onDragstart.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mousedown', function() {
+				t.onMousedown.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mousemove', function() {
+				t.onMousemove.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mouseout', function() {
+				t.onMouseout.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mouseover', function() {
+				t.onMouseover.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mouseup', function() {
+				t.onMouseup.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'rightclick', function() {
+				t.onRightclick.apply(t, arguments);
+			});
+		},
+
+		onClick: function(e) {
+			if(!this.get('api').getEditable()) {
+				this.get('map').closeInfowindows();
+				this.get('infowindow').open(this.get('map').api);
+				this.get('infowindow').setPosition(e.latLng);
+			}
+		},
+
+		onDblclick: function() {},
+
+		onDrag: function() {},
+
+		onDragend: function(e) {},
+
+		onDragstart: function() {},
+
+		onMousedown: function() {},
+
+		onMousemove: function() {},
+
+		onMouseout: function() {},
+
+		onMouseover: function() {},
+
+		onMouseup: function() {},
+
+		onRightclick: function() {}
+
+	});
+
+}());
 (function() {
 
 	"use strict";
@@ -10067,10 +11152,17 @@ var GoogleMaps = {
 
   		geocoder: false,
 
-  		mapOptions: {
-  			zoom: 8,
-  			disableDefaultUI: true
-  		},
+  		width: false,
+
+  		height: false,
+
+  		position: false,
+
+  		zoom: false,
+
+  		savedData: false,
+
+  		mapOptions: {},
 
   		regions: {
   			buttonBar: '.oh-google-map-controls',
@@ -10079,10 +11171,18 @@ var GoogleMaps = {
 
   		markers: [],
 
+  		polygons: [],
+
   		className: 'oh-google-map-relative',
 
   		initialize: function(options) {
   			this.markers = [];
+  			this.polygons = [];
+
+  			this.mapOptions = _.extend({}, {
+	  			zoom: 8,
+	  			disableDefaultUI: true
+	  		});
 
   			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
 
@@ -10090,45 +11190,44 @@ var GoogleMaps = {
   				this.model = new Backbone.Model();
   			}
 
-  			this.model.set('fieldname', this.fieldname);
-  			this.model.set('savedData', this.savedData);
+  			if(this.position) {
+  				this.mapOptions.center = this.position;
+  			}
+
+  			if(this.zoom) {
+  				this.mapOptions.zoom = this.zoom;
+  			}
+
+  			this.model.set({
+  				fieldname: this.fieldname,
+  				savedData: this.savedData,
+  				width: this.width,
+  				height: this.height
+  			});
+
+  			this.$el.css({
+  				width: this.width,
+  				height: this.height
+  			}); 
   		},
 
   		updateHiddenField: function() {
   			var data = {
-  				markers: []
+  				markers: [],
+  				polygons: []
   			};
 
   			_.each(this.markers, function(marker, i) {
-  				var obj = {
-  					lat: marker.getPosition().lat(),
-  					lng: marker.getPosition().lng(),
-  					title: marker.title,
-  					content: marker.content,
-  					customContent: marker.customContent ? true : false,
-  					address: marker.address,
-  					addressComponents: marker.addressComponents,
-  					isNew: marker.isNew ? true : false
-  				};
-
-  				if(marker.deleted) {
-  					obj.deleted = true;
-  				}
-
-  				if(marker.elementId) {
-  					obj.elementId = marker.elementId;
-  				}
-
-  				if(marker.locationId) {
-  					obj.locationId = marker.locationId;
-  				}
-
-  				data.markers.push(obj);
+  				data.markers.push(marker.toJSON());
   			});
 
-  			console.log(data);
+  			_.each(this.polygons, function(polygon, i) {
+  				data.polygons.push(polygon.toJSON());
+  			});
 
-  			this.$el.find('.field-data').val(JSON.stringify(data));
+  			data = JSON.stringify(data);
+
+  			this.$el.find('.field-data').val(data).html(data);
   		},
 
 		onRender: function() {
@@ -10152,12 +11251,61 @@ var GoogleMaps = {
  				e.preventDefault();
  			});
 
+ 			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
+
  			if(this.savedData) {
 	 			if(this.savedData.markers) {
+	 				var view = new GoogleMaps.Views.MarkerForm({
+	 					map: this
+	 				});
+
 		 			_.each(this.savedData.markers, function(marker) {
-		 				t.addMarker(marker, marker.isNew);
+		 				view.addMarker(marker, marker.isNew);
 		 			});
 		 		}
+
+	 			if(this.savedData.polygons) {
+		 			_.each(this.savedData.polygons, function(polygon) {
+
+		 				/*
+		 				polygon.map = t;
+
+		 				polygon = ;
+
+		 				var points = [];
+
+		 				_.each(polygon.points, function(point) {
+		 					points.push(new google.maps.LatLng(point.lat, point.lng));
+		 				});
+
+		 				polygon.map = t.api;
+		 				polygon.points = points;
+
+		 				polygon = new google.maps.Polygon(polygon);
+
+		 				polygon.infowindow = new google.maps.InfoWindow({
+		 					content: polygon.content
+		 				});
+
+		 				google.maps.event.addListener(polygon, 'click', function(e) {
+		 					polygon.infowindow.open(t.api);
+		 					polygon.infowindow.setPosition(e.latLng);
+		 					//polygon.infowindow.open(t.api, e.latLng);
+		 				});
+						*/
+
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.polygons.push(new GoogleMaps.Models.Polygon(_.extend({}, options, polygon)));
+		 			});
+
+		 			t.center();
+		 		}
+
+		 		this.updateHiddenField();
 		 	}
 		},
 
@@ -10182,24 +11330,19 @@ var GoogleMaps = {
  				},{
  					name: 'Add Marker',
  					click: function(e) {
- 						var view = new GoogleMaps.Views.Geocoder({
-							cancel: function() {
-								t.hideModal(this);
-							},
-							responseHandler: function(response) {
-								console.log(response);
+ 						var view = new GoogleMaps.Views.MarkerForm({
+ 							map: t
+ 						});
 
-								var marker = t.addMarker({
-									lat: response.geometry.location.lat(), 
-									lng: response.geometry.location.lng(),
-									address: response.formatted_address,
-									addressComponents: response.address_components
-								});
+ 						t.showModal(view);
 
-								t.closeInfoWindows();
-
-								marker.infowindow.open(t.api, marker);
-							}
+ 						e.preventDefault();
+ 					}
+ 				},{
+ 					name: 'Add Polygon',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.PolygonForm({
+ 							map: t
  						});
 
  						t.showModal(view);
@@ -10210,9 +11353,13 @@ var GoogleMaps = {
  			}));
 		},
 
-		closeInfoWindows: function() {
+		closeInfowindows: function() {
 			_.each(this.markers, function(marker) {
-				marker.infowindow.close();
+				marker.get('infowindow').close();
+			});
+
+			_.each(this.polygons, function(polygon) {
+				polygon.get('infowindow').close();
 			});
 		},
 
@@ -10225,7 +11372,8 @@ var GoogleMaps = {
 		hideModal: function(view) {
 			this.modal.$el.removeClass('show');
 			this.buttonBar.$el.removeClass('hide');
-			this.center();
+			this.center();			
+			this.modal.empty();
 		},
 
 		zoomIn: function() {
@@ -10252,164 +11400,23 @@ var GoogleMaps = {
 			this.api.setZoom(x);
 		},
 
-		buildInfoWindowContent: function(marker, content) {
-			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
-			var t = this, latLng = marker.getPosition();
-
-			_return.push([
-					'<div class="oh-google-map-infowindow-actions">',
-						'<a href="#" class="edit">Edit</a> | ',
-						'<a href="#" class="delete">Delete</a>',
-					'</div>',
-				'</div>'
-			].join(''));
-
-			var $content = $(_return.join(''));
-
-			$content.find('.edit').click(function(e) {
-
-				t.api.setCenter(latLng);
-				t.api.panBy(0, -150);
-
-				var view = new GoogleMaps.Views.BaseForm({
-					model: new Backbone.Model({
-						title: marker.title,
-						content: marker.content
-					}),
-					template: GoogleMaps.Template('edit-marker-form'),								
-					onShow: function() {
-						var t = this;
-
-						setTimeout(function() {
-							t.$el.find('input').focus();
-						}, 250);
-					},
-					submit: function() {
-						marker.title = t.$el.find('input').val();
-						marker.content = t.$el.find('textarea').val();
-						marker.customContent = true;
-
-						marker.infowindow.setContent(t.buildInfoWindowContent(marker, marker.content));
-
-						t.hideModal();
-						t.updateHiddenField();
-					},
-					cancel: function() {
-						t.hideModal();
-					}
-				});
-
-				t.showModal(view);
-
-				e.preventDefault();
-			});
-
-			$content.find('.delete').click(function(e) {
-				t.api.setCenter(latLng);
-				t.api.panBy(0, -150);
-
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-marker-form'),
-					submit: function() {
-						marker.setMap(null);
-						marker.deleted = true;
-
-						t.hideModal();
-						t.updateHiddenField();
-					},
-					cancel: function() {
-						t.hideModal();
-					}
-				});
-
-				t.showModal(view);
-
-				e.preventDefault();
-			});
-
-			return $content.get(0);
-		},
-
-		addMarker: function(data, isNewMarker) {
-			var t = this, latLng = new google.maps.LatLng(data.lat, data.lng);
-
-			if(_.isUndefined(isNewMarker)) {
-				isNewMarker = true;
-			}
-
-			var marker = new google.maps.Marker({
-				map: this.api,
-				position: latLng,
-				draggable: true,
-				customContent: false
-			});
-
-			google.maps.event.addListener(marker, 'click', function() {
-				t.closeInfoWindows();
-				infowindow.open(t.api, marker);
-			});
-
-			google.maps.event.addListener(marker, 'dragend', function(e) {
-				t.geocoder.geocode({location: e.latLng}, function(results, status) {
-					var content = data.content ? data.content : data.address.split(',').join('<br>');
-
-					if(status == 'OK') {
-						marker.address = results[0].formatted_address;
-						marker.addressComponents = results[0].address_components;
-					}
-					else {
-						marker.address = '';
-						marker.addressComponents = [];
-					}
-
-					if(!marker.customContent) {
-						marker.content = marker.address.split(',').join('<br>');
-						marker.infowindow.setContent(t.buildInfoWindowContent(marker, marker.content));
-					}
-
-					t.updateHiddenField();
-				});
-			});
-
-			var content = data.content ? data.content : data.address.split(',').join('<br>');
-
-			var infowindow = new google.maps.InfoWindow({
-				content: this.buildInfoWindowContent(marker, content)
-			});
-
-			marker.title = data.title ? data.title : null;
-			marker.content = content;
-			marker.customContent = data.customContent ? true : false;
-			marker.infowindow = infowindow;
-			marker.address = data.address;
-			marker.addressComponents = data.addressComponents;
-			marker.isNew = isNewMarker ? true : false;
-
-			if(data.locationId) {
-				marker.locationId = data.locationId;
-			}
-
-			if(data.elementId) {
-				marker.elementId = data.elementId;
-			}
-	
-			this.markers.push(marker);
-
-			this.center();
-			this.hideModal();
-			this.updateHiddenField();
-
-			return marker;
-		},
-
 		center: function() {
-			var bounds = new google.maps.LatLngBounds();
+			var t = this, bounds = new google.maps.LatLngBounds();
 			var boundsChanged = false;
 
 			_.each(this.markers, function(marker) {
-				if(!marker.deleted) {
+				if(!marker.get('deleted')) {
 					bounds.extend(marker.getPosition());
 					boundsChanged = true;
+				}
+			});
+
+			_.each(this.polygons, function(polygon) {
+				if(!polygon.get('deleted')) {
+					_.each(polygon.getPath().getArray(), function(latLng) {
+						bounds.extend(latLng);
+						boundsChanged = true;
+					});
 				}
 			});
 
@@ -10423,9 +11430,7 @@ var GoogleMaps = {
 		},
 
 		getMapOptions: function() {
-			return _.extend({
-	    		center: new google.maps.LatLng(0, 0)
-	  		}, this.mapOptions);
+			return this.mapOptions;
 		}
 
 	});
@@ -10481,6 +11486,397 @@ var GoogleMaps = {
 
 	"use strict";
 
+	GoogleMaps.Views.MarkerForm = GoogleMaps.Views.Geocoder.extend({
+
+		map: false,
+
+		responseHandler: function(response) {
+			var marker = this.addMarker({
+				lat: response.geometry.location.lat(), 
+				lng: response.geometry.location.lng(),
+				address: response.formatted_address,
+				addressComponents: response.address_components
+			});
+
+			this.map.closeInfowindows();
+
+			marker.get('infowindow').open(this.map.api, marker.get('api'));
+		},
+		
+		addMarker: function(data, isNewMarker) {
+			var t = this, latLng = new google.maps.LatLng(data.lat, data.lng);
+
+			if(_.isUndefined(isNewMarker)) {
+				isNewMarker = true;
+			}
+
+			/*
+			google.maps.event.addListener(marker, 'click', function() {
+				t.map.closeInfoWindows();
+				infowindow.open(t.map.api, marker);
+			});
+
+			google.maps.event.addListener(marker, 'dragend', function(e) {
+				t.geocoder.geocode({location: e.latLng}, function(results, status) {
+					var content = data.content ? data.content : data.address.split(',').join('<br>');
+
+					if(status == 'OK') {
+						marker.address = results[0].formatted_address;
+						marker.addressComponents = results[0].address_components;
+					}
+					else {
+						marker.address = '';
+						marker.addressComponents = [];
+					}
+
+					if(!marker.customContent) {
+						marker.content = marker.address.split(',').join('<br>');
+						marker.infowindow.setContent(t.buildInfoWindowContent(marker, marker.content));
+					}
+
+					t.map.updateHiddenField();
+				});
+			});
+
+			var content = data.content ? data.content : data.address.split(',').join('<br>');
+
+			var infowindow = new google.maps.InfoWindow({
+				content: this.buildInfoWindowContent(marker, content)
+			});
+			*/
+
+			/*
+			marker.title = data.title ? data.title : null;
+			marker.content = content;
+			marker.customContent = data.customContent ? true : false;
+			marker.infowindow = infowindow;
+			marker.address = data.address;
+			marker.addressComponents = data.addressComponents;
+			marker.isNew = isNewMarker ? true : false;
+			*/
+
+			/*
+			if(data.locationId) {
+				marker.locationId = data.locationId;
+			}
+
+			if(data.elementId) {
+				marker.elementId = data.elementId;
+			}
+			*/
+
+			var marker = new GoogleMaps.Models.Marker({
+				map: this.map,
+				api: new google.maps.Marker({
+					position: latLng,
+					draggable: true
+				}),
+				title: data.title ? data.title : null,
+				content: data.content ? data.content : data.address.split(',').join('<br>'),
+				customContent: data.customContent ? true : false,
+				address: data.address,
+				addressComponents: data.addressComponents,
+				// infowindow: infowindow,
+				isNew: isNewMarker ? true : false,
+				icon: data.icon ? data.icon : null,
+				elementId: data.elementId ? data.elementId : null,
+				locationId: data.locationId ? data.locationId : null
+			});
+
+			this.map.markers.push(marker);
+
+			this.map.center();
+			this.map.hideModal();
+			this.map.updateHiddenField();
+
+			return marker;
+		},
+
+		cancel: function() {
+			this.map.hideModal();
+		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Views.PolygonForm = GoogleMaps.Views.BaseForm.extend({
+
+		geocoder: false,
+
+		template: GoogleMaps.Template('polygon-form'),
+
+		map: false,
+
+		api: false,
+
+		dblclickEvent: false,
+
+		initialize: function(options) {
+			var t = this;
+
+			this.geocoder = new google.maps.Geocoder();
+
+			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
+
+			if(!this.model) {
+				this.model = new GoogleMaps.Models.Polygon({
+					map: this.map,
+					points: [],
+					hideDetails: true,
+					isNew: true,
+					isSavedToMap: false
+				});
+			}
+
+			this.model.get('infowindow').close();
+			this.model.get('api').setDraggable(true);
+			this.model.get('api').setEditable(true);
+
+			this.api = this.model.get('api');
+		},
+
+		onRender: function() {
+			var t = this;
+
+			GoogleMaps.Views.BaseForm.prototype.onRender.call(this);
+
+			this.model.onMouseup = function() {
+				setTimeout(function() {
+					// t.model.set('points', t.api.getPath().getArray());
+					t.render();
+				}, 200);
+			};
+
+			this.model.onDragend = function() {
+				// t.model.set('points', t.api.getPath().getArray());
+				t.render();
+			};
+
+			this.$el.find('.toggle-details').click(function(e) {
+				var $panel = t.$el.find('.details');
+
+				if($panel.css('display') == 'none') {
+					$panel.show();			
+					t.model.set('hideDetails', false);		
+					$(this).html('Hide Details');
+				}
+				else {
+					$panel.hide();
+					t.model.set('hideDetails', true);
+					$(this).html('Show Details');
+				}
+
+				t.$el.find('input').focus();
+
+				e.preventDefault();
+			});
+
+			this.$el.find('input').keypress(function(e) {
+				if(e.keyCode == 13) {
+					t.$el.find('.add-point').click();
+					e.preventDefault();
+				}
+			}).focus();
+
+			this.$el.find('.add-point').click(function(e) {
+				t.addPoint(t.$el.find('input').val());
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.oh-google-map-tag a').click(function(e) {
+				var index = $(this).parent().index();
+
+				t.removePoint(index);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.simple-color-picker').simpleColorPicker().blur(function() {
+				t.updatePolygonOptions();
+			})
+			.blur();
+
+			this.$el.find('.slider').each(function() {
+				var value = $(this).data('value');
+				var start = $(this).data('start');
+				var step = $(this).data('step');
+				var min = $(this).data('min');
+				var max = $(this).data('max');
+
+				$(this).noUiSlider({
+					start: parseFloat(value ? value : start),
+					step: parseFloat(step),
+					range: {
+						'min': parseFloat(min),
+						'max': parseFloat(max)
+					}
+				})
+				.change(function(e, value) {
+					$(this).next().val(value);
+					t.updatePolygonOptions();
+				});
+
+				$(this).next().val($(this).val());
+			});
+
+			t.updatePolygonOptions();
+
+			this.$el.find('.oh-google-map-tab-trigger').click(function(e) {
+				var selector = $(this).attr('href');
+
+				t.$el.find('.oh-google-map-tab.active').removeClass('active');
+				t.$el.find('.oh-google-map-tab-trigger').removeClass('active');
+
+				t.$el.find(selector).addClass('active');
+				$(this).addClass('active');
+
+				e.preventDefault();
+			});
+
+			this.$el.find('[href="#oh-points-tab"]').click(function() {
+				t.$el.find('[name="point"]').focus();				
+			});
+
+			this.$el.find('.oh-google-map-tab-trigger.active').click();
+		},
+
+		updatePolygonOptions: function() {
+			var options = {
+				strokeColor: this.$el.find('[name="strokeColor"]').val(),
+				strokeOpacity: this.$el.find('[name="strokeOpacity"]').val(),
+				strokeWeight: this.$el.find('[name="strokeWeight"]').val(),
+				fillColor: this.$el.find('[name="fillColor"]').val(),
+				fillOpacity: this.$el.find('[name="fillOpacity"]').val(),
+				title: this.$el.find('[name="title"]').val(),
+				content: this.$el.find('[name="content"]').val()
+			};
+
+			this.model.set(options);
+			this.api.setOptions(options);
+		},
+
+		onShow: function() {
+			var t = this;
+
+			this.map.api.setOptions({
+				disableDoubleClickZoom: true
+			});
+
+			this.dblclickEvent = google.maps.event.addListener(this.map.api, 'dblclick', function(e) {
+				t.addPoint(e.latLng);
+			});
+
+			setTimeout(function() {
+				t.$el.find('input').focus();
+			}, 250);
+
+		},
+
+		onDestroy: function() {
+
+			this.model.onMouseup = function() {};
+
+			this.model.onDragend = function() {};
+
+			if(!this.model.get('isSavedToMap') && this.model.get('isNew')) {
+				this.api.setMap(null);
+			}
+
+			this.map.api.setOptions({
+				disableDoubleClickZoom: false
+			});
+
+			if(this.dblclickEvent) {
+				this.dblclickEvent.remove();
+			}
+		},
+
+		addPoint: function(coord) {
+			var t = this, path = this.api.getPath();
+
+			if(_.isObject(coord)) {
+				path.push(coord);
+
+				this.api.setPath(path);
+				this.render();
+			}
+			else if(coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/)) {
+				coord = coord.split(',');
+
+				path.push(new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1])));
+
+				this.api.setPath(points);
+				this.render();
+			}
+			else {
+				this.geocoder.geocode({address: coord}, function(results, status) {
+					if(status == 'OK') {
+						path.push(results[0].geometry.location);
+						t.api.setPath(path);
+					}
+
+					t.render();
+				});
+			}
+		},
+
+		removePoint: function(index) {
+			var path = this.api.getPath();
+
+			path.removeAt(index);
+
+			this.api.setPath(path);
+			this.render();
+		},
+
+		submit: function() {
+			this.api.setDraggable(false);
+			this.api.setEditable(false);
+
+			var points = [];
+
+			this.api.getPath().forEach(function(path) {
+				points.push({lat: path.lat(), lng: path.lng()});
+			});
+
+			this.model.set('points', points);
+
+			this.updatePolygonOptions();
+
+			if(!this.model.get('isSavedToMap')) {
+				this.map.polygons.push(this.model);
+				this.model.set('isSavedToMap', true);
+			}
+
+			if(this.model.get('infowindow')) {
+				this.model.get('infowindow').setOptions({
+					content: this.model.buildInfoWindowContent()
+				});
+			}
+
+			this.map.hideModal();
+			this.map.updateHiddenField();
+		},
+
+		cancel: function() {
+			this.model.setPoints(this.model.get('points'));
+			this.model.setDraggable(false);
+			this.model.setEditable(false);
+			this.map.hideModal();
+		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
 	/*
 	GoogleMaps.App.addInitializer(function() {
 
@@ -10509,5 +11905,408 @@ var GoogleMaps = {
 		
 	});
 	*/
+
+}());
+(function() {
+
+    Handlebars.registerHelper('activeSegment', function(segment, match, options) {
+        var _return = [];
+
+        if(Timeblocker.Uri.segment(segment) == match) {
+            return options.fn();
+        }
+
+        return false;
+    });
+
+}());
+(function() {
+
+    Handlebars.registerHelper('addon', function(addon, options) {
+    	if(Account.hasAddon(addon)) {
+	        return options.fn(Account.get('addons')[addon]);
+	    }
+        return null;
+    });
+
+}());
+(function() {
+
+    Handlebars.registerHelper('date', function(timestamp, format, options) {
+
+      if(_.isObject(format)) {
+        format = timestamp;
+        timestamp = new Timeblocker.Date();
+      }
+
+      var time;
+
+      if(_.isObject(timestamp) && _.isFunction(timestamp.timestamp)) {
+        time = timestamp.timestamp();
+      }
+      else {
+        time = new Timeblocker.Date(timestamp);
+      }
+
+      if(!time.date) {
+        time = new Timeblocker.Date(time); 
+      }
+      
+      return time.format(format);
+
+    });
+
+}());
+(function() {
+
+	'use strict';
+
+    Handlebars.registerHelper('eachProperty', function(context, options) {
+    	var ret = [];
+
+    	if(_.isObject(context)) {
+	    	_.each(context, function(value, property) {
+	    		var parse = {
+	    			property: property,
+	    			value: value
+	    		};
+
+	    		ret.push(options.fn(parse));
+	    	});
+	    }
+
+    	return ret.join("\n");
+    });
+
+}());
+
+
+(function() {
+
+	'use strict';
+
+    Handlebars.registerHelper('forEach', function(context, options) {
+    	var ret = [];
+
+    	if(_.isObject(context)) {
+	    	_.each(context, function(value, i) {
+	    		var parse = _.extend(value, {
+	    			index: i,
+	    			count: i + 1
+	    		});
+
+	    		ret.push(options.fn(parse));
+	    	});
+	    }
+
+    	return ret.join("\n");
+    });
+
+}());
+
+
+(function() {
+
+    Handlebars.registerHelper('hasAddon', function(addon, options) {
+    	if(Account.hasAddon(addon)) {
+	        return options.fn();
+	    }
+    });
+
+    Handlebars.registerHelper('hasNoAddon', function(addon, options) {
+    	if(!Account.hasAddon(addon)) {
+	        return options.fn();
+	    }
+    });
+
+}());
+(function() {
+
+    Handlebars.registerHelper('profile', function(options) {
+        return options.fn(Profile.toJSON());
+    });
+
+    Handlebars.registerHelper('account', function(options) {
+        return options.fn(Account.toJSON());
+    });
+
+    Handlebars.registerHelper('hasPermission', function(permission, options) {
+    	if(Profile.hasPermission(permission)) {
+	        return options.fn();
+	    }
+    });
+
+    Handlebars.registerHelper('notPermitted', function(permission, options) {
+     	if(!Profile.hasPermission(permission)) {
+	        return options.fn();
+	    }
+    });
+
+    Handlebars.registerHelper('canCancelAppointment', function(client, options) {
+    	if( Profile.get('uid') == client.uid || 
+            Profile.get('uid') == client.parent.uid ||
+            Profile.hasPermission('manageAppointments') ) {
+    		return options.fn();
+    	}
+    });
+
+}());
+(function() {
+
+    Handlebars.registerHelper('inArray', function(needle, haystack, options) {
+        if( typeof haystack == "object" && haystack.indexOf(needle) >= 0) {
+        	return options.fn();
+        }
+    });
+
+}());
+(function (root, factory) {
+    if (typeof exports === 'object') {
+        module.exports = factory(require('handlebars'));
+    } else if (typeof define === 'function' && define.amd) {
+        define(['handlebars'], factory);
+    } else {
+        root.HandlebarsHelpersRegistry = factory(root.Handlebars);
+    }
+}(this, function (Handlebars) {
+
+    var isArray = function(value) {
+        return Object.prototype.toString.call(value) === '[object Array]';
+    };
+
+    var ExpressionRegistry = function() {
+        this.expressions = [];
+    };
+
+    ExpressionRegistry.prototype.add = function (operator, method) {
+        this.expressions[operator] = method;
+    };
+
+    ExpressionRegistry.prototype.call = function (operator, left, right) {
+        if ( ! this.expressions.hasOwnProperty(operator)) {
+            throw new Error('Unknown operator "'+operator+'"');
+        }
+
+        return this.expressions[operator](left, right);
+    };
+
+    var eR = new ExpressionRegistry();
+    eR.add('not', function(left, right) {
+        return left != right;
+    });
+    eR.add('>', function(left, right) {
+        return left > right;
+    });
+    eR.add('<', function(left, right) {
+        return left < right;
+    });
+    eR.add('>=', function(left, right) {
+        return left >= right;
+    });
+    eR.add('<=', function(left, right) {
+        return left <= right;
+    });
+    eR.add('==', function(left, right) {
+        return left == right;
+    });
+    eR.add('===', function(left, right) {
+        return left === right;
+    });
+    eR.add('!==', function(left, right) {
+        return left !== right;
+    });
+    eR.add('in', function(left, right) {
+        if ( ! isArray(right)) {
+            right = right.split(',');
+        }
+        return right.indexOf(left) !== -1;
+    });
+
+    var isHelper = function() {
+        var args = arguments,
+            left = args[0],
+            operator = args[1],
+            right = args[2],
+            options = args[3];
+
+        if (args.length == 2) {
+            options = args[1];
+            if (left) return options.fn(this);
+            return options.inverse(this);
+        }
+
+        if (args.length == 3) {
+            right = args[1];
+            options = args[2];
+            if (left == right) return options.fn(this);
+            return options.inverse(this);
+        }
+
+        if (eR.call(operator, left, right)) {
+            return options.fn(this);
+        }
+        return options.inverse(this);
+    };
+
+    Handlebars.registerHelper('is', isHelper);
+
+    /*
+    Handlebars.registerHelper('nl2br', function(text) {
+        var nl2br = (text + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '$1' + '<br>' + '$2');
+        return new Handlebars.SafeString(nl2br);
+    });
+
+    Handlebars.registerHelper('log', function() {
+        console.log(['Values:'].concat(
+            Array.prototype.slice.call(arguments, 0, -1)
+        ));
+    });
+
+    Handlebars.registerHelper('debug', function() {
+        console.log('Context:', this);
+        console.log(['Values:'].concat(
+            Array.prototype.slice.call(arguments, 0, -1)
+        ));
+    });
+	*/
+
+    return eR;
+
+}));
+(function() {
+
+    Handlebars.registerHelper('isArray', function(variable, options) {
+        if(_.isArray(variable)) {
+            return options.fn();
+        }
+    });
+
+    Handlebars.registerHelper('notArray', function(variable, options) {
+        if(!_.isArray(variable)) {
+            return options.fn();
+        }
+    });
+
+}());
+(function() {
+
+    Handlebars.registerHelper('isHost', function(options) {
+        if(Profile.isHost()) {
+            return options.fn();
+        }
+    });
+
+    Handlebars.registerHelper('notHost', function(options) {
+        if(!Profile.isHost()) {
+            return options.fn();
+        }
+    });
+
+    Handlebars.registerHelper('isClient', function(options) {
+        if(Profile.isClient()) {
+            return options.fn();
+        }
+    });
+
+    Handlebars.registerHelper('notClient', function(options) {
+        if(!Profile.isClient()) {
+            return options.fn();
+        }
+    });
+
+}());
+(function() {
+
+    Handlebars.registerHelper('localize', function() {
+        var str = Timeblocker.localize(arguments[0].replace(/\s$/, ''));
+
+        if(arguments.length > 1) {
+            for(var i = 1; i <= arguments.length; i++) {
+                var x = arguments[i];
+
+                str = str.replace('{{$'+(i-1)+'}}', x);
+            }
+        }
+
+        return new Handlebars.SafeString(str);
+    });
+
+}());
+(function() {
+
+    Handlebars.registerHelper('not', function(value, options) {
+    	return !value || value == 0 ? options.fn(value) : false;
+    });
+
+    Handlebars.registerHelper('undefined', function(value, options) {
+    	return _.isUndefined(value) ? true : false;
+    });
+
+}());
+(function() {
+
+	function link(path, text, options) {
+		var attrs = [];
+
+		path = new Timeblocker.Path(path);
+
+		attrs.push('href="'+path.string()+'"');
+
+		_.each(options.hash, function(value, name) {
+			attrs.push(name+'="'+value+'"');
+		});
+
+		return '<a '+attrs.join(' ')+'>'+text+'</a>';
+	}
+
+    Handlebars.registerHelper('path', function() {
+        return new Timeblocker.Path(arguments).string();        
+    });
+
+    Handlebars.registerHelper('url', function() {
+        if(arguments[0] && !_.isObject(arguments[0])) {
+            return new Timeblocker.Path(arguments).url();
+        }
+        else {
+            console.log(arguments);
+
+            return arguments[0];
+        }
+    });
+
+    Handlebars.registerHelper('image', function() {
+        return new Timeblocker.Path(arguments).account();
+    });
+
+    Handlebars.registerHelper('link', function(url, text, options) {
+    	if(_.isObject(text)) {
+    		options = text;
+    		text = options.fn ? options.fn(this) : '';
+    	}
+
+    	return new Handlebars.SafeString(link(url, text, options));
+    });
+
+}());
+(function() {
+
+    Handlebars.registerHelper('segment', function(segment) {
+        return Timeblocker.Uri.segment(segment);
+    });
+
+}());
+
+
+(function() {
+
+    Handlebars.registerHelper('swapFieldNameWithLabel', function(value, subject) {
+     	_.each(subject, function(obj) {
+    		if(obj.name == value) {
+    			value = obj.label;
+    		}
+    	});
+
+    	return value;
+    });
 
 }());

@@ -12,10 +12,17 @@
 
   		geocoder: false,
 
-  		mapOptions: {
-  			zoom: 8,
-  			disableDefaultUI: true
-  		},
+  		width: false,
+
+  		height: false,
+
+  		position: false,
+
+  		zoom: false,
+
+  		savedData: false,
+
+  		mapOptions: {},
 
   		regions: {
   			buttonBar: '.oh-google-map-controls',
@@ -24,10 +31,18 @@
 
   		markers: [],
 
+  		polygons: [],
+
   		className: 'oh-google-map-relative',
 
   		initialize: function(options) {
   			this.markers = [];
+  			this.polygons = [];
+
+  			this.mapOptions = _.extend({}, {
+	  			zoom: 8,
+	  			disableDefaultUI: true
+	  		});
 
   			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
 
@@ -35,45 +50,44 @@
   				this.model = new Backbone.Model();
   			}
 
-  			this.model.set('fieldname', this.fieldname);
-  			this.model.set('savedData', this.savedData);
+  			if(this.position) {
+  				this.mapOptions.center = this.position;
+  			}
+
+  			if(this.zoom) {
+  				this.mapOptions.zoom = this.zoom;
+  			}
+
+  			this.model.set({
+  				fieldname: this.fieldname,
+  				savedData: this.savedData,
+  				width: this.width,
+  				height: this.height
+  			});
+
+  			this.$el.css({
+  				width: this.width,
+  				height: this.height
+  			}); 
   		},
 
   		updateHiddenField: function() {
   			var data = {
-  				markers: []
+  				markers: [],
+  				polygons: []
   			};
 
   			_.each(this.markers, function(marker, i) {
-  				var obj = {
-  					lat: marker.getPosition().lat(),
-  					lng: marker.getPosition().lng(),
-  					title: marker.title,
-  					content: marker.content,
-  					customContent: marker.customContent ? true : false,
-  					address: marker.address,
-  					addressComponents: marker.addressComponents,
-  					isNew: marker.isNew ? true : false
-  				};
-
-  				if(marker.deleted) {
-  					obj.deleted = true;
-  				}
-
-  				if(marker.elementId) {
-  					obj.elementId = marker.elementId;
-  				}
-
-  				if(marker.locationId) {
-  					obj.locationId = marker.locationId;
-  				}
-
-  				data.markers.push(obj);
+  				data.markers.push(marker.toJSON());
   			});
 
-  			console.log(data);
+  			_.each(this.polygons, function(polygon, i) {
+  				data.polygons.push(polygon.toJSON());
+  			});
 
-  			this.$el.find('.field-data').val(JSON.stringify(data));
+  			data = JSON.stringify(data);
+
+  			this.$el.find('.field-data').val(data).html(data);
   		},
 
 		onRender: function() {
@@ -97,12 +111,61 @@
  				e.preventDefault();
  			});
 
+ 			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
+
  			if(this.savedData) {
 	 			if(this.savedData.markers) {
+	 				var view = new GoogleMaps.Views.MarkerForm({
+	 					map: this
+	 				});
+
 		 			_.each(this.savedData.markers, function(marker) {
-		 				t.addMarker(marker, marker.isNew);
+		 				view.addMarker(marker, marker.isNew);
 		 			});
 		 		}
+
+	 			if(this.savedData.polygons) {
+		 			_.each(this.savedData.polygons, function(polygon) {
+
+		 				/*
+		 				polygon.map = t;
+
+		 				polygon = ;
+
+		 				var points = [];
+
+		 				_.each(polygon.points, function(point) {
+		 					points.push(new google.maps.LatLng(point.lat, point.lng));
+		 				});
+
+		 				polygon.map = t.api;
+		 				polygon.points = points;
+
+		 				polygon = new google.maps.Polygon(polygon);
+
+		 				polygon.infowindow = new google.maps.InfoWindow({
+		 					content: polygon.content
+		 				});
+
+		 				google.maps.event.addListener(polygon, 'click', function(e) {
+		 					polygon.infowindow.open(t.api);
+		 					polygon.infowindow.setPosition(e.latLng);
+		 					//polygon.infowindow.open(t.api, e.latLng);
+		 				});
+						*/
+
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.polygons.push(new GoogleMaps.Models.Polygon(_.extend({}, options, polygon)));
+		 			});
+
+		 			t.center();
+		 		}
+
+		 		this.updateHiddenField();
 		 	}
 		},
 
@@ -127,24 +190,19 @@
  				},{
  					name: 'Add Marker',
  					click: function(e) {
- 						var view = new GoogleMaps.Views.Geocoder({
-							cancel: function() {
-								t.hideModal(this);
-							},
-							responseHandler: function(response) {
-								console.log(response);
+ 						var view = new GoogleMaps.Views.MarkerForm({
+ 							map: t
+ 						});
 
-								var marker = t.addMarker({
-									lat: response.geometry.location.lat(), 
-									lng: response.geometry.location.lng(),
-									address: response.formatted_address,
-									addressComponents: response.address_components
-								});
+ 						t.showModal(view);
 
-								t.closeInfoWindows();
-
-								marker.infowindow.open(t.api, marker);
-							}
+ 						e.preventDefault();
+ 					}
+ 				},{
+ 					name: 'Add Polygon',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.PolygonForm({
+ 							map: t
  						});
 
  						t.showModal(view);
@@ -155,9 +213,13 @@
  			}));
 		},
 
-		closeInfoWindows: function() {
+		closeInfowindows: function() {
 			_.each(this.markers, function(marker) {
-				marker.infowindow.close();
+				marker.get('infowindow').close();
+			});
+
+			_.each(this.polygons, function(polygon) {
+				polygon.get('infowindow').close();
 			});
 		},
 
@@ -170,7 +232,8 @@
 		hideModal: function(view) {
 			this.modal.$el.removeClass('show');
 			this.buttonBar.$el.removeClass('hide');
-			this.center();
+			this.center();			
+			this.modal.empty();
 		},
 
 		zoomIn: function() {
@@ -197,164 +260,23 @@
 			this.api.setZoom(x);
 		},
 
-		buildInfoWindowContent: function(marker, content) {
-			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
-			var t = this, latLng = marker.getPosition();
-
-			_return.push([
-					'<div class="oh-google-map-infowindow-actions">',
-						'<a href="#" class="edit">Edit</a> | ',
-						'<a href="#" class="delete">Delete</a>',
-					'</div>',
-				'</div>'
-			].join(''));
-
-			var $content = $(_return.join(''));
-
-			$content.find('.edit').click(function(e) {
-
-				t.api.setCenter(latLng);
-				t.api.panBy(0, -150);
-
-				var view = new GoogleMaps.Views.BaseForm({
-					model: new Backbone.Model({
-						title: marker.title,
-						content: marker.content
-					}),
-					template: GoogleMaps.Template('edit-marker-form'),								
-					onShow: function() {
-						var t = this;
-
-						setTimeout(function() {
-							t.$el.find('input').focus();
-						}, 250);
-					},
-					submit: function() {
-						marker.title = t.$el.find('input').val();
-						marker.content = t.$el.find('textarea').val();
-						marker.customContent = true;
-
-						marker.infowindow.setContent(t.buildInfoWindowContent(marker, marker.content));
-
-						t.hideModal();
-						t.updateHiddenField();
-					},
-					cancel: function() {
-						t.hideModal();
-					}
-				});
-
-				t.showModal(view);
-
-				e.preventDefault();
-			});
-
-			$content.find('.delete').click(function(e) {
-				t.api.setCenter(latLng);
-				t.api.panBy(0, -150);
-
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-marker-form'),
-					submit: function() {
-						marker.setMap(null);
-						marker.deleted = true;
-
-						t.hideModal();
-						t.updateHiddenField();
-					},
-					cancel: function() {
-						t.hideModal();
-					}
-				});
-
-				t.showModal(view);
-
-				e.preventDefault();
-			});
-
-			return $content.get(0);
-		},
-
-		addMarker: function(data, isNewMarker) {
-			var t = this, latLng = new google.maps.LatLng(data.lat, data.lng);
-
-			if(_.isUndefined(isNewMarker)) {
-				isNewMarker = true;
-			}
-
-			var marker = new google.maps.Marker({
-				map: this.api,
-				position: latLng,
-				draggable: true,
-				customContent: false
-			});
-
-			google.maps.event.addListener(marker, 'click', function() {
-				t.closeInfoWindows();
-				infowindow.open(t.api, marker);
-			});
-
-			google.maps.event.addListener(marker, 'dragend', function(e) {
-				t.geocoder.geocode({location: e.latLng}, function(results, status) {
-					var content = data.content ? data.content : data.address.split(',').join('<br>');
-
-					if(status == 'OK') {
-						marker.address = results[0].formatted_address;
-						marker.addressComponents = results[0].address_components;
-					}
-					else {
-						marker.address = '';
-						marker.addressComponents = [];
-					}
-
-					if(!marker.customContent) {
-						marker.content = marker.address.split(',').join('<br>');
-						marker.infowindow.setContent(t.buildInfoWindowContent(marker, marker.content));
-					}
-
-					t.updateHiddenField();
-				});
-			});
-
-			var content = data.content ? data.content : data.address.split(',').join('<br>');
-
-			var infowindow = new google.maps.InfoWindow({
-				content: this.buildInfoWindowContent(marker, content)
-			});
-
-			marker.title = data.title ? data.title : null;
-			marker.content = content;
-			marker.customContent = data.customContent ? true : false;
-			marker.infowindow = infowindow;
-			marker.address = data.address;
-			marker.addressComponents = data.addressComponents;
-			marker.isNew = isNewMarker ? true : false;
-
-			if(data.locationId) {
-				marker.locationId = data.locationId;
-			}
-
-			if(data.elementId) {
-				marker.elementId = data.elementId;
-			}
-	
-			this.markers.push(marker);
-
-			this.center();
-			this.hideModal();
-			this.updateHiddenField();
-
-			return marker;
-		},
-
 		center: function() {
-			var bounds = new google.maps.LatLngBounds();
+			var t = this, bounds = new google.maps.LatLngBounds();
 			var boundsChanged = false;
 
 			_.each(this.markers, function(marker) {
-				if(!marker.deleted) {
+				if(!marker.get('deleted')) {
 					bounds.extend(marker.getPosition());
 					boundsChanged = true;
+				}
+			});
+
+			_.each(this.polygons, function(polygon) {
+				if(!polygon.get('deleted')) {
+					_.each(polygon.getPath().getArray(), function(latLng) {
+						bounds.extend(latLng);
+						boundsChanged = true;
+					});
 				}
 			});
 
@@ -368,9 +290,7 @@
 		},
 
 		getMapOptions: function() {
-			return _.extend({
-	    		center: new google.maps.LatLng(0, 0)
-	  		}, this.mapOptions);
+			return this.mapOptions;
 		}
 
 	});

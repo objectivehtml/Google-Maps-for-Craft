@@ -18,13 +18,14 @@ class GoogleMaps_LocationRecord extends BaseRecord
         );
 
         return array(
-            'handle'    => AttributeType::String,
-            'address'   => array(AttributeType::String, 'column' => ColumnType::Text),
-            'addressComponents'   => array(AttributeType::String, 'column' => ColumnType::Text),
-            'title'     => array(AttributeType::String, 'column' => ColumnType::Text),
-            'content'   => array(AttributeType::String, 'column' => ColumnType::Text),
-            'lat'       => $coordColumn,
-            'lng'       => $coordColumn,
+            'handle' => AttributeType::String,
+            'address' => array(AttributeType::String, 'column' => ColumnType::Text),
+            'addressComponents' => array(AttributeType::String, 'column' => ColumnType::Text),
+            'title' => array(AttributeType::String, 'column' => ColumnType::Text),
+            'content' => array(AttributeType::String, 'column' => ColumnType::Text),
+            'icon' => array(AttributeType::String, 'column' => ColumnType::Text),
+            'lat' => $coordColumn,
+            'lng' => $coordColumn,
         );
 
     }

@@ -17,7 +17,9 @@ module.exports = function(grunt) {
           'resources/js/vendor/backbone.wreqr.js',
           'resources/js/vendor/backbone.babysitter.js',
           'resources/js/vendor/backbone.marionette.js',
-          'resources/js/vendor/handlebars.js'
+          'resources/js/vendor/handlebars.js',
+          'resources/js/vendor/jquery.simple-color-picker.js',
+          'resources/js/vendor/jquery.nouislider.min.js',
         ],
         dest: 'resources/js/libraries.js',
       },
@@ -29,6 +31,7 @@ module.exports = function(grunt) {
           'resources/js/app/views/LayoutView.js',
           'resources/js/app/views/*.js',
           'resources/js/app/core/*.js',
+          'resources/js/app/helpers/*.js',
         ],
         dest: 'resources/js/app.js',
       },

@@ -1,0 +1,119 @@
+{{#not isSavedToMap}}
+	<h2>Add Polygon</h2>
+{{/not}}
+
+{{#if isSavedToMap}}
+	<h2>Edit Polygon</h2>
+{{/if}}
+
+<nav class="oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up">
+	<ul>
+		<li><a class="oh-google-map-tab-trigger active" href="#oh-points-tab">Points</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-content-tab">Content</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-options-tab">Options</a></li>
+	</ul>
+</nav>
+
+<div id="oh-points-tab" class="oh-google-map-clearfix oh-google-map-tab">
+	<p><span class="oh-google-map-small-text"><a href="#" class="toggle-details">{{#if hideDetails}}Show Details{{/if}}{{#not hideDetails}}Hide Details{{/not}}</a></span></p>
+
+	<div class="details" {{#if hideDetails}}style="display:none"{{/if}}>
+		<p class="oh-google-map-small-text">To add points to the polygon, you can either double click the map or add enter coordinates or addresses manually.</p>
+
+		<div class="points oh-google-map-tags">
+			{{#forEach points}}
+			<div class="oh-google-map-tag" title="{{lat}},{{lng}}">
+				<span>Point {{count}}</span>
+				<a href="#" class="remove"><span>&times;</span></a>
+			</div>
+			{{/forEach}}
+		</div>
+	</div>
+
+	<div class="point-field">
+		<input type="text" name="point" value="" class="text" placeholder="Enter a coordinate or address" style="width:45%;" /> <a class="btn add-point" style="margin-left:10px;">+ Add Point</a>
+	</div>
+
+</div>
+
+<div id="oh-content-tab" class="oh-google-map-clearfix oh-google-map-tab">
+	
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="poly-title">Title</label>
+				<input type="text" name="title" id="poly-title" value="{{title}}" class="text fullwidth" />
+			</div>
+		</div>
+	</div>
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="poly-title">Content</label>
+				<textarea name="content" id="poly-content" class="text fullwidth">{{content}}</textarea>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div id="oh-options-tab" class="oh-google-map-clearfix oh-google-map-tab">
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="stroke-color">Stroke Color</label>
+				<input type="text" name="strokeColor" id="stroke-color" value="{{strokeColor}}" class="simple-color-picker text fullwidth" />
+			</div>
+		</div>
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="stroke-color">Fill Color</label>
+				<input type="text" name="fillColor" id="fill-color" value="{{fillColor}}" class="simple-color-picker text fullwidth" />
+			</div>
+		</div>
+	</div>
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="stroke-opacity" class="oh-google-map-small-margin-bottom">Stroke Opacity</label>
+				<div class="slider" data-value="{{strokeOpacity}}" data-start=".6" data-step=".1" data-min="0" data-max="1"></div>
+				<input type="hidden" name="strokeOpacity" id="stroke-opacity" value="{{strokeOpacity}}" />
+			</div>
+		</div>
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="fill-opacity" class="oh-google-map-small-margin-bottom">Fill Opacity</label>
+				<div class="slider" data-value="{{fillOpacity}}" data-start=".6" data-step=".1" data-min="0" data-max="1"></div>
+				<input type="hidden" name="fillOpacity" id="fill-opacity" value="{{fillOpacity}}" />
+			</div>
+		</div>
+	</div>
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="stroke-opacity" class="oh-google-map-small-margin-bottom">Stroke Weight</label>
+				<div class="slider" data-value="{{strokeWeight}}" data-start="3" data-step="1" data-min="0" data-max="10"></div>
+				<input type="hidden" name="strokeWeight" id="stroke-weight" value="{{strokeWeight}}" />
+			</div>
+		</div>
+		<div class="oh-google-map-column oh-google-map-large-6">
+		</div>
+	</div>
+
+</div>
+
+<footer>
+	{{#not isSavedToMap}}
+		<button type="submit" class="btn submit">Save Polygon</button>
+	{{/not}}
+
+	{{#if isSavedToMap}}
+		<button type="submit" class="btn submit">Save Changes</button>
+	{{/if}}
+	
+	<a href="#" class="cancel">Cancel</a>
+</footer>

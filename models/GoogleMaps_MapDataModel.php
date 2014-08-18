@@ -49,6 +49,19 @@ class GoogleMaps_MapDataModel extends BaseModel
         return $return;
     }
 
+    public function getPolygons()
+    {
+        $return = array();
+
+        foreach($this->polygons as $polygon)
+        {
+            $return[] = GoogleMaps_PolygonModel::populateModel((array) $polygon);
+
+        }
+
+        return $return;
+    }
+
     public function sortByDistanceAsc($a, $b)
     {
         return $a->distance < $b->distance ? -1 : 1;
@@ -62,7 +75,8 @@ class GoogleMaps_MapDataModel extends BaseModel
     public function toJson()
     {
         $return = array(
-            'markers' => array()
+            'markers' => array(),
+            'polygons' => array()
         );
 
         foreach($this->getMarkers() as $marker)
@@ -70,7 +84,48 @@ class GoogleMaps_MapDataModel extends BaseModel
             $return['markers'][] = $marker->getAttributes();
         }
 
+        foreach($this->getPolygons() as $polygon)
+        {
+            $return['polygons'][] = $polygon->getAttributes();
+        }
+
         return json_encode($return);
+    }
+
+    public function addMarker(GoogleMaps_MarkerModel $marker)
+    {
+        $markers = $this->markers;
+
+        $markers[] = $marker;
+
+        $this->markers = $markers;
+    }
+
+    public function removeMarker($index)
+    {
+        $markers = $this->markers;
+
+        unset($markers[$index]);
+
+        $this->markers = $markers;
+    }
+
+    public function addPolygon(GoogleMaps_PolygonModel $polygon)
+    {
+        $polygons = $this->polygons;
+
+        $polygons[] = $polygon;
+
+        $this->polygons = $polygons;
+    }
+
+    public function removePolygon($index)
+    {
+        $polygons = $this->polygons;
+
+        unset($polygons[$index]);
+
+        $this->polygons = $polygons;
     }
 
     public function getStaticMapModel($options = array())
@@ -88,7 +143,8 @@ class GoogleMaps_MapDataModel extends BaseModel
     {
         return array(
             // Location Parameters
-            'markers'   => array(AttributeType::Mixed, 'default' => array())
+            'markers'   => array(AttributeType::Mixed, 'default' => array()),
+            'polygons'   => array(AttributeType::Mixed, 'default' => array())
         );
 
     }

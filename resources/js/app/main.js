@@ -45,10 +45,16 @@ var GoogleMaps = {
 			content: $el
 		});
 	
+		var coord = options.center.split(',');
+
 		App.addInitializer(function() {
 			var map = new GoogleMaps.Views.Map({
 				fieldname: options.fieldname,
-				savedData: options.savedData
+				savedData: options.savedData,
+				width: options.width,
+				height: options.height,
+				position: new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1])),
+				zoom: options.zoom
 			});
 
 			App.content.show(map);

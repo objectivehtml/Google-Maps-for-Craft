@@ -28,6 +28,10 @@
 			this.bindEvents();
 		},
 		
+		isCoordinate: function(coord) {
+			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+		},
+
 		buildInfoWindowContent: function() {
 			var content = this.get('content');
 			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
@@ -290,8 +294,6 @@
 			});
 
 			this.get('map').geocoder.geocode({location: e.latLng}, function(results, status) {
-				var content = t.get('content') ? t.get('content') : t.get('address').split(',').join('<br>');
-
 				if(status == 'OK') {
 					t.set('address', results[0].formatted_address);
 					t.set('addressComponents', results[0].address_components);
@@ -302,7 +304,13 @@
 				}
 
 				if(!t.get('customContent')) {
-					t.set('content', t.get('address').split(',').join('<br>'));
+					if(!t.isCoodinate(t.get('address'))) {
+						t.model.set('content', t.get('address').split(',').join('<br>'));
+					}
+					else {
+						t.model.set('content', t.get('address'));
+					}
+
 					t.get('infowindow').setContent(t.buildInfoWindowContent());
 				}
 

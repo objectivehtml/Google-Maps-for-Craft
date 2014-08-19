@@ -68,7 +68,7 @@
 		},
 
 		hasLocation: function() {
-			return !this.model.get('lat') || !this.model.get('lng') ? false : true;
+			return _.isUndefined(this.model.get('lat')) || _.isUndefined(this.model.get('lng')) ? false : true;
 		},
 
 		onRender: function() {
@@ -104,6 +104,9 @@
 			}
 		},
 
+		isCoordinate: function(coord) {
+			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+		},
 		showGeocoder: function() {
 			var t = this;
 
@@ -117,7 +120,12 @@
 					});
 
 					if(!t.model.get('customContent')) {
-						t.model.set('content', response.formatted_address.split(',').join('<br>'));
+						if(!t.model.isCoordinate(response.formatted_address)) {
+							t.model.set('content', response.formatted_address.split(',').join('<br>'));
+						}
+						else {
+							t.model.set('content', response.formatted_address);
+						}
 					}
 
 					var view = new GoogleMaps.Views.MarkerForm({

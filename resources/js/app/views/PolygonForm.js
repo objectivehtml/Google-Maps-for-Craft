@@ -179,6 +179,10 @@
 			}
 		},
 
+		isCoordinate: function(coord) {
+			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+		},
+
 		addPoint: function(coord) {
 			var t = this, path = this.api.getPath();
 
@@ -192,12 +196,12 @@
 				this.api.setPath(path);
 				this.render();
 			}
-			else if(coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/)) {
+			else if(this.isCoordinate(coord)) {
 				coord = coord.split(',');
 
 				path.push(new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1])));
 
-				this.api.setPath(points);
+				this.api.setPath(path);
 				this.render();
 			}
 			else {

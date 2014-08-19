@@ -192,8 +192,6 @@
  							data.polygons.push(polygon.toJSON());
  						});
 
- 						console.log(data);
-
  						var view = new GoogleMaps.Views.MapList({
  							map: t,
  							model: new Backbone.Model(data)

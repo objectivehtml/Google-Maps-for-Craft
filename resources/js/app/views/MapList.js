@@ -53,6 +53,7 @@
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
 
+				t.map.api.setZoom(14);
 				t.map.api.setCenter(marker.getPosition());
 				
 				e.preventDefault();

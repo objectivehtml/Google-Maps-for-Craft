@@ -1297,8 +1297,6 @@ var GoogleMaps = {
  							data.polygons.push(polygon.toJSON());
  						});
 
- 						console.log(data);
-
  						var view = new GoogleMaps.Views.MapList({
  							map: t,
  							model: new Backbone.Model(data)
@@ -1481,6 +1479,7 @@ var GoogleMaps = {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
 
+				t.map.api.setZoom(14);
 				t.map.api.setCenter(marker.getPosition());
 				
 				e.preventDefault();
@@ -2441,8 +2440,6 @@ var GoogleMaps = {
             return new Timeblocker.Path(arguments).url();
         }
         else {
-            console.log(arguments);
-
             return arguments[0];
         }
     });

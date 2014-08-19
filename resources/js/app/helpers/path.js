@@ -23,8 +23,6 @@
             return new Timeblocker.Path(arguments).url();
         }
         else {
-            console.log(arguments);
-
             return arguments[0];
         }
     });

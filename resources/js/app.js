@@ -1835,6 +1835,10 @@ var GoogleMaps = {
 		addPoint: function(coord) {
 			var t = this, path = this.api.getPath();
 
+			if(!path) {
+				path = [];
+			}
+
 			if(_.isObject(coord)) {
 				path.push(coord);
 
@@ -1852,12 +1856,7 @@ var GoogleMaps = {
 			else {
 				this.geocoder.geocode({address: coord}, function(results, status) {
 					if(status == 'OK') {
-						if(path) {
-							path.push(results[0].geometry.location);
-						}
-						else {
-							path = [results[0].geometry.location];
-						}
+						path.push(results[0].geometry.location);
 
 						t.api.setPath(path);
 					}

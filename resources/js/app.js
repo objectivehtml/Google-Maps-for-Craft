@@ -1480,9 +1480,9 @@ var GoogleMaps = {
 
 			// GoogleMaps.Views.BaseForm.prototype.onShow.call(this);
 
-			this.model.get('map').closeInfoWindows();
+			this.map.closeInfoWindows();
 
-			if(this.model.get('infowindow')) {
+			if(this.model.get('isSavedToMap')) {
 				this.model.get('infowindow').open(this.map.api, this.model.get('api'));
 			}
 

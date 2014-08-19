@@ -4,6 +4,14 @@
 
 <ol class="oh-google-map-ordered-list">
 {{#each markers}}
-	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="center">{{this.address}}</a>{{#if this.deleted}}</span> <a href="#" class="undo oh-google-map-small-text">Undo Delete</a>{{/if}}</li>
+	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="marker-center">{{this.address}}</a>{{#if this.deleted}}</span> <a href="#" class="marker-undo oh-google-map-small-text">Undo Delete</a>{{/if}}</li>
 {{/each}}
+</ol>
+
+<h2>Polygons</h2>
+
+<ol class="oh-google-map-ordered-list">
+{{#forEach polygons}}
+	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="polygon-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Polygon {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="polygon-undo oh-google-map-small-text">Undo Delete</a>{{/if}}</li>
+{{/forEach}}
 </ol>

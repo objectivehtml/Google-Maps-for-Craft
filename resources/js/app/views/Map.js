@@ -174,14 +174,29 @@
 			var t = this;
 
 			this.buttonBar.show(new GoogleMaps.Views.ButtonBar({
- 				buttons: [{
+ 				buttons: [
+
+ 				{
  					icon: 'list',
  					click: function(e) {
+ 						var data = {
+ 							markers: [],
+ 							polygons: []
+ 						};
+
+ 						_.each(t.markers, function(marker) {
+ 							data.markers.push(marker.toJSON());
+ 						});
+
+ 						_.each(t.polygons, function(polygon) {
+ 							data.polygons.push(polygon.toJSON());
+ 						});
+
+ 						console.log(data);
+
  						var view = new GoogleMaps.Views.MapList({
  							map: t,
- 							model: new Backbone.Model({
- 								markers: t.markers
- 							})
+ 							model: new Backbone.Model(data)
  						});
 
  						t.showModal(view);
@@ -232,11 +247,14 @@
 			this.buttonBar.$el.addClass('hide');
 		},
 
-		hideModal: function() {
+		hideModal: function(center) {
 			this.modal.$el.removeClass('show');
 			this.buttonBar.$el.removeClass('hide');
-			this.center();			
 			this.modal.empty();
+
+			if(_.isUndefined(center) || center === true) {	
+				this.center();
+			}
 		},
 
 		zoomIn: function() {
@@ -284,8 +302,12 @@
 			});
 
 			if(boundsChanged) {
-				this.api.fitBounds(bounds);
+				this.fitBounds(bounds);
 			}
+		},
+
+		fitBounds: function(bounds) {
+			this.api.fitBounds(bounds);
 		},
 
 		getCanvas: function() {

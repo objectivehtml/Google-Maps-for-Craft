@@ -9882,7 +9882,7 @@ function program2(depth0,data) {
 templates['map-list'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, self=this, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, helper, options, self=this, functionType="function", escapeExpression=this.escapeExpression, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
@@ -9890,7 +9890,7 @@ function program1(depth0,data) {
   buffer += "\n	<li>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "<a href=\"#\" class=\"center\">"
+  buffer += "<a href=\"#\" class=\"marker-center\">"
     + escapeExpression(((stack1 = (depth0 && depth0.address)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</a>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
@@ -9907,11 +9907,51 @@ function program2(depth0,data) {
 function program4(depth0,data) {
   
   
-  return "</span> <a href=\"#\" class=\"undo oh-google-map-small-text\">Undo Delete</a>";
+  return "</span> <a href=\"#\" class=\"marker-undo oh-google-map-small-text\">Undo Delete</a>";
+  }
+
+function program6(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n	<li>";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "<a href=\"#\" class=\"polygon-center\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(7, program7, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(9, program9, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a>";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</li>\n";
+  return buffer;
+  }
+function program7(depth0,data,depth1) {
+  
+  var stack1;
+  return escapeExpression(((stack1 = (depth1 && depth1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+  }
+
+function program9(depth0,data,depth1) {
+  
+  var buffer = "", stack1;
+  buffer += "Polygon "
+    + escapeExpression(((stack1 = (depth1 && depth1.count)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+  return buffer;
+  }
+
+function program11(depth0,data) {
+  
+  
+  return "</span> <a href=\"#\" class=\"polygon-undo oh-google-map-small-text\">Undo Delete</a>";
   }
 
   buffer += "<h2>Markers</h2>\n\n<a href=\"#\" class=\"cancel oh-google-map-close\">&times; close</a>\n\n<ol class=\"oh-google-map-ordered-list\">\n";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.markers), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ol>\n\n<h2>Polygons</h2>\n\n<ol class=\"oh-google-map-ordered-list\">\n";
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polygons), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polygons), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>";
   return buffer;
@@ -11387,14 +11427,29 @@ var GoogleMaps = {
 			var t = this;
 
 			this.buttonBar.show(new GoogleMaps.Views.ButtonBar({
- 				buttons: [{
+ 				buttons: [
+
+ 				{
  					icon: 'list',
  					click: function(e) {
+ 						var data = {
+ 							markers: [],
+ 							polygons: []
+ 						};
+
+ 						_.each(t.markers, function(marker) {
+ 							data.markers.push(marker.toJSON());
+ 						});
+
+ 						_.each(t.polygons, function(polygon) {
+ 							data.polygons.push(polygon.toJSON());
+ 						});
+
+ 						console.log(data);
+
  						var view = new GoogleMaps.Views.MapList({
  							map: t,
- 							model: new Backbone.Model({
- 								markers: t.markers
- 							})
+ 							model: new Backbone.Model(data)
  						});
 
  						t.showModal(view);
@@ -11445,11 +11500,14 @@ var GoogleMaps = {
 			this.buttonBar.$el.addClass('hide');
 		},
 
-		hideModal: function() {
+		hideModal: function(center) {
 			this.modal.$el.removeClass('show');
 			this.buttonBar.$el.removeClass('hide');
-			this.center();			
 			this.modal.empty();
+
+			if(_.isUndefined(center) || center === true) {	
+				this.center();
+			}
 		},
 
 		zoomIn: function() {
@@ -11497,8 +11555,12 @@ var GoogleMaps = {
 			});
 
 			if(boundsChanged) {
-				this.api.fitBounds(bounds);
+				this.fitBounds(bounds);
 			}
+		},
+
+		fitBounds: function(bounds) {
+			this.api.fitBounds(bounds);
 		},
 
 		getCanvas: function() {
@@ -11526,17 +11588,19 @@ var GoogleMaps = {
 			var t = this;
 
 			this.$el.find('.cancel').click(function(e) {
-				t.map.hideModal();
+				t.map.hideModal(false);
 
 				e.preventDefault();
 			});
 
-			this.$el.find('.undo').click(function(e) {
+			this.$el.find('.marker-undo').click(function(e) {
 				var index = $(this).parent().index();
-				var marker = t.model.get('markers')[index];
+				var marker = t.map.markers[index];
 
-				marker.deleted = false;
-				marker.setMap(t.map.api);
+				marker.set('deleted', false);
+				marker.get('api').setMap(t.map.api);
+
+				t.model.get('markers')[index].deleted = false;
 
 				t.map.center();
 				t.map.updateHiddenField();
@@ -11545,12 +11609,43 @@ var GoogleMaps = {
 				e.preventDefault();
 			});
 
-			this.$el.find('.center').click(function(e) {
+			this.$el.find('.polygon-undo').click(function(e) {
 				var index = $(this).parent().index();
-				var marker = t.model.get('markers')[index];
+				var polygon = t.map.polygons[index];
+
+				polygon.set('deleted', false);
+				polygon.get('api').setMap(t.map.api);
+
+				t.model.get('polygons')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
+			this.$el.find('.marker-center').click(function(e) {
+				var index = $(this).parent().index();
+				var marker = t.map.markers[index];
 
 				t.map.api.setCenter(marker.getPosition());
 				
+				e.preventDefault();
+			});
+
+			this.$el.find('.polygon-center').click(function(e) {
+				var index = $(this).parent().index();
+				var polygon = t.map.polygons[index];
+
+				var bounds = new google.maps.LatLngBounds();
+
+				polygon.getPath().forEach(function(latLng) {
+					bounds.extend(latLng);
+				});
+				
+				t.map.fitBounds(bounds);
+
 				e.preventDefault();
 			});
 		}

@@ -25,7 +25,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         {
             foreach($data->markers as $index => $marker)
             {
-                if(isset($marker->deleted))
+                if(isset($marker->deleted) && $marker->deleted === true)
                 {
                     if(isset($marker->locationId))
                     {
@@ -68,7 +68,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
             foreach($data->polygons as $index => $polygon)
             {
-                if(isset($polygon->deleted))
+                if(isset($polygon->deleted) && $polygon->deleted === true)
                 {
                     $data->removePolygon($index);
                 }

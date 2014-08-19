@@ -1214,14 +1214,29 @@ var GoogleMaps = {
 			var t = this;
 
 			this.buttonBar.show(new GoogleMaps.Views.ButtonBar({
- 				buttons: [{
+ 				buttons: [
+
+ 				{
  					icon: 'list',
  					click: function(e) {
+ 						var data = {
+ 							markers: [],
+ 							polygons: []
+ 						};
+
+ 						_.each(t.markers, function(marker) {
+ 							data.markers.push(marker.toJSON());
+ 						});
+
+ 						_.each(t.polygons, function(polygon) {
+ 							data.polygons.push(polygon.toJSON());
+ 						});
+
+ 						console.log(data);
+
  						var view = new GoogleMaps.Views.MapList({
  							map: t,
- 							model: new Backbone.Model({
- 								markers: t.markers
- 							})
+ 							model: new Backbone.Model(data)
  						});
 
  						t.showModal(view);
@@ -1272,11 +1287,14 @@ var GoogleMaps = {
 			this.buttonBar.$el.addClass('hide');
 		},
 
-		hideModal: function() {
+		hideModal: function(center) {
 			this.modal.$el.removeClass('show');
 			this.buttonBar.$el.removeClass('hide');
-			this.center();			
 			this.modal.empty();
+
+			if(_.isUndefined(center) || center === true) {	
+				this.center();
+			}
 		},
 
 		zoomIn: function() {
@@ -1324,8 +1342,12 @@ var GoogleMaps = {
 			});
 
 			if(boundsChanged) {
-				this.api.fitBounds(bounds);
+				this.fitBounds(bounds);
 			}
+		},
+
+		fitBounds: function(bounds) {
+			this.api.fitBounds(bounds);
 		},
 
 		getCanvas: function() {
@@ -1353,17 +1375,19 @@ var GoogleMaps = {
 			var t = this;
 
 			this.$el.find('.cancel').click(function(e) {
-				t.map.hideModal();
+				t.map.hideModal(false);
 
 				e.preventDefault();
 			});
 
-			this.$el.find('.undo').click(function(e) {
+			this.$el.find('.marker-undo').click(function(e) {
 				var index = $(this).parent().index();
-				var marker = t.model.get('markers')[index];
+				var marker = t.map.markers[index];
 
-				marker.deleted = false;
-				marker.setMap(t.map.api);
+				marker.set('deleted', false);
+				marker.get('api').setMap(t.map.api);
+
+				t.model.get('markers')[index].deleted = false;
 
 				t.map.center();
 				t.map.updateHiddenField();
@@ -1372,12 +1396,43 @@ var GoogleMaps = {
 				e.preventDefault();
 			});
 
-			this.$el.find('.center').click(function(e) {
+			this.$el.find('.polygon-undo').click(function(e) {
 				var index = $(this).parent().index();
-				var marker = t.model.get('markers')[index];
+				var polygon = t.map.polygons[index];
+
+				polygon.set('deleted', false);
+				polygon.get('api').setMap(t.map.api);
+
+				t.model.get('polygons')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
+			this.$el.find('.marker-center').click(function(e) {
+				var index = $(this).parent().index();
+				var marker = t.map.markers[index];
 
 				t.map.api.setCenter(marker.getPosition());
 				
+				e.preventDefault();
+			});
+
+			this.$el.find('.polygon-center').click(function(e) {
+				var index = $(this).parent().index();
+				var polygon = t.map.polygons[index];
+
+				var bounds = new google.maps.LatLngBounds();
+
+				polygon.getPath().forEach(function(latLng) {
+					bounds.extend(latLng);
+				});
+				
+				t.map.fitBounds(bounds);
+
 				e.preventDefault();
 			});
 		}

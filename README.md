@@ -1,5 +1,7 @@
 ### Google Maps for Craft
 
+#### The complete geolocation and mapping toolkit
+
 Google Maps for Craft is a complete geolocation toolkit that interfaces with the [Google Maps API](https://developers.google.com/maps/web/). Google Maps for Craft provides you with all the tools to generate maps, geocode data, add markers, searches, a field type, and much more. And best of all, Google Maps for Craft is built by the same people that built [Google Maps for ExpressionEngine](https://objectivehtml.com/google-maps), so you can be sure you are getting something that is reliable and will stand the test of time.
 
 ### Features

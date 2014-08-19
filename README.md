@@ -13,7 +13,7 @@ Google Maps for Craft is a complete geolocation toolkit that interfaces with the
 
 ### Wiki
 
-For more information, [refer to the Wiki](https://github.com/objectivehtml/Google-Maps-for-Craft/wiki).
+For more information and documentation, [refer to the Wiki](https://github.com/objectivehtml/Google-Maps-for-Craft/wiki).
 
 ### Support
 

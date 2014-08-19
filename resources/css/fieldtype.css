@@ -97,7 +97,11 @@ h2 .oh-google-map-small-text { margin-left: 10px; }
 .oh-google-map-tab { display: none; }
 .oh-google-map-tab.active { display: block; }
 
+.oh-google-map-tabs.oh-google-map-one-up li { width: 100%; }
+.oh-google-map-tabs.oh-google-map-two-up li { width: 50%; }
 .oh-google-map-tabs.oh-google-map-three-up li { width: 33%; }
+.oh-google-map-tabs.oh-google-map-four-up li { width: 25%; }
+.oh-google-map-tabs.oh-google-map-five-up li { width: 20%; }
 
 .oh-google-maps-wrapper .color-picker-wrapper { position: relative; }
 .oh-google-maps-wrapper .color-picker-wrapper .color { width: 20px; height: 20px; position: absolute; top: 6px; right: 5px; border: 1px solid black; z-index: 100; border-radius: 3px; background-image: none; }

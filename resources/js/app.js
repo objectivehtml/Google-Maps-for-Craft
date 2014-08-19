@@ -89,9 +89,11 @@ var GoogleMaps = {
 	GoogleMaps.Models.Base = Backbone.Model.extend({
 
 		initialize: function(options) {
+			var t = this;
+
 			_.each(options, function(option, i) {
 				if(_.isFunction(option)) {
-					this[i] = option;
+					t[i] = option;
 				}
 			});
 
@@ -117,38 +119,19 @@ var GoogleMaps = {
 
 	GoogleMaps.Models.Marker = GoogleMaps.Models.Base.extend({
 
-		api: false,
-
-		map: false,
-
-		address: null,
-
-		addressComponents: null,
-
-		content: null,
-
-		customContent: false,
-
-		deleted: false,
-
-		icon: null,
-
-		infowindow: false,
-
-		isNew: false,
-
-		lat: 0,
-
-		lng: 0,
-
-		title: null,
-		
-		elementId: null,
-		
-		locationId: null,
-
 		initialize: function(options) {
 			GoogleMaps.Models.Base.prototype.initialize.call(this, options);
+
+			if(!this.get('api')) {
+				this.set('api', new google.maps.Marker(_.extend({}, options, {
+					map: this.get('map').api,
+					position: new google.maps.LatLng(this.get('lat'), this.get('lng')),
+					draggable: true
+				})));
+			}
+			else {
+				this.get('api').setMap(this.get('map').api);
+			}
 
 			if(!this.get('infowindow')) {
 				this.set('infowindow', new google.maps.InfoWindow({
@@ -156,8 +139,6 @@ var GoogleMaps = {
 					content: this.buildInfoWindowContent()
 				}));
 			}
-
-			this.get('api').setMap(this.get('map').api);
 
 			this.bindEvents();
 		},
@@ -180,31 +161,9 @@ var GoogleMaps = {
 
 			$content.find('.edit').click(function(e) {
 
-				t.get('map').api.setCenter(latLng);
-				t.get('map').api.panBy(0, -150);
-
-				var view = new GoogleMaps.Views.BaseForm({
-					model: new Backbone.Model({
-						title: t.get('title'),
-						content: t.get('content')
-					}),
-					template: GoogleMaps.Template('edit-marker-form'),								
-					onShow: function() {
-						setTimeout(function() {
-							view.$el.find('input').focus();
-						}, 250);
-					},
-					submit: function() {
-						t.set('title', view.$el.find('input').val());
-						t.set('content', view.$el.find('textarea').val());
-						t.set('customContent', true);
-						t.get('infowindow').setContent(t.buildInfoWindowContent());
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
+				var view = new GoogleMaps.Views.MarkerForm({
+					model: t,
+					map: t.get('map')
 				});
 
 				t.get('map').showModal(view);
@@ -213,8 +172,11 @@ var GoogleMaps = {
 			});
 
 			$content.find('.delete').click(function(e) {
+
+				/*
 				t.get('map').api.setCenter(latLng);
 				t.get('map').api.panBy(0, -150);
+				*/
 
 				var view = new GoogleMaps.Views.BaseForm({
 					template: GoogleMaps.Template('delete-marker-form'),
@@ -337,21 +299,6 @@ var GoogleMaps = {
 			this.get('api').setZIndex(value);
 		},
 
-		toJSON: function() {
-			var json = Backbone.Model.prototype.toJSON.call(this);
-
-			var position = this.get('api').getPosition();
-
-			json.lat = position.lat();
-			json.lng = position.lng();
-
-			delete json.api;
-			delete json.map;
-			delete json.infowindow;
-
-			return json;
-		},
-
 		bindEvents: function() {
 			var t = this;
 
@@ -439,7 +386,7 @@ var GoogleMaps = {
 		onAnimationChanged: function() {},
 
 		onClick: function() {
-			this.get('map').closeInfowindows();
+			this.get('map').closeInfoWindows();
 			this.get('infowindow').open(this.get('map').api, this.get('api'));
 		},
 
@@ -449,8 +396,13 @@ var GoogleMaps = {
 
 		onDrag: function() {},
 
-		onDragend: function(e) {
+		onDragend: function(e, callback) {
 			var t = this;
+
+			t.set({
+				lat: e.latLng.lat(),
+				lng: e.latLng.lng()
+			});
 
 			this.get('map').geocoder.geocode({location: e.latLng}, function(results, status) {
 				var content = t.get('content') ? t.get('content') : t.get('address').split(',').join('<br>');
@@ -470,6 +422,10 @@ var GoogleMaps = {
 				}
 
 				t.get('map').updateHiddenField();
+				
+				if(_.isFunction(callback)) {
+					callback(e);
+				}
 			});
 		},
 
@@ -575,8 +531,10 @@ var GoogleMaps = {
 			options.map = this.get('map').api;
 			options.zIndex = this.get('map').polygons.length;
 
-			this.set('api', new google.maps.Polygon(options));
-
+			if(!this.get('api')) {
+				this.set('api', new google.maps.Polygon(options));
+			}
+			
 			if(!this.get('infowindow')) {
 				this.set('infowindow', new google.maps.InfoWindow({
 					maxWidth: 300,
@@ -808,7 +766,7 @@ var GoogleMaps = {
 
 		onClick: function(e) {
 			if(!this.get('api').getEditable()) {
-				this.get('map').closeInfowindows();
+				this.get('map').closeInfoWindows();
 				this.get('infowindow').open(this.get('map').api);
 				this.get('infowindow').setPosition(e.latLng);
 			}
@@ -890,6 +848,7 @@ var GoogleMaps = {
 		tagName: 'form',
 
 		onRender: function() {
+
 			var t = this;
 
 			this.$el.off('submit').submit(function(e) {
@@ -903,6 +862,24 @@ var GoogleMaps = {
 
 				e.preventDefault();
 			});
+
+			this.$el.find('.oh-google-map-tab-trigger').click(function(e) {
+				var selector = $(this).attr('href');
+
+				t.$el.find('.oh-google-map-tab.active').removeClass('active');
+				t.$el.find('.oh-google-map-tab-trigger').removeClass('active');
+
+				t.$el.find(selector).addClass('active');
+				$(this).addClass('active');
+
+				e.preventDefault();
+			});
+
+			this.$el.find('[href="#oh-points-tab"]').click(function() {
+				t.$el.find('[name="point"]').focus();				
+			});
+
+			this.$el.find('.oh-google-map-tab-trigger.active').click();
 		},
 
 		submit: function() {
@@ -1177,17 +1154,19 @@ var GoogleMaps = {
  			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
 
  			if(this.savedData) {
-	 			if(this.savedData.markers) {
-	 				var view = new GoogleMaps.Views.MarkerForm({
-	 					map: this
-	 				});
-
+	 			if(this.savedData.markers.length) {
 		 			_.each(this.savedData.markers, function(marker) {
-		 				view.addMarker(marker, marker.isNew);
+						var options = {
+							map: t,
+							isNew: false,
+							isSavedToMap: true
+						};
+
+		 				t.markers.push(new GoogleMaps.Models.Marker(_.extend({}, options, marker)));
 		 			});
 		 		}
 
-	 			if(this.savedData.polygons) {
+	 			if(this.savedData.polygons.length) {
 		 			_.each(this.savedData.polygons, function(polygon) {
 
 		 				/*
@@ -1224,10 +1203,9 @@ var GoogleMaps = {
 
 		 				t.polygons.push(new GoogleMaps.Models.Polygon(_.extend({}, options, polygon)));
 		 			});
-
-		 			t.center();
 		 		}
 
+		 		this.center();
 		 		this.updateHiddenField();
 		 	}
 		},
@@ -1253,6 +1231,7 @@ var GoogleMaps = {
  				},{
  					name: 'Add Marker',
  					click: function(e) {
+
  						var view = new GoogleMaps.Views.MarkerForm({
  							map: t
  						});
@@ -1276,7 +1255,7 @@ var GoogleMaps = {
  			}));
 		},
 
-		closeInfowindows: function() {
+		closeInfoWindows: function() {
 			_.each(this.markers, function(marker) {
 				marker.get('infowindow').close();
 			});
@@ -1286,13 +1265,14 @@ var GoogleMaps = {
 			});
 		},
 
-		showModal: function(view) {
+		showModal: function(view) {	
+			this.modal.empty();
 			this.modal.show(view);
 			this.modal.$el.addClass('show');
 			this.buttonBar.$el.addClass('hide');
 		},
 
-		hideModal: function(view) {
+		hideModal: function() {
 			this.modal.$el.removeClass('show');
 			this.buttonBar.$el.removeClass('hide');
 			this.center();			
@@ -1409,10 +1389,146 @@ var GoogleMaps = {
 
 	"use strict";
 
-	GoogleMaps.Views.MarkerForm = GoogleMaps.Views.Geocoder.extend({
+	GoogleMaps.Views.MarkerForm = GoogleMaps.Views.BaseForm.extend({
 
 		map: false,
 
+		template: GoogleMaps.Template('marker-form'),
+
+		originalModel: {},
+
+		initialize: function(options) {
+			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
+
+			var t = this;
+
+			if(!this.model) {
+				this.model = new GoogleMaps.Models.Marker({
+					map: this.map,
+					isNew: true,
+					isSavedToMap: false
+				});
+			}
+			else {
+				this.originalModel = this.model.toJSON();
+			}
+
+			this.model.onDragend = function(e) {
+				GoogleMaps.Models.Marker.prototype.onDragend.call(this, e, function() {
+					t.$el.find('.lat').html(e.latLng.lat());
+					t.$el.find('.lng').html(e.latLng.lng());
+					t.$el.find('.address').html(t.model.get('address'));
+
+					if(!t.model.get('customContent')) {
+						t.$el.find('[name="content"]').val(t.model.get('content'));
+					}
+				});
+			};
+		},
+
+		submit: function() {
+			this.model.set({
+				title: this.$el.find('[name="title"]').val(),
+				content: this.$el.find('[name="content"]').val()
+			});
+
+			if(this.model.get('content') != this.model.get('address').split(',').join('<br>')) {
+				this.model.set('customContent', true);
+			}
+
+			var latLng = new google.maps.LatLng(this.model.get('lat'), this.model.get('lng'));
+
+			this.model.get('infowindow').setOptions({content: this.model.buildInfoWindowContent()});
+			this.model.get('api').setPosition(latLng);
+
+			if(!this.model.get('isSavedToMap')) {
+				this.map.markers.push(this.model);
+			}
+
+			this.model.set('isSavedToMap', true);
+
+			this.model.get('infowindow').open(this.map.api, this.model.get('api'));
+
+			this.map.center();
+			this.map.hideModal();
+			this.map.updateHiddenField();
+		},
+
+		hasLocation: function() {
+			return !this.model.get('lat') || !this.model.get('lng') ? false : true;
+		},
+
+		onRender: function() {
+			var t = this;
+
+			GoogleMaps.Views.BaseForm.prototype.onRender.call(this);
+
+			this.$el.find('.edit-location').click(function(e) {
+				t.showGeocoder();
+				e.preventDefault();
+			});
+
+			/*
+			this.$el.find('[name="title"]').blur(function(e) {
+				t.model.set('title', this.$el);				
+			});
+			*/
+		},
+
+		onShow: function() {
+			var t = this;
+
+			// GoogleMaps.Views.BaseForm.prototype.onShow.call(this);
+
+			this.model.get('map').closeInfoWindows();
+
+			if(this.model.get('infowindow')) {
+				this.model.get('infowindow').open(this.map.api, this.model.get('api'));
+			}
+
+			if(!this.hasLocation()) {
+				this.showGeocoder();
+			}
+		},
+
+		showGeocoder: function() {
+			var t = this;
+
+			var view = new GoogleMaps.Views.Geocoder({
+				responseHandler: function(response) {
+					t.model.set({
+						address: response.formatted_address,
+						addressComponents: response.address_components,
+						lat: response.geometry.location.lat(),
+						lng: response.geometry.location.lng()
+					});
+
+					if(!t.model.get('customContent')) {
+						t.model.set('content', response.formatted_address.split(',').join('<br>'));
+					}
+
+					var view = new GoogleMaps.Views.MarkerForm({
+						model: t.model,
+						map: t.map
+					});
+
+					t.map.showModal(view);
+				},
+				cancel: function() {
+					if(t.hasLocation()) {
+						t.isDestroyed = false;
+						t.map.showModal(t);
+					}
+					else {
+						t.map.hideModal();
+					}
+				}
+			});
+
+			this.map.showModal(view);
+		},
+
+		/*
 		responseHandler: function(response) {
 			var marker = this.addMarker({
 				lat: response.geometry.location.lat(), 
@@ -1421,10 +1537,11 @@ var GoogleMaps = {
 				addressComponents: response.address_components
 			});
 
-			this.map.closeInfowindows();
+			this.map.closeInfoWindows();
 
 			marker.get('infowindow').open(this.map.api, marker.get('api'));
 		},
+		*/
 		
 		addMarker: function(data, isNewMarker) {
 			var t = this, latLng = new google.maps.LatLng(data.lat, data.lng);
@@ -1486,7 +1603,6 @@ var GoogleMaps = {
 			if(data.elementId) {
 				marker.elementId = data.elementId;
 			}
-			*/
 
 			var marker = new GoogleMaps.Models.Marker({
 				map: this.map,
@@ -1513,9 +1629,22 @@ var GoogleMaps = {
 			this.map.updateHiddenField();
 
 			return marker;
+
+			*/
 		},
 
 		cancel: function() {
+			if(this.model.get('isSavedToMap')) {
+				var position = new google.maps.LatLng(
+					this.originalModel.lat, 
+					this.originalModel.lng
+				);
+
+				this.model.set(this.originalModel);
+				this.model.get('api').setPosition(position);
+				this.model.get('infowindow').setOptions({content: this.model.buildInfoWindowContent()});
+			}
+
 			this.map.hideModal();
 		}
 
@@ -1648,24 +1777,6 @@ var GoogleMaps = {
 			});
 
 			t.updatePolygonOptions();
-
-			this.$el.find('.oh-google-map-tab-trigger').click(function(e) {
-				var selector = $(this).attr('href');
-
-				t.$el.find('.oh-google-map-tab.active').removeClass('active');
-				t.$el.find('.oh-google-map-tab-trigger').removeClass('active');
-
-				t.$el.find(selector).addClass('active');
-				$(this).addClass('active');
-
-				e.preventDefault();
-			});
-
-			this.$el.find('[href="#oh-points-tab"]').click(function() {
-				t.$el.find('[name="point"]').focus();				
-			});
-
-			this.$el.find('.oh-google-map-tab-trigger.active').click();
 		},
 
 		updatePolygonOptions: function() {
@@ -1685,6 +1796,8 @@ var GoogleMaps = {
 
 		onShow: function() {
 			var t = this;
+
+			this.map.closeInfoWindows();
 
 			this.map.api.setOptions({
 				disableDoubleClickZoom: true
@@ -1739,7 +1852,13 @@ var GoogleMaps = {
 			else {
 				this.geocoder.geocode({address: coord}, function(results, status) {
 					if(status == 'OK') {
-						path.push(results[0].geometry.location);
+						if(path) {
+							path.push(results[0].geometry.location);
+						}
+						else {
+							path = [results[0].geometry.location];
+						}
+
 						t.api.setPath(path);
 					}
 

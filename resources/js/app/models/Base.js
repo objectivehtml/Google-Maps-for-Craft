@@ -5,9 +5,11 @@
 	GoogleMaps.Models.Base = Backbone.Model.extend({
 
 		initialize: function(options) {
+			var t = this;
+
 			_.each(options, function(option, i) {
 				if(_.isFunction(option)) {
-					this[i] = option;
+					t[i] = option;
 				}
 			});
 

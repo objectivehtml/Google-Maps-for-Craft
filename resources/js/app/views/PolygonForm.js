@@ -124,24 +124,6 @@
 			});
 
 			t.updatePolygonOptions();
-
-			this.$el.find('.oh-google-map-tab-trigger').click(function(e) {
-				var selector = $(this).attr('href');
-
-				t.$el.find('.oh-google-map-tab.active').removeClass('active');
-				t.$el.find('.oh-google-map-tab-trigger').removeClass('active');
-
-				t.$el.find(selector).addClass('active');
-				$(this).addClass('active');
-
-				e.preventDefault();
-			});
-
-			this.$el.find('[href="#oh-points-tab"]').click(function() {
-				t.$el.find('[name="point"]').focus();				
-			});
-
-			this.$el.find('.oh-google-map-tab-trigger.active').click();
 		},
 
 		updatePolygonOptions: function() {
@@ -161,6 +143,8 @@
 
 		onShow: function() {
 			var t = this;
+
+			this.map.closeInfoWindows();
 
 			this.map.api.setOptions({
 				disableDoubleClickZoom: true
@@ -215,7 +199,13 @@
 			else {
 				this.geocoder.geocode({address: coord}, function(results, status) {
 					if(status == 'OK') {
-						path.push(results[0].geometry.location);
+						if(path) {
+							path.push(results[0].geometry.location);
+						}
+						else {
+							path = [results[0].geometry.location];
+						}
+
 						t.api.setPath(path);
 					}
 

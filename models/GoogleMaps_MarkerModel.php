@@ -86,7 +86,7 @@ class GoogleMaps_MarkerModel extends BaseModel
             // Location Parameters
             'title'   => array(AttributeType::String, 'default' => ''),
             'distance'   => array(AttributeType::Mixed, 'default' => false),
-            'icon'   => array(AttributeType::Mixed, 'default' => false),
+            'icon'   => array(AttributeType::Mixed, 'default' => ''),
             'lat'   => array(AttributeType::Number, 'default' => 0),
             'lng'   => array(AttributeType::Number, 'default' => 0),
             'content'   => array(AttributeType::String, 'default' => ''),

@@ -69,8 +69,10 @@
 			options.map = this.get('map').api;
 			options.zIndex = this.get('map').polygons.length;
 
-			this.set('api', new google.maps.Polygon(options));
-
+			if(!this.get('api')) {
+				this.set('api', new google.maps.Polygon(options));
+			}
+			
 			if(!this.get('infowindow')) {
 				this.set('infowindow', new google.maps.InfoWindow({
 					maxWidth: 300,
@@ -302,7 +304,7 @@
 
 		onClick: function(e) {
 			if(!this.get('api').getEditable()) {
-				this.get('map').closeInfowindows();
+				this.get('map').closeInfoWindows();
 				this.get('infowindow').open(this.get('map').api);
 				this.get('infowindow').setPosition(e.latLng);
 			}

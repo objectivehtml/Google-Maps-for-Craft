@@ -114,17 +114,19 @@
  			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
 
  			if(this.savedData) {
-	 			if(this.savedData.markers) {
-	 				var view = new GoogleMaps.Views.MarkerForm({
-	 					map: this
-	 				});
-
+	 			if(this.savedData.markers.length) {
 		 			_.each(this.savedData.markers, function(marker) {
-		 				view.addMarker(marker, marker.isNew);
+						var options = {
+							map: t,
+							isNew: false,
+							isSavedToMap: true
+						};
+
+		 				t.markers.push(new GoogleMaps.Models.Marker(_.extend({}, options, marker)));
 		 			});
 		 		}
 
-	 			if(this.savedData.polygons) {
+	 			if(this.savedData.polygons.length) {
 		 			_.each(this.savedData.polygons, function(polygon) {
 
 		 				/*
@@ -161,10 +163,9 @@
 
 		 				t.polygons.push(new GoogleMaps.Models.Polygon(_.extend({}, options, polygon)));
 		 			});
-
-		 			t.center();
 		 		}
 
+		 		this.center();
 		 		this.updateHiddenField();
 		 	}
 		},
@@ -190,6 +191,7 @@
  				},{
  					name: 'Add Marker',
  					click: function(e) {
+
  						var view = new GoogleMaps.Views.MarkerForm({
  							map: t
  						});
@@ -213,7 +215,7 @@
  			}));
 		},
 
-		closeInfowindows: function() {
+		closeInfoWindows: function() {
 			_.each(this.markers, function(marker) {
 				marker.get('infowindow').close();
 			});
@@ -223,13 +225,14 @@
 			});
 		},
 
-		showModal: function(view) {
+		showModal: function(view) {	
+			this.modal.empty();
 			this.modal.show(view);
 			this.modal.$el.addClass('show');
 			this.buttonBar.$el.addClass('hide');
 		},
 
-		hideModal: function(view) {
+		hideModal: function() {
 			this.modal.$el.removeClass('show');
 			this.buttonBar.$el.removeClass('hide');
 			this.center();			

@@ -4,38 +4,19 @@
 
 	GoogleMaps.Models.Marker = GoogleMaps.Models.Base.extend({
 
-		api: false,
-
-		map: false,
-
-		address: null,
-
-		addressComponents: null,
-
-		content: null,
-
-		customContent: false,
-
-		deleted: false,
-
-		icon: null,
-
-		infowindow: false,
-
-		isNew: false,
-
-		lat: 0,
-
-		lng: 0,
-
-		title: null,
-		
-		elementId: null,
-		
-		locationId: null,
-
 		initialize: function(options) {
 			GoogleMaps.Models.Base.prototype.initialize.call(this, options);
+
+			if(!this.get('api')) {
+				this.set('api', new google.maps.Marker(_.extend({}, options, {
+					map: this.get('map').api,
+					position: new google.maps.LatLng(this.get('lat'), this.get('lng')),
+					draggable: true
+				})));
+			}
+			else {
+				this.get('api').setMap(this.get('map').api);
+			}
 
 			if(!this.get('infowindow')) {
 				this.set('infowindow', new google.maps.InfoWindow({
@@ -43,8 +24,6 @@
 					content: this.buildInfoWindowContent()
 				}));
 			}
-
-			this.get('api').setMap(this.get('map').api);
 
 			this.bindEvents();
 		},
@@ -67,31 +46,9 @@
 
 			$content.find('.edit').click(function(e) {
 
-				t.get('map').api.setCenter(latLng);
-				t.get('map').api.panBy(0, -150);
-
-				var view = new GoogleMaps.Views.BaseForm({
-					model: new Backbone.Model({
-						title: t.get('title'),
-						content: t.get('content')
-					}),
-					template: GoogleMaps.Template('edit-marker-form'),								
-					onShow: function() {
-						setTimeout(function() {
-							view.$el.find('input').focus();
-						}, 250);
-					},
-					submit: function() {
-						t.set('title', view.$el.find('input').val());
-						t.set('content', view.$el.find('textarea').val());
-						t.set('customContent', true);
-						t.get('infowindow').setContent(t.buildInfoWindowContent());
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
+				var view = new GoogleMaps.Views.MarkerForm({
+					model: t,
+					map: t.get('map')
 				});
 
 				t.get('map').showModal(view);
@@ -100,8 +57,11 @@
 			});
 
 			$content.find('.delete').click(function(e) {
+
+				/*
 				t.get('map').api.setCenter(latLng);
 				t.get('map').api.panBy(0, -150);
+				*/
 
 				var view = new GoogleMaps.Views.BaseForm({
 					template: GoogleMaps.Template('delete-marker-form'),
@@ -224,21 +184,6 @@
 			this.get('api').setZIndex(value);
 		},
 
-		toJSON: function() {
-			var json = Backbone.Model.prototype.toJSON.call(this);
-
-			var position = this.get('api').getPosition();
-
-			json.lat = position.lat();
-			json.lng = position.lng();
-
-			delete json.api;
-			delete json.map;
-			delete json.infowindow;
-
-			return json;
-		},
-
 		bindEvents: function() {
 			var t = this;
 
@@ -326,7 +271,7 @@
 		onAnimationChanged: function() {},
 
 		onClick: function() {
-			this.get('map').closeInfowindows();
+			this.get('map').closeInfoWindows();
 			this.get('infowindow').open(this.get('map').api, this.get('api'));
 		},
 
@@ -336,8 +281,13 @@
 
 		onDrag: function() {},
 
-		onDragend: function(e) {
+		onDragend: function(e, callback) {
 			var t = this;
+
+			t.set({
+				lat: e.latLng.lat(),
+				lng: e.latLng.lng()
+			});
 
 			this.get('map').geocoder.geocode({location: e.latLng}, function(results, status) {
 				var content = t.get('content') ? t.get('content') : t.get('address').split(',').join('<br>');
@@ -357,6 +307,10 @@
 				}
 
 				t.get('map').updateHiddenField();
+				
+				if(_.isFunction(callback)) {
+					callback(e);
+				}
 			});
 		},
 

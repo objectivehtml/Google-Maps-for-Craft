@@ -10,7 +10,7 @@ class GoogleMapsPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.0.1';
+        return '0.1.0';
     }
 
     public function getDeveloper()
@@ -22,9 +22,4 @@ class GoogleMapsPlugin extends BasePlugin
     {
         return 'https://objectivehtml.com';
     }
-
-    public function test()
-    {
-        exit('test');
-    } 
 }

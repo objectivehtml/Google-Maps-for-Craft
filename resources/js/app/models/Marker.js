@@ -157,12 +157,17 @@
 		},
 		
 		setIcon: function(value) {
-			var icon = {
-				scaledSize: new google.maps.Size(32, 32),
-				url: value
-			};
-			
-			this.get('api').setIcon(icon);
+			if(value) {
+				var icon = {
+					scaledSize: new google.maps.Size(32, 32),
+					url: value
+				};
+				
+				this.get('api').setIcon(icon);
+			}
+			else {
+				this.get('api').setIcon(null);
+			}
 		},
 		
 		setMap: function(value) {

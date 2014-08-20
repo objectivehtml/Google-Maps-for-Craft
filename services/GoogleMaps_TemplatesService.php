@@ -55,7 +55,7 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
     public function geocode($location)
     {
         var_dump(craft()->googleMaps_geocoder->geocode($location));exit();
-        
+
         return craft()->googleMaps_geocoder->geocode($location);
     }
 
@@ -114,6 +114,11 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
     public function polygon($id, $points, $options = array())
     {
         craft()->templates->includeJs('new GoogleMaps.Polygon('.$id.','.json_encode($points).','.json_encode((object) $options).');');
+    }
+
+    public function polyline($id, $points, $options = array())
+    {
+        craft()->templates->includeJs('new GoogleMaps.Polyline('.$id.','.json_encode($points).','.json_encode((object) $options).');');
     }
 
     public function marker($id, $options = array())

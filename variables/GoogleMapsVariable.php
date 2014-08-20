@@ -47,4 +47,9 @@ class GoogleMapsVariable
     {
         return craft()->googleMaps_templates->polygon($id, $points, $options);
     }
+
+    public function polyline($id, $points, $options = array())
+    {
+        return craft()->googleMaps_templates->polyline($id, $points, $options);
+    }
 }

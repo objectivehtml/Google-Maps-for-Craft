@@ -62,7 +62,7 @@
 				this.model.setIcon(this.model.get('icon'));
 			}
 			else {
-				this.model.setIcon(null);
+				this.model.setIcon(false);
 			}
 
 			this.model.set('isSavedToMap', true);

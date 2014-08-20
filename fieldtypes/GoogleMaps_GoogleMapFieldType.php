@@ -78,6 +78,19 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
                     $polygon->isNew = false;
                 }
             }
+
+            foreach($data->polylines as $index => $polyline)
+            {
+                if(isset($polyline->deleted) && $polyline->deleted === true)
+                {
+                    $data->removePolyline($index);
+                }
+                else
+                {
+                    $polyline->elementId = $this->element->id;
+                    $polyline->isNew = false;
+                }
+            }
         }
 
         if(isset($this->element->$handle))

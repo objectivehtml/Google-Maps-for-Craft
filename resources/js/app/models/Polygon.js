@@ -31,7 +31,7 @@
 		fillOpacity: 0.6,
 
 		initialize: function(options) {
-
+			
 			if(!options.strokeColor) {
 				options.strokeColor = this.strokeColor;
 			}
@@ -59,6 +59,22 @@
 			_.each(this.get('points'), function(point) {
 				points.push(new google.maps.LatLng(point.lat, point.lng));
 			});
+			
+			if(!this.get('api')) {	
+				this.initializeApi(points, options);
+			}
+
+			if(!this.get('infowindow')) {
+				this.set('infowindow', new google.maps.InfoWindow({
+					maxWidth: 300,
+					content: this.buildInfoWindowContent()
+				}));
+			}
+
+			this.bindEvents();
+		},
+
+		initializeApi: function(points, options) {
 
 			options.strokeColor = this.get('strokeColor');
 			options.strokeWeight = this.get('strokeWeight');
@@ -72,15 +88,35 @@
 			if(!this.get('api')) {
 				this.set('api', new google.maps.Polygon(options));
 			}
-			
-			if(!this.get('infowindow')) {
-				this.set('infowindow', new google.maps.InfoWindow({
-					maxWidth: 300,
-					content: this.buildInfoWindowContent()
-				}));
-			}
+		},	
 
-			this.bindEvents();
+		onEdit: function() {
+			var view = new GoogleMaps.Views.PolygonForm({
+				api: t.get('api'),
+				map: t.get('map'),
+				model: t
+			});
+
+
+			t.get('map').showModal(view);
+		},
+
+		onDelete: function() {
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-polygon-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.get('infowindow').close();
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.get('map').hideModal();
+				}
+			});
+
+			t.get('map').showModal(view);
 		},
 		
 		buildInfoWindowContent: function() {
@@ -101,14 +137,7 @@
 
 			$content.find('.edit').click(function(e) {
 				
-				var view = new GoogleMaps.Views.PolygonForm({
-					api: t.get('api'),
-					map: t.get('map'),
-					model: t
-				});
-
-
-				t.get('map').showModal(view);
+				t.onEdit();
 
 				/*
 				t.get('map').api.setCenter(latLng);
@@ -151,21 +180,7 @@
 
 				*/
 
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-polygon-form'),
-					submit: function() {
-						t.get('api').setMap(null);
-						t.get('infowindow').close();
-						t.set('deleted', true);
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.onDelete();
 
 				e.preventDefault();
 			});
@@ -206,7 +221,7 @@
 		},
 		
 		setMap: function(value) {
-			//this.get('api').setMap(value);
+			this.get('api').setMap(value);
 		},
 		
 		setOptions: function(value) {

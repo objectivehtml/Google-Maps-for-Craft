@@ -49,6 +49,22 @@
 				e.preventDefault();
 			});
 
+			this.$el.find('.polyline-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var polyline = t.map.polylines[index];
+
+				polyline.set('deleted', false);
+				polyline.get('api').setMap(t.map.api);
+
+				t.model.get('polylines')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.marker-center').click(function(e) {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
@@ -66,6 +82,21 @@
 				var bounds = new google.maps.LatLngBounds();
 
 				polygon.getPath().forEach(function(latLng) {
+					bounds.extend(latLng);
+				});
+				
+				t.map.fitBounds(bounds);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.polyline-center').click(function(e) {
+				var index = $(this).parent().index();
+				var polyline = t.map.polylines[index];
+
+				var bounds = new google.maps.LatLngBounds();
+
+				polyline.getPath().forEach(function(latLng) {
 					bounds.extend(latLng);
 				});
 				

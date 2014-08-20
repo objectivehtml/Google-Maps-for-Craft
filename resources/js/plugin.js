@@ -617,7 +617,7 @@ var GoogleMaps = {
 		constructor: function(map, points, options) {
 			var t = this;
 
-			this.paths = [];
+			this.path = [];
 
 			this.map = map;
 
@@ -625,30 +625,34 @@ var GoogleMaps = {
 
 			_.each(points, function(point) {
 				if(_.isArray(point)) {
-					t.paths.push(new google.maps.LatLng(point[0], point[1]));
+					t.path.push(new google.maps.LatLng(point[0], point[1]));
 				}
 				else if(point.lat && point.lng) {
-					t.paths.push(new google.maps.LatLng(point.lat, point.lng));
+					t.path.push(new google.maps.LatLng(point.lat, point.lng));
 				}
 				else if(_.isObject(point)) {
-					t.paths.push(point)
+					t.path.push(point)
 				}
 
 				if(t.fitBounds) {
-					map.bounds.extend(t.paths[t.paths.length - 1]);
+					map.bounds.extend(t.path[t.path.length - 1]);
 				}
 			});
 
-			var defaultOptions = {
-				map: map.api,
-				paths: t.paths
-			};
-
-			this.api = new google.maps.Polygon(_.extend({}, defaultOptions, this.options));
+			this.initializeApi(map);
 			this.createInfoWindow();
 			this.bindEvents();
 
 			map.addPolygon(this, this.fitBounds);
+		},
+
+		initializeApi: function(map) {			
+			var defaultOptions = {
+				map: map.api,
+				paths: this.path
+			};
+
+			this.api = new google.maps.Polygon(_.extend({}, defaultOptions, this.options));
 		},
 
 		createInfoWindow: function(polygon) {
@@ -827,6 +831,19 @@ var GoogleMaps = {
 
 	});
 
+	GoogleMaps.Polyline = GoogleMaps.Polygon.extend({
+
+		initializeApi: function(map) {
+			var defaultOptions = {
+				map: map.api,
+				path: this.path
+			};
+
+			this.api = new google.maps.Polyline(_.extend({}, defaultOptions, this.options));
+		}
+
+	});
+
 	GoogleMaps.MapData = GoogleMaps.BaseClass.extend({
 
 		bounds: false,
@@ -879,6 +896,23 @@ var GoogleMaps = {
 							strokeWeight: polygon.strokeWeight,
 							fillColor: polygon.fillColor,
 							fillOpacity: polygon.fillOpacity
+						}
+					});
+				});
+			}
+
+			if(data.polylines) {
+				_.each(data.polylines, function(polyline, i) {
+
+					var polyline = new GoogleMaps.Polyline(map, polyline.points, {
+						title: polyline.title,
+						content: polyline.content,
+						fitBounds: t.fitBounds,
+						infoWindowOptions: options.infoWindowOptions ? options.infoWindowOptions : {},
+						options: {
+							strokeColor: polyline.strokeColor,
+							strokeOpacity: polyline.strokeOpacity,
+							strokeWeight: polyline.strokeWeight
 						}
 					});
 				});

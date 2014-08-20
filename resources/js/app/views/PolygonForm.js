@@ -21,6 +21,16 @@
 
 			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
 
+			this.initializeApi();
+
+			this.model.get('infowindow').close();
+			this.model.get('api').setDraggable(true);
+			this.model.get('api').setEditable(true);
+
+			this.api = this.model.get('api');
+		},
+
+		initializeApi: function() {
 			if(!this.model) {
 				this.model = new GoogleMaps.Models.Polygon({
 					map: this.map,
@@ -30,12 +40,6 @@
 					isSavedToMap: false
 				});
 			}
-
-			this.model.get('infowindow').close();
-			this.model.get('api').setDraggable(true);
-			this.model.get('api').setEditable(true);
-
-			this.api = this.model.get('api');
 		},
 
 		onRender: function() {
@@ -226,6 +230,13 @@
 			this.render();
 		},
 
+		saveToMap: function() {
+			if(!this.model.get('isSavedToMap')) {
+				this.map.polygons.push(this.model);
+				this.model.set('isSavedToMap', true);
+			}
+		},
+
 		submit: function() {
 			this.api.setDraggable(false);
 			this.api.setEditable(false);
@@ -238,12 +249,8 @@
 
 			this.model.set('points', points);
 
+			this.saveToMap();
 			this.updatePolygonOptions();
-
-			if(!this.model.get('isSavedToMap')) {
-				this.map.polygons.push(this.model);
-				this.model.set('isSavedToMap', true);
-			}
 
 			if(this.model.get('infowindow')) {
 				this.model.get('infowindow').setOptions({

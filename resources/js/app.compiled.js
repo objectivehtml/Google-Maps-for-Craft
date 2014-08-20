@@ -9827,6 +9827,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Delete Polygon?</h2>\n\n<p>Are you sure you want to delete this polygon?</p>\n\n<footer>\n	<button type=\"submit\" class=\"btn submit\">Delete Polygon</button>\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
   });
 
+templates['delete-polyline-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<h2>Delete Polyline?</h2>\n\n<p>Are you sure you want to delete this polyline?</p>\n\n<footer>\n	<button type=\"submit\" class=\"btn submit\">Delete Polyline</button>\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
+  });
+
 templates['edit-marker-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -9886,54 +9895,66 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 function program1(depth0,data) {
   
+  
+  return "\n<p>There are no markers on the map.</p>\n";
+  }
+
+function program3(depth0,data) {
+  
   var buffer = "", stack1;
   buffer += "\n	<li>";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "<a href=\"#\" class=\"marker-center\">"
     + escapeExpression(((stack1 = (depth0 && depth0.address)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</a>";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</li>\n";
   return buffer;
   }
-function program2(depth0,data) {
+function program4(depth0,data) {
   
   
   return "<span class=\"oh-google-map-strike-out\">";
   }
 
-function program4(depth0,data) {
+function program6(depth0,data) {
   
   
   return "</span> <a href=\"#\" class=\"marker-undo oh-google-map-small-text\">Undo Delete</a>";
   }
 
-function program6(depth0,data) {
+function program8(depth0,data) {
+  
+  
+  return "\n<p>There are no polygons on the map.</p>\n";
+  }
+
+function program10(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n	<li>";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "<a href=\"#\" class=\"polygon-center\">";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(7, program7, data, depth0),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(9, program9, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(13, program13, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a>";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</li>\n";
   return buffer;
   }
-function program7(depth0,data,depth1) {
+function program11(depth0,data,depth1) {
   
   var stack1;
   return escapeExpression(((stack1 = (depth1 && depth1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
   }
 
-function program9(depth0,data,depth1) {
+function program13(depth0,data,depth1) {
   
   var buffer = "", stack1;
   buffer += "Polygon "
@@ -9941,17 +9962,66 @@ function program9(depth0,data,depth1) {
   return buffer;
   }
 
-function program11(depth0,data) {
+function program15(depth0,data) {
   
   
   return "</span> <a href=\"#\" class=\"polygon-undo oh-google-map-small-text\">Undo Delete</a>";
   }
 
-  buffer += "<h2>Markers</h2>\n\n<a href=\"#\" class=\"cancel oh-google-map-close\">&times; close</a>\n\n<ol class=\"oh-google-map-ordered-list\">\n";
-  stack1 = helpers.each.call(depth0, (depth0 && depth0.markers), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+function program17(depth0,data) {
+  
+  
+  return "\n<p>There are no polylines on the map.</p>\n";
+  }
+
+function program19(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n	<li>";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</ol>\n\n<h2>Polygons</h2>\n\n<ol class=\"oh-google-map-ordered-list\">\n";
-  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polygons), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polygons), options));
+  buffer += "<a href=\"#\" class=\"polyline-center\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(20, program20, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a>";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(22, program22, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</li>\n";
+  return buffer;
+  }
+function program20(depth0,data,depth1) {
+  
+  var buffer = "", stack1;
+  buffer += "Polyline "
+    + escapeExpression(((stack1 = (depth1 && depth1.count)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+  return buffer;
+  }
+
+function program22(depth0,data) {
+  
+  
+  return "</span> <a href=\"#\" class=\"polyline-undo oh-google-map-small-text\">Undo Delete</a>";
+  }
+
+  buffer += "<h2>Markers</h2>\n\n<a href=\"#\" class=\"cancel oh-google-map-close\">&times; close</a>\n\n";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.markers)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.markers)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
+  stack1 = helpers.each.call(depth0, (depth0 && depth0.markers), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ol>\n\n<h2>Polygons</h2>\n\n";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polygons), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polygons), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ol>\n\n<h2>Polylines</h2>\n\n";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polylines), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polylines), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>";
   return buffer;
@@ -9986,7 +10056,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 templates['marker-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
 
 function program1(depth0,data) {
   
@@ -10044,10 +10114,7 @@ function program11(depth0,data) {
     + "</span></p>\n\n			<a href=\"#\" class=\"edit-location\">Change Location</a>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-4\">\n			<div class=\"oh-google-map-map-icon\">\n				<label>Map Icon</label>\n				<span><img src=\"";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.icon), {hash:{},inverse:self.noop,fn:self.programWithDepth(5, program5, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data}
-  if (helper = helpers.not) { stack1 = helper.call(depth0, options); }
-  else { helper = (depth0 && depth0.not); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
-  if (!helpers.not) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data}); }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.icon), options) : helperMissing.call(depth0, "not", (depth0 && depth0.icon), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\" /></span>\n				<a href=\"#\" class=\"change-icon\">Change Icon</a>\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<div id=\"oh-content-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Title</label>\n				<input type=\"text\" name=\"title\" id=\"poly-title\" value=\"";
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
@@ -10222,6 +10289,126 @@ function program15(depth0,data) {
   else { helper = (depth0 && depth0.strokeWeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n		</div>\n	</div>\n\n</div>\n\n<footer>\n	";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(13, program13, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n	";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
+  return buffer;
+  });
+
+templates['polyline-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  
+  return "\n	<h2>Add Polyline</h2>\n";
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "\n	<h2>Edit Polyline</h2>\n";
+  }
+
+function program5(depth0,data) {
+  
+  
+  return "Show Details";
+  }
+
+function program7(depth0,data) {
+  
+  
+  return "Hide Details";
+  }
+
+function program9(depth0,data) {
+  
+  
+  return "style=\"display:none\"";
+  }
+
+function program11(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n			<div class=\"oh-google-map-tag\" title=\"";
+  if (helper = helpers.lat) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.lat); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + ",";
+  if (helper = helpers.lng) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.lng); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\">\n				<span>Point ";
+  if (helper = helpers.count) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.count); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</span>\n				<a href=\"#\" class=\"remove\"><span>&times;</span></a>\n			</div>\n			";
+  return buffer;
+  }
+
+function program13(depth0,data) {
+  
+  
+  return "\n		<button type=\"submit\" class=\"btn submit\">Save Polyline</button>\n	";
+  }
+
+function program15(depth0,data) {
+  
+  
+  return "\n		<button type=\"submit\" class=\"btn submit\">Save Changes</button>\n	";
+  }
+
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<nav class=\"oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up\">\n	<ul>\n		<li><a class=\"oh-google-map-tab-trigger active\" href=\"#oh-points-tab\">Points</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-content-tab\">Content</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-options-tab\">Options</a></li>\n	</ul>\n</nav>\n\n<div id=\"oh-points-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	<p><span class=\"oh-google-map-small-text\"><a href=\"#\" class=\"toggle-details\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.hideDetails), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.hideDetails), options) : helperMissing.call(depth0, "not", (depth0 && depth0.hideDetails), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a></span></p>\n\n	<div class=\"details\" ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.hideDetails), {hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n		<p class=\"oh-google-map-small-text\">To add points to the polygon, you can either double click the map or add enter coordinates or addresses manually.</p>\n\n		<div class=\"points oh-google-map-tags\">\n			";
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.points), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.points), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n		</div>\n	</div>\n\n	<div class=\"point-field\">\n		<input type=\"text\" name=\"point\" value=\"\" class=\"text\" placeholder=\"Enter a coordinate or address\" style=\"width:45%;\" /> <a class=\"btn add-point\" style=\"margin-left:10px;\">+ Add Point</a>\n	</div>\n\n</div>\n\n<div id=\"oh-content-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Title</label>\n				<input type=\"text\" name=\"title\" id=\"poly-title\" value=\"";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"text fullwidth\" />\n			</div>\n		</div>\n	</div>\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Content</label>\n				<textarea name=\"content\" id=\"poly-content\" class=\"text fullwidth\">";
+  if (helper = helpers.content) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.content); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<div id=\"oh-options-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-color\">Stroke Color</label>\n				<input type=\"text\" name=\"strokeColor\" id=\"stroke-color\" value=\"";
+  if (helper = helpers.strokeColor) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeColor); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"simple-color-picker text fullwidth\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-opacity\" class=\"oh-google-map-small-margin-bottom\">Stroke Opacity</label>\n				<div class=\"slider\" data-value=\"";
+  if (helper = helpers.strokeOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-start=\".6\" data-step=\".1\" data-min=\"0\" data-max=\"1\"></div>\n				<input type=\"hidden\" name=\"strokeOpacity\" id=\"stroke-opacity\" value=\"";
+  if (helper = helpers.strokeOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n			</div>\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-opacity\" class=\"oh-google-map-small-margin-bottom\">Stroke Weight</label>\n				<div class=\"slider\" data-value=\"";
+  if (helper = helpers.strokeWeight) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeWeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" data-start=\"3\" data-step=\"1\" data-min=\"0\" data-max=\"10\"></div>\n				<input type=\"hidden\" name=\"strokeWeight\" id=\"stroke-weight\" value=\"";
+  if (helper = helpers.strokeWeight) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.strokeWeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<footer>\n	";
   stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(13, program13, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n	";
@@ -10743,7 +10930,7 @@ var GoogleMaps = {
 		fillOpacity: 0.6,
 
 		initialize: function(options) {
-
+			
 			if(!options.strokeColor) {
 				options.strokeColor = this.strokeColor;
 			}
@@ -10771,6 +10958,22 @@ var GoogleMaps = {
 			_.each(this.get('points'), function(point) {
 				points.push(new google.maps.LatLng(point.lat, point.lng));
 			});
+			
+			if(!this.get('api')) {	
+				this.initializeApi(points, options);
+			}
+
+			if(!this.get('infowindow')) {
+				this.set('infowindow', new google.maps.InfoWindow({
+					maxWidth: 300,
+					content: this.buildInfoWindowContent()
+				}));
+			}
+
+			this.bindEvents();
+		},
+
+		initializeApi: function(points, options) {
 
 			options.strokeColor = this.get('strokeColor');
 			options.strokeWeight = this.get('strokeWeight');
@@ -10784,15 +10987,35 @@ var GoogleMaps = {
 			if(!this.get('api')) {
 				this.set('api', new google.maps.Polygon(options));
 			}
-			
-			if(!this.get('infowindow')) {
-				this.set('infowindow', new google.maps.InfoWindow({
-					maxWidth: 300,
-					content: this.buildInfoWindowContent()
-				}));
-			}
+		},	
 
-			this.bindEvents();
+		onEdit: function() {
+			var view = new GoogleMaps.Views.PolygonForm({
+				api: t.get('api'),
+				map: t.get('map'),
+				model: t
+			});
+
+
+			t.get('map').showModal(view);
+		},
+
+		onDelete: function() {
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-polygon-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.get('infowindow').close();
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.get('map').hideModal();
+				}
+			});
+
+			t.get('map').showModal(view);
 		},
 		
 		buildInfoWindowContent: function() {
@@ -10813,14 +11036,7 @@ var GoogleMaps = {
 
 			$content.find('.edit').click(function(e) {
 				
-				var view = new GoogleMaps.Views.PolygonForm({
-					api: t.get('api'),
-					map: t.get('map'),
-					model: t
-				});
-
-
-				t.get('map').showModal(view);
+				t.onEdit();
 
 				/*
 				t.get('map').api.setCenter(latLng);
@@ -10863,21 +11079,7 @@ var GoogleMaps = {
 
 				*/
 
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-polygon-form'),
-					submit: function() {
-						t.get('api').setMap(null);
-						t.get('infowindow').close();
-						t.set('deleted', true);
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.onDelete();
 
 				e.preventDefault();
 			});
@@ -10918,7 +11120,7 @@ var GoogleMaps = {
 		},
 		
 		setMap: function(value) {
-			//this.get('api').setMap(value);
+			this.get('api').setMap(value);
 		},
 		
 		setOptions: function(value) {
@@ -11041,6 +11243,61 @@ var GoogleMaps = {
 		onMouseup: function() {},
 
 		onRightclick: function() {}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Models.Polyline = GoogleMaps.Models.Polygon.extend({
+
+		initializeApi: function(points, options) {
+
+			options.strokeColor = this.get('strokeColor');
+			options.strokeWeight = this.get('strokeWeight');
+			options.strokeOpacity = this.get('strokeOpacity');
+			options.path = points;
+			options.map = this.get('map').api;
+			options.zIndex = this.get('map').polygons.length;
+
+			this.set('api', new google.maps.Polyline(options));
+		},	
+
+		getPaths: function() {
+			return;
+		},
+
+		onEdit: function() {
+			var view = new GoogleMaps.Views.PolylineForm({
+				api: this.get('api'),
+				map: this.get('map'),
+				model: this
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		onDelete: function() {
+			var t = this;
+
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-polyline-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.get('infowindow').close();
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.get('map').hideModal();
+				}
+			});
+
+			this.get('map').showModal(view);
+		},
 
 	});
 
@@ -11380,11 +11637,14 @@ var GoogleMaps = {
 
   		polygons: [],
 
+  		polylines: [],
+
   		className: 'oh-google-map-relative',
 
   		initialize: function(options) {
   			this.markers = [];
   			this.polygons = [];
+  			this.polylines = [];
 
   			this.mapOptions = _.extend({}, {
 	  			zoom: 8,
@@ -11421,7 +11681,8 @@ var GoogleMaps = {
   		updateHiddenField: function() {
   			var data = {
   				markers: [],
-  				polygons: []
+  				polygons: [],
+  				polylines: []
   			};
 
   			_.each(this.markers, function(marker, i) {
@@ -11430,6 +11691,10 @@ var GoogleMaps = {
 
   			_.each(this.polygons, function(polygon, i) {
   				data.polygons.push(polygon.toJSON());
+  			});
+
+  			_.each(this.polylines, function(polyline, i) {
+  				data.polylines.push(polyline.toJSON());
   			});
 
   			data = JSON.stringify(data);
@@ -11461,7 +11726,7 @@ var GoogleMaps = {
  			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
 
  			if(this.savedData) {
-	 			if(this.savedData.markers.length) {
+	 			if(this.savedData.markers && this.savedData.markers.length) {
 		 			_.each(this.savedData.markers, function(marker) {
 						var options = {
 							map: t,
@@ -11473,42 +11738,28 @@ var GoogleMaps = {
 		 			});
 		 		}
 
-	 			if(this.savedData.polygons.length) {
+	 			if(this.savedData.polygons && this.savedData.polygons.length) {
 		 			_.each(this.savedData.polygons, function(polygon) {
-
-		 				/*
-		 				polygon.map = t;
-
-		 				polygon = ;
-
-		 				var points = [];
-
-		 				_.each(polygon.points, function(point) {
-		 					points.push(new google.maps.LatLng(point.lat, point.lng));
-		 				});
-
-		 				polygon.map = t.api;
-		 				polygon.points = points;
-
-		 				polygon = new google.maps.Polygon(polygon);
-
-		 				polygon.infowindow = new google.maps.InfoWindow({
-		 					content: polygon.content
-		 				});
-
-		 				google.maps.event.addListener(polygon, 'click', function(e) {
-		 					polygon.infowindow.open(t.api);
-		 					polygon.infowindow.setPosition(e.latLng);
-		 					//polygon.infowindow.open(t.api, e.latLng);
-		 				});
-						*/
-
 						var options = {
 							map: t,
 							isSavedToMap: true
 						};
 
 		 				t.polygons.push(new GoogleMaps.Models.Polygon(_.extend({}, options, polygon)));
+		 			});
+		 		}
+
+	 			if(this.savedData.polylines && this.savedData.polylines.length) {
+
+						console.log(this.savedData.polylines);
+
+		 			_.each(this.savedData.polylines, function(polyline) {
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.polylines.push(new GoogleMaps.Models.Polyline(_.extend({}, options, polyline)));
 		 			});
 		 		}
 
@@ -11528,7 +11779,8 @@ var GoogleMaps = {
  					click: function(e) {
  						var data = {
  							markers: [],
- 							polygons: []
+ 							polygons: [],
+ 							polylines: []
  						};
 
  						_.each(t.markers, function(marker) {
@@ -11537,6 +11789,10 @@ var GoogleMaps = {
 
  						_.each(t.polygons, function(polygon) {
  							data.polygons.push(polygon.toJSON());
+ 						});
+
+ 						_.each(t.polylines, function(polyline) {
+ 							data.polylines.push(polyline.toJSON());
  						});
 
  						var view = new GoogleMaps.Views.MapList({
@@ -11657,6 +11913,15 @@ var GoogleMaps = {
 				}
 			});
 
+			_.each(this.polylines, function(polyline) {
+				if(!polyline.get('deleted')) {
+					_.each(polyline.getPath().getArray(), function(latLng) {
+						bounds.extend(latLng);
+						boundsChanged = true;
+					});
+				}
+			});
+
 			if(boundsChanged) {
 				this.fitBounds(bounds);
 			}
@@ -11728,6 +11993,22 @@ var GoogleMaps = {
 				e.preventDefault();
 			});
 
+			this.$el.find('.polyline-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var polyline = t.map.polylines[index];
+
+				polyline.set('deleted', false);
+				polyline.get('api').setMap(t.map.api);
+
+				t.model.get('polylines')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.marker-center').click(function(e) {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
@@ -11745,6 +12026,21 @@ var GoogleMaps = {
 				var bounds = new google.maps.LatLngBounds();
 
 				polygon.getPath().forEach(function(latLng) {
+					bounds.extend(latLng);
+				});
+				
+				t.map.fitBounds(bounds);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.polyline-center').click(function(e) {
+				var index = $(this).parent().index();
+				var polyline = t.map.polylines[index];
+
+				var bounds = new google.maps.LatLngBounds();
+
+				polyline.getPath().forEach(function(latLng) {
 					bounds.extend(latLng);
 				});
 				
@@ -12078,6 +12374,16 @@ var GoogleMaps = {
 
 			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
 
+			this.initializeApi();
+
+			this.model.get('infowindow').close();
+			this.model.get('api').setDraggable(true);
+			this.model.get('api').setEditable(true);
+
+			this.api = this.model.get('api');
+		},
+
+		initializeApi: function() {
 			if(!this.model) {
 				this.model = new GoogleMaps.Models.Polygon({
 					map: this.map,
@@ -12087,12 +12393,6 @@ var GoogleMaps = {
 					isSavedToMap: false
 				});
 			}
-
-			this.model.get('infowindow').close();
-			this.model.get('api').setDraggable(true);
-			this.model.get('api').setEditable(true);
-
-			this.api = this.model.get('api');
 		},
 
 		onRender: function() {
@@ -12283,6 +12583,13 @@ var GoogleMaps = {
 			this.render();
 		},
 
+		saveToMap: function() {
+			if(!this.model.get('isSavedToMap')) {
+				this.map.polygons.push(this.model);
+				this.model.set('isSavedToMap', true);
+			}
+		},
+
 		submit: function() {
 			this.api.setDraggable(false);
 			this.api.setEditable(false);
@@ -12295,12 +12602,8 @@ var GoogleMaps = {
 
 			this.model.set('points', points);
 
+			this.saveToMap();
 			this.updatePolygonOptions();
-
-			if(!this.model.get('isSavedToMap')) {
-				this.map.polygons.push(this.model);
-				this.model.set('isSavedToMap', true);
-			}
 
 			if(this.model.get('infowindow')) {
 				this.model.get('infowindow').setOptions({
@@ -12318,6 +12621,40 @@ var GoogleMaps = {
 			this.model.setEditable(false);
 			this.map.hideModal();
 		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Views.PolylineForm = GoogleMaps.Views.PolygonForm.extend({
+
+		geocoder: false,
+
+		template: GoogleMaps.Template('polyline-form'),
+
+		initializeApi: function() {
+			console.log('init');
+			
+			if(!this.model) {
+				this.model = new GoogleMaps.Models.Polyline({
+					map: this.map,
+					points: [],
+					hideDetails: true,
+					isNew: true,
+					isSavedToMap: false
+				});
+			}
+		},
+
+		saveToMap: function() {
+			if(!this.model.get('isSavedToMap')) {
+				this.map.polylines.push(this.model);
+				this.model.set('isSavedToMap', true);
+			}
+		}			
 
 	});
 

@@ -510,7 +510,7 @@ var GoogleMaps = {
 		fillOpacity: 0.6,
 
 		initialize: function(options) {
-
+			
 			if(!options.strokeColor) {
 				options.strokeColor = this.strokeColor;
 			}
@@ -538,6 +538,22 @@ var GoogleMaps = {
 			_.each(this.get('points'), function(point) {
 				points.push(new google.maps.LatLng(point.lat, point.lng));
 			});
+			
+			if(!this.get('api')) {	
+				this.initializeApi(points, options);
+			}
+
+			if(!this.get('infowindow')) {
+				this.set('infowindow', new google.maps.InfoWindow({
+					maxWidth: 300,
+					content: this.buildInfoWindowContent()
+				}));
+			}
+
+			this.bindEvents();
+		},
+
+		initializeApi: function(points, options) {
 
 			options.strokeColor = this.get('strokeColor');
 			options.strokeWeight = this.get('strokeWeight');
@@ -551,15 +567,35 @@ var GoogleMaps = {
 			if(!this.get('api')) {
 				this.set('api', new google.maps.Polygon(options));
 			}
-			
-			if(!this.get('infowindow')) {
-				this.set('infowindow', new google.maps.InfoWindow({
-					maxWidth: 300,
-					content: this.buildInfoWindowContent()
-				}));
-			}
+		},	
 
-			this.bindEvents();
+		onEdit: function() {
+			var view = new GoogleMaps.Views.PolygonForm({
+				api: t.get('api'),
+				map: t.get('map'),
+				model: t
+			});
+
+
+			t.get('map').showModal(view);
+		},
+
+		onDelete: function() {
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-polygon-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.get('infowindow').close();
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.get('map').hideModal();
+				}
+			});
+
+			t.get('map').showModal(view);
 		},
 		
 		buildInfoWindowContent: function() {
@@ -580,14 +616,7 @@ var GoogleMaps = {
 
 			$content.find('.edit').click(function(e) {
 				
-				var view = new GoogleMaps.Views.PolygonForm({
-					api: t.get('api'),
-					map: t.get('map'),
-					model: t
-				});
-
-
-				t.get('map').showModal(view);
+				t.onEdit();
 
 				/*
 				t.get('map').api.setCenter(latLng);
@@ -630,21 +659,7 @@ var GoogleMaps = {
 
 				*/
 
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-polygon-form'),
-					submit: function() {
-						t.get('api').setMap(null);
-						t.get('infowindow').close();
-						t.set('deleted', true);
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.onDelete();
 
 				e.preventDefault();
 			});
@@ -685,7 +700,7 @@ var GoogleMaps = {
 		},
 		
 		setMap: function(value) {
-			//this.get('api').setMap(value);
+			this.get('api').setMap(value);
 		},
 		
 		setOptions: function(value) {
@@ -808,6 +823,61 @@ var GoogleMaps = {
 		onMouseup: function() {},
 
 		onRightclick: function() {}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Models.Polyline = GoogleMaps.Models.Polygon.extend({
+
+		initializeApi: function(points, options) {
+
+			options.strokeColor = this.get('strokeColor');
+			options.strokeWeight = this.get('strokeWeight');
+			options.strokeOpacity = this.get('strokeOpacity');
+			options.path = points;
+			options.map = this.get('map').api;
+			options.zIndex = this.get('map').polygons.length;
+
+			this.set('api', new google.maps.Polyline(options));
+		},	
+
+		getPaths: function() {
+			return;
+		},
+
+		onEdit: function() {
+			var view = new GoogleMaps.Views.PolylineForm({
+				api: this.get('api'),
+				map: this.get('map'),
+				model: this
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		onDelete: function() {
+			var t = this;
+
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-polyline-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.get('infowindow').close();
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.get('map').hideModal();
+				}
+			});
+
+			this.get('map').showModal(view);
+		},
 
 	});
 
@@ -1147,11 +1217,14 @@ var GoogleMaps = {
 
   		polygons: [],
 
+  		polylines: [],
+
   		className: 'oh-google-map-relative',
 
   		initialize: function(options) {
   			this.markers = [];
   			this.polygons = [];
+  			this.polylines = [];
 
   			this.mapOptions = _.extend({}, {
 	  			zoom: 8,
@@ -1188,7 +1261,8 @@ var GoogleMaps = {
   		updateHiddenField: function() {
   			var data = {
   				markers: [],
-  				polygons: []
+  				polygons: [],
+  				polylines: []
   			};
 
   			_.each(this.markers, function(marker, i) {
@@ -1197,6 +1271,10 @@ var GoogleMaps = {
 
   			_.each(this.polygons, function(polygon, i) {
   				data.polygons.push(polygon.toJSON());
+  			});
+
+  			_.each(this.polylines, function(polyline, i) {
+  				data.polylines.push(polyline.toJSON());
   			});
 
   			data = JSON.stringify(data);
@@ -1228,7 +1306,7 @@ var GoogleMaps = {
  			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
 
  			if(this.savedData) {
-	 			if(this.savedData.markers.length) {
+	 			if(this.savedData.markers && this.savedData.markers.length) {
 		 			_.each(this.savedData.markers, function(marker) {
 						var options = {
 							map: t,
@@ -1240,42 +1318,28 @@ var GoogleMaps = {
 		 			});
 		 		}
 
-	 			if(this.savedData.polygons.length) {
+	 			if(this.savedData.polygons && this.savedData.polygons.length) {
 		 			_.each(this.savedData.polygons, function(polygon) {
-
-		 				/*
-		 				polygon.map = t;
-
-		 				polygon = ;
-
-		 				var points = [];
-
-		 				_.each(polygon.points, function(point) {
-		 					points.push(new google.maps.LatLng(point.lat, point.lng));
-		 				});
-
-		 				polygon.map = t.api;
-		 				polygon.points = points;
-
-		 				polygon = new google.maps.Polygon(polygon);
-
-		 				polygon.infowindow = new google.maps.InfoWindow({
-		 					content: polygon.content
-		 				});
-
-		 				google.maps.event.addListener(polygon, 'click', function(e) {
-		 					polygon.infowindow.open(t.api);
-		 					polygon.infowindow.setPosition(e.latLng);
-		 					//polygon.infowindow.open(t.api, e.latLng);
-		 				});
-						*/
-
 						var options = {
 							map: t,
 							isSavedToMap: true
 						};
 
 		 				t.polygons.push(new GoogleMaps.Models.Polygon(_.extend({}, options, polygon)));
+		 			});
+		 		}
+
+	 			if(this.savedData.polylines && this.savedData.polylines.length) {
+
+						console.log(this.savedData.polylines);
+
+		 			_.each(this.savedData.polylines, function(polyline) {
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.polylines.push(new GoogleMaps.Models.Polyline(_.extend({}, options, polyline)));
 		 			});
 		 		}
 
@@ -1295,7 +1359,8 @@ var GoogleMaps = {
  					click: function(e) {
  						var data = {
  							markers: [],
- 							polygons: []
+ 							polygons: [],
+ 							polylines: []
  						};
 
  						_.each(t.markers, function(marker) {
@@ -1304,6 +1369,10 @@ var GoogleMaps = {
 
  						_.each(t.polygons, function(polygon) {
  							data.polygons.push(polygon.toJSON());
+ 						});
+
+ 						_.each(t.polylines, function(polyline) {
+ 							data.polylines.push(polyline.toJSON());
  						});
 
  						var view = new GoogleMaps.Views.MapList({
@@ -1424,6 +1493,15 @@ var GoogleMaps = {
 				}
 			});
 
+			_.each(this.polylines, function(polyline) {
+				if(!polyline.get('deleted')) {
+					_.each(polyline.getPath().getArray(), function(latLng) {
+						bounds.extend(latLng);
+						boundsChanged = true;
+					});
+				}
+			});
+
 			if(boundsChanged) {
 				this.fitBounds(bounds);
 			}
@@ -1495,6 +1573,22 @@ var GoogleMaps = {
 				e.preventDefault();
 			});
 
+			this.$el.find('.polyline-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var polyline = t.map.polylines[index];
+
+				polyline.set('deleted', false);
+				polyline.get('api').setMap(t.map.api);
+
+				t.model.get('polylines')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.marker-center').click(function(e) {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
@@ -1512,6 +1606,21 @@ var GoogleMaps = {
 				var bounds = new google.maps.LatLngBounds();
 
 				polygon.getPath().forEach(function(latLng) {
+					bounds.extend(latLng);
+				});
+				
+				t.map.fitBounds(bounds);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.polyline-center').click(function(e) {
+				var index = $(this).parent().index();
+				var polyline = t.map.polylines[index];
+
+				var bounds = new google.maps.LatLngBounds();
+
+				polyline.getPath().forEach(function(latLng) {
 					bounds.extend(latLng);
 				});
 				
@@ -1845,6 +1954,16 @@ var GoogleMaps = {
 
 			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
 
+			this.initializeApi();
+
+			this.model.get('infowindow').close();
+			this.model.get('api').setDraggable(true);
+			this.model.get('api').setEditable(true);
+
+			this.api = this.model.get('api');
+		},
+
+		initializeApi: function() {
 			if(!this.model) {
 				this.model = new GoogleMaps.Models.Polygon({
 					map: this.map,
@@ -1854,12 +1973,6 @@ var GoogleMaps = {
 					isSavedToMap: false
 				});
 			}
-
-			this.model.get('infowindow').close();
-			this.model.get('api').setDraggable(true);
-			this.model.get('api').setEditable(true);
-
-			this.api = this.model.get('api');
 		},
 
 		onRender: function() {
@@ -2050,6 +2163,13 @@ var GoogleMaps = {
 			this.render();
 		},
 
+		saveToMap: function() {
+			if(!this.model.get('isSavedToMap')) {
+				this.map.polygons.push(this.model);
+				this.model.set('isSavedToMap', true);
+			}
+		},
+
 		submit: function() {
 			this.api.setDraggable(false);
 			this.api.setEditable(false);
@@ -2062,12 +2182,8 @@ var GoogleMaps = {
 
 			this.model.set('points', points);
 
+			this.saveToMap();
 			this.updatePolygonOptions();
-
-			if(!this.model.get('isSavedToMap')) {
-				this.map.polygons.push(this.model);
-				this.model.set('isSavedToMap', true);
-			}
 
 			if(this.model.get('infowindow')) {
 				this.model.get('infowindow').setOptions({
@@ -2085,6 +2201,40 @@ var GoogleMaps = {
 			this.model.setEditable(false);
 			this.map.hideModal();
 		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Views.PolylineForm = GoogleMaps.Views.PolygonForm.extend({
+
+		geocoder: false,
+
+		template: GoogleMaps.Template('polyline-form'),
+
+		initializeApi: function() {
+			console.log('init');
+			
+			if(!this.model) {
+				this.model = new GoogleMaps.Models.Polyline({
+					map: this.map,
+					points: [],
+					hideDetails: true,
+					isNew: true,
+					isSavedToMap: false
+				});
+			}
+		},
+
+		saveToMap: function() {
+			if(!this.model.get('isSavedToMap')) {
+				this.map.polylines.push(this.model);
+				this.model.set('isSavedToMap', true);
+			}
+		}			
 
 	});
 

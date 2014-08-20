@@ -33,11 +33,14 @@
 
   		polygons: [],
 
+  		polylines: [],
+
   		className: 'oh-google-map-relative',
 
   		initialize: function(options) {
   			this.markers = [];
   			this.polygons = [];
+  			this.polylines = [];
 
   			this.mapOptions = _.extend({}, {
 	  			zoom: 8,
@@ -74,7 +77,8 @@
   		updateHiddenField: function() {
   			var data = {
   				markers: [],
-  				polygons: []
+  				polygons: [],
+  				polylines: []
   			};
 
   			_.each(this.markers, function(marker, i) {
@@ -83,6 +87,10 @@
 
   			_.each(this.polygons, function(polygon, i) {
   				data.polygons.push(polygon.toJSON());
+  			});
+
+  			_.each(this.polylines, function(polyline, i) {
+  				data.polylines.push(polyline.toJSON());
   			});
 
   			data = JSON.stringify(data);
@@ -114,7 +122,7 @@
  			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
 
  			if(this.savedData) {
-	 			if(this.savedData.markers.length) {
+	 			if(this.savedData.markers && this.savedData.markers.length) {
 		 			_.each(this.savedData.markers, function(marker) {
 						var options = {
 							map: t,
@@ -126,42 +134,28 @@
 		 			});
 		 		}
 
-	 			if(this.savedData.polygons.length) {
+	 			if(this.savedData.polygons && this.savedData.polygons.length) {
 		 			_.each(this.savedData.polygons, function(polygon) {
-
-		 				/*
-		 				polygon.map = t;
-
-		 				polygon = ;
-
-		 				var points = [];
-
-		 				_.each(polygon.points, function(point) {
-		 					points.push(new google.maps.LatLng(point.lat, point.lng));
-		 				});
-
-		 				polygon.map = t.api;
-		 				polygon.points = points;
-
-		 				polygon = new google.maps.Polygon(polygon);
-
-		 				polygon.infowindow = new google.maps.InfoWindow({
-		 					content: polygon.content
-		 				});
-
-		 				google.maps.event.addListener(polygon, 'click', function(e) {
-		 					polygon.infowindow.open(t.api);
-		 					polygon.infowindow.setPosition(e.latLng);
-		 					//polygon.infowindow.open(t.api, e.latLng);
-		 				});
-						*/
-
 						var options = {
 							map: t,
 							isSavedToMap: true
 						};
 
 		 				t.polygons.push(new GoogleMaps.Models.Polygon(_.extend({}, options, polygon)));
+		 			});
+		 		}
+
+	 			if(this.savedData.polylines && this.savedData.polylines.length) {
+
+						console.log(this.savedData.polylines);
+
+		 			_.each(this.savedData.polylines, function(polyline) {
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.polylines.push(new GoogleMaps.Models.Polyline(_.extend({}, options, polyline)));
 		 			});
 		 		}
 
@@ -181,7 +175,8 @@
  					click: function(e) {
  						var data = {
  							markers: [],
- 							polygons: []
+ 							polygons: [],
+ 							polylines: []
  						};
 
  						_.each(t.markers, function(marker) {
@@ -190,6 +185,10 @@
 
  						_.each(t.polygons, function(polygon) {
  							data.polygons.push(polygon.toJSON());
+ 						});
+
+ 						_.each(t.polylines, function(polyline) {
+ 							data.polylines.push(polyline.toJSON());
  						});
 
  						var view = new GoogleMaps.Views.MapList({
@@ -304,6 +303,15 @@
 			_.each(this.polygons, function(polygon) {
 				if(!polygon.get('deleted')) {
 					_.each(polygon.getPath().getArray(), function(latLng) {
+						bounds.extend(latLng);
+						boundsChanged = true;
+					});
+				}
+			});
+
+			_.each(this.polylines, function(polyline) {
+				if(!polyline.get('deleted')) {
+					_.each(polyline.getPath().getArray(), function(latLng) {
 						bounds.extend(latLng);
 						boundsChanged = true;
 					});

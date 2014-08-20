@@ -62,6 +62,19 @@ class GoogleMaps_MapDataModel extends BaseModel
         return $return;
     }
 
+    public function getPolylines()
+    {
+        $return = array();
+
+        foreach($this->polylines as $polyline)
+        {
+            $return[] = GoogleMaps_PolylineModel::populateModel((array) $polyline);
+
+        }
+
+        return $return;
+    }
+
     public function sortByDistanceAsc($a, $b)
     {
         return $a->distance < $b->distance ? -1 : 1;
@@ -89,6 +102,11 @@ class GoogleMaps_MapDataModel extends BaseModel
             $return['polygons'][] = $polygon->getAttributes();
         }
 
+        foreach($this->getPolylines() as $polygon)
+        {
+            $return['polylines'][] = $polygon->getAttributes();
+        }
+
         return json_encode($return);
     }
 
@@ -112,9 +130,18 @@ class GoogleMaps_MapDataModel extends BaseModel
 
     public function addPolygon(GoogleMaps_PolygonModel $polygon)
     {
+        $polylines = $this->polylines;
+
+        $polylines[] = $polygon;
+
+        $this->polylines = $polylines;
+    }
+
+    public function addPolyline(GoogleMaps_PolylineModel $polyline)
+    {
         $polygons = $this->polygons;
 
-        $polygons[] = $polygon;
+        $polygons[] = $polyline;
 
         $this->polygons = $polygons;
     }
@@ -126,6 +153,15 @@ class GoogleMaps_MapDataModel extends BaseModel
         unset($polygons[$index]);
 
         $this->polygons = $polygons;
+    }
+
+    public function removePolyline($index)
+    {
+        $polylines = $this->polylines;
+
+        unset($polylines[$index]);
+
+        $this->polylines = $polylines;
     }
 
     public function getStaticMapModel($options = array())
@@ -144,7 +180,8 @@ class GoogleMaps_MapDataModel extends BaseModel
         return array(
             // Location Parameters
             'markers'   => array(AttributeType::Mixed, 'default' => array()),
-            'polygons'   => array(AttributeType::Mixed, 'default' => array())
+            'polygons'   => array(AttributeType::Mixed, 'default' => array()),
+            'polylines'   => array(AttributeType::Mixed, 'default' => array())
         );
 
     }

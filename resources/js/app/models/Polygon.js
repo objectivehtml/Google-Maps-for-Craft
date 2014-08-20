@@ -92,16 +92,17 @@
 
 		onEdit: function() {
 			var view = new GoogleMaps.Views.PolygonForm({
-				api: t.get('api'),
-				map: t.get('map'),
-				model: t
+				api: this.get('api'),
+				map: this.get('map'),
+				model: this
 			});
 
-
-			t.get('map').showModal(view);
+			this.get('map').showModal(view);
 		},
 
 		onDelete: function() {
+			var t = this;
+
 			var view = new GoogleMaps.Views.BaseForm({
 				template: GoogleMaps.Template('delete-polygon-form'),
 				submit: function() {

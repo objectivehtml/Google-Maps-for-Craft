@@ -114,6 +114,11 @@ h2 .oh-google-map-small-text { margin-left: 10px; }
 .oh-google-map-small-margin-bottom { display: block; margin-bottom: 7px; }
 
 
+.oh-google-map-map-icon { text-align: center; }
+.oh-google-map-map-icon label { text-transform: uppercase; font-weight: 200; margin: 0 0 10px; color: rgb(155, 155, 155); }
+.oh-google-map-map-icon span { display: block; padding: 12px; box-shadow: 0 0 10px rgba(0, 0, 0, .3) inset; margin: 10px; }
+.oh-google-map-map-icon img { max-width: 100%; }
+
 .oh-google-map-clearfix:before,
 .oh-google-map-clearfix:after {
 	content: "";

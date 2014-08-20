@@ -263,6 +263,8 @@ var GoogleMaps = {
 
 		infoWindowOptions: {},
 
+		iconSize: [32, 32],
+
 		constructor: function(map, options) {
 			var t = this;
 
@@ -317,9 +319,276 @@ var GoogleMaps = {
 			});
 		},
 
+		getAnimation: function() {
+			return this.api.getAnimation();
+		},
+
+		getClickable: function() {
+			return this.api.getClickable();
+		},
+
+		getCursor: function() {
+			return this.api.getCursor();
+		},
+
+		getDraggable: function() {
+			return this.api.getDraggable();
+		},
+
+		getIcon: function() {
+			return this.api.getIcon();
+		},
+
+		getMap: function() {
+			return this.api.getMap();
+		},
+
+		getOpacity: function() {
+			return this.api.getOpacity();
+		},
+
 		getPosition: function() {
 			return this.api.getPosition();
-		}
+		},
+
+		getShape: function() {
+			return this.api.getShape()
+		},
+
+		getTitle: function() {
+			return this.api.getTitle();
+		},
+
+		getVisible: function() {
+			return this.api.getVisible();
+		},
+
+		getZIndex: function() {
+			return this.api.getZIndex();
+		},
+
+		setAnimation: function(value) {
+			this.api.setAnimation(value);
+		},
+
+		setClickable: function(value) {
+			this.api.setClickable(value);
+		},
+		
+		setCursor: function(value) {
+			this.api.setCursor(value);
+		},
+		
+		setDraggable: function(value) {
+			this.api.setDraggable(value);
+		},
+		
+		setIcon: function(value) {
+
+			console.log(this.iconSize);
+
+			var icon = {
+				scaledSize: new google.maps.Size(this.iconSize[0], this.iconSize[1]),
+				url: value
+			};
+			
+			this.api.setIcon(icon);
+		},
+		
+		setMap: function(value) {
+			this.api.setMap(value);
+		},
+		
+		setOpacity: function(value) {
+			this.api.setOpacity(value);
+		},
+		
+		setOptions: function(value) {
+			this.api.setOptions(value);
+		},
+		
+		setPosition: function(value) {
+			this.api.setPosition(value);
+		},
+		
+		setShape: function(value) {
+			this.api.setShape(value);
+		},
+		
+		setTitle: function(value) {
+			this.api.setTitle(value);
+		},
+		
+		setVisible: function(value) {
+			this.api.setVisible(value);
+		},
+		
+		setZIndex: function(value) {
+			this.api.setZIndex(value);
+		},
+
+		bindEvents: function() {
+			var t = this;
+
+			google.maps.event.addListener(this.api, 'animation_changed', function() {
+				t.onAnimationChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'click', function() {
+				t.onClick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'cursor_changed', function() {
+				t.onCursorChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'dblclick', function() {
+				t.onDblclick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'drag', function() {
+				t.onDrag.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'dragend', function() {
+				t.onDragend.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'draggable_changed', function() {
+				t.onDraggableChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'dragstart', function() {
+				t.onDragstart.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'flat_changed', function() {
+				t.onFlatChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'icon_changed', function() {
+				t.onIconChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'mousemove', function() {
+				t.onMousemove.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'mouseout', function() {
+				t.onMouseout.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'mouseover', function() {
+				t.onMouseover.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'mouseup', function() {
+				t.onMouseup.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'position_changed', function() {
+				t.onPositionChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'rightclick', function() {
+				t.onRightclick.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'shape_changed', function() {
+				t.onShapeChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'tilt_changed', function() {
+				t.onTiltChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'visible_changed', function() {
+				t.onVisibleChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'zindex_changed', function() {
+				t.onZindexChanged.apply(t, arguments);
+			});
+		},
+
+		onAnimationChanged: function() {},
+
+		onClick: function() {
+			this.get('map').closeInfoWindows();
+			this.get('infowindow').open(this.get('map').api, this.api);
+		},
+
+		onCursorChanged: function() {},
+
+		onDblclick: function() {},
+
+		onDrag: function() {},
+
+		onDragend: function(e, callback) {
+			var t = this;
+
+			t.set({
+				lat: e.latLng.lat(),
+				lng: e.latLng.lng()
+			});
+
+			this.get('map').geocoder.geocode({location: e.latLng}, function(results, status) {
+				if(status == 'OK') {
+					t.set('address', results[0].formatted_address);
+					t.set('addressComponents', results[0].address_components);
+				}
+				else {
+					t.set('address', null);
+					t.set('addressComponents', null);
+				}
+
+				if(!t.get('customContent')) {
+					if(!t.isCoordinate(t.get('address'))) {
+						t.set('content', t.get('address').split(',').join('<br>'));
+					}
+					else {
+						t.set('content', t.get('address'));
+					}
+
+					t.get('infowindow').setContent(t.buildInfoWindowContent());
+				}
+
+				t.get('map').updateHiddenField();
+				
+				if(_.isFunction(callback)) {
+					callback(e);
+				}
+			});
+		},
+
+		onDraggableChanged: function() {},
+
+		onDragstart: function() {},
+
+		onFlatChanged: function() {},
+
+		onIconChanged: function() {},
+
+		onMousemove: function() {},
+
+		onMouseout: function() {},
+
+		onMouseover: function() {},
+
+		onMouseup: function() {},
+
+		onPositionChanged: function() {},
+
+		onRightclick: function() {},
+
+		onShapeChanged: function() {},
+
+		onTiltChanged: function() {},
+
+		onVisibleChanged: function() {},
+
+		onZindexChanged: function() {}
+
 
 	});
 
@@ -566,6 +835,8 @@ var GoogleMaps = {
 
 		markers: [],
 
+		iconSize: [32, 32],
+
 		constructor: function(map, data, options) {
 			var t = this;
 
@@ -575,12 +846,22 @@ var GoogleMaps = {
 
 			if(data.markers) {
 				_.each(data.markers, function(marker, i) {
+					var icon = marker.icon;
+
 					var marker = new GoogleMaps.Marker(map, {
 						lat: marker.lat,
 						lng: marker.lng,
 						content: marker.content,
 						fitBounds: t.fitBounds
 					});
+
+					if(t.iconSize) {
+						marker.iconSize = t.iconSize;
+					}
+
+					if(icon) {
+						marker.setIcon(icon);
+					}
 				});
 			}
 

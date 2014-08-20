@@ -15,11 +15,23 @@
 
 <div id="oh-location-tab" class="oh-google-map-clearfix oh-google-map-tab">
 
-	<p><b>Address:</b> <span class="address">{{address}}</span></p>
-	<p><b>Latitude:</b> <span class="lat">{{lat}}</span></p>
-	<p><b>Longitude:</b> <span class="lng">{{lng}}</span></p>
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-8">
+			<p><b>Address:</b> <span class="address">{{address}}</span></p>
+			<p><b>Latitude:</b> <span class="lat">{{lat}}</span></p>
+			<p><b>Longitude:</b> <span class="lng">{{lng}}</span></p>
 
-	<a href="#" class="edit-location">Change Location</a>
+			<a href="#" class="edit-location">Change Location</a>
+		</div>
+		<div class="oh-google-map-column oh-google-map-large-4">
+			<div class="oh-google-map-map-icon">
+				<label>Map Icon</label>
+				<span><img src="{{#if icon}}{{../icon}}{{/if}}{{#not}}http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=2{{/not}}" /></span>
+				<a href="#" class="change-icon">Change Icon</a>
+			</div>
+		</div>
+	</div>
+
 </div>
 
 <div id="oh-content-tab" class="oh-google-map-clearfix oh-google-map-tab">

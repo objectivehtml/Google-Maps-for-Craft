@@ -18,6 +18,10 @@
 				this.get('api').setMap(this.get('map').api);
 			}
 
+			if(this.get('icon')) {
+				this.setIcon(this.get('icon'));
+			}
+
 			if(!this.get('infowindow')) {
 				this.set('infowindow', new google.maps.InfoWindow({
 					maxWidth: 300,
@@ -153,7 +157,12 @@
 		},
 		
 		setIcon: function(value) {
-			this.get('api').setIcon(value);
+			var icon = {
+				scaledSize: new google.maps.Size(32, 32),
+				url: value
+			};
+			
+			this.get('api').setIcon(icon);
 		},
 		
 		setMap: function(value) {
@@ -304,11 +313,11 @@
 				}
 
 				if(!t.get('customContent')) {
-					if(!t.isCoodinate(t.get('address'))) {
-						t.model.set('content', t.get('address').split(',').join('<br>'));
+					if(!t.isCoordinate(t.get('address'))) {
+						t.set('content', t.get('address').split(',').join('<br>'));
 					}
 					else {
-						t.model.set('content', t.get('address'));
+						t.set('content', t.get('address'));
 					}
 
 					t.get('infowindow').setContent(t.buildInfoWindowContent());

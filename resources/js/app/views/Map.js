@@ -224,6 +224,17 @@
 
  						e.preventDefault();
  					}
+ 				},{
+ 					name: 'Add Polyline',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.PolylineForm({
+ 							map: t
+ 						});
+
+ 						t.showModal(view);
+
+ 						e.preventDefault();
+ 					}
  				}]
  			}));
 		},

@@ -232,7 +232,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 templates['marker-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, helper, options, self=this, helperMissing=helpers.helperMissing, functionType="function", escapeExpression=this.escapeExpression;
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing, blockHelperMissing=helpers.blockHelperMissing;
 
 function program1(depth0,data) {
   
@@ -246,13 +246,25 @@ function program3(depth0,data) {
   return "\n	<h2>Edit Marker</h2>\n";
   }
 
-function program5(depth0,data) {
+function program5(depth0,data,depth1) {
+  
+  var stack1;
+  return escapeExpression(((stack1 = (depth1 && depth1.icon)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+  }
+
+function program7(depth0,data) {
+  
+  
+  return "http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=2";
+  }
+
+function program9(depth0,data) {
   
   
   return "\n		<button type=\"submit\" class=\"btn submit\">Save Marker</button>\n	";
   }
 
-function program7(depth0,data) {
+function program11(depth0,data) {
   
   
   return "\n		<button type=\"submit\" class=\"btn submit\">Save Changes</button>\n	";
@@ -263,19 +275,27 @@ function program7(depth0,data) {
   buffer += "\n\n";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n\n<nav class=\"oh-google-map-tabs oh-google-map-clearfix oh-google-map-two-up\">\n	<ul>\n		<li><a class=\"oh-google-map-tab-trigger active\" href=\"#oh-location-tab\">Location</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-content-tab\">Content</a></li>\n	</ul>\n</nav>\n\n<div id=\"oh-location-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<p><b>Address:</b> <span class=\"address\">";
+  buffer += "\n\n<nav class=\"oh-google-map-tabs oh-google-map-clearfix oh-google-map-two-up\">\n	<ul>\n		<li><a class=\"oh-google-map-tab-trigger active\" href=\"#oh-location-tab\">Location</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-content-tab\">Content</a></li>\n	</ul>\n</nav>\n\n<div id=\"oh-location-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-8\">\n			<p><b>Address:</b> <span class=\"address\">";
   if (helper = helpers.address) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.address); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span></p>\n	<p><b>Latitude:</b> <span class=\"lat\">";
+    + "</span></p>\n			<p><b>Latitude:</b> <span class=\"lat\">";
   if (helper = helpers.lat) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.lat); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span></p>\n	<p><b>Longitude:</b> <span class=\"lng\">";
+    + "</span></p>\n			<p><b>Longitude:</b> <span class=\"lng\">";
   if (helper = helpers.lng) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.lng); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</span></p>\n\n	<a href=\"#\" class=\"edit-location\">Change Location</a>\n</div>\n\n<div id=\"oh-content-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Title</label>\n				<input type=\"text\" name=\"title\" id=\"poly-title\" value=\"";
+    + "</span></p>\n\n			<a href=\"#\" class=\"edit-location\">Change Location</a>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-4\">\n			<div class=\"oh-google-map-map-icon\">\n				<label>Map Icon</label>\n				<span><img src=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.icon), {hash:{},inverse:self.noop,fn:self.programWithDepth(5, program5, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data}
+  if (helper = helpers.not) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.not); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.not) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" /></span>\n				<a href=\"#\" class=\"change-icon\">Change Icon</a>\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<div id=\"oh-content-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Title</label>\n				<input type=\"text\" name=\"title\" id=\"poly-title\" value=\"";
   if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -316,10 +336,10 @@ function program7(depth0,data) {
   else { helper = (depth0 && depth0.strokeWeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n		</div>\n	</div>\n\n</div>\n\n<footer>\n	";
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n	";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(11, program11, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n	\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
   return buffer;

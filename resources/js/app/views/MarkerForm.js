@@ -58,6 +58,13 @@
 				this.map.markers.push(this.model);
 			}
 
+			if(this.model.get('icon')) {
+				this.model.setIcon(this.model.get('icon'));
+			}
+			else {
+				this.model.setIcon(null);
+			}
+
 			this.model.set('isSavedToMap', true);
 
 			this.model.get('infowindow').open(this.map.api, this.model.get('api'));
@@ -78,6 +85,23 @@
 
 			this.$el.find('.edit-location').click(function(e) {
 				t.showGeocoder();
+				e.preventDefault();
+			});
+
+			this.$el.find('.change-icon').click(function(e) {
+				
+				var modal = Craft.createElementSelectorModal('Asset', {
+				    multiSelect: false,
+				    storageKey: 'googleMapsPlugin',
+				    criteria: { kind: 'image' },
+				    onSelect: function(entries) {
+				    	t.model.set('icon', entries[0].url);
+				    	t.$el.find('.oh-google-map-map-icon img').attr('src', entries[0].url);
+				    }
+				});
+				
+
+
 				e.preventDefault();
 			});
 

@@ -133,6 +133,10 @@ var GoogleMaps = {
 				this.get('api').setMap(this.get('map').api);
 			}
 
+			if(this.get('icon')) {
+				this.setIcon(this.get('icon'));
+			}
+
 			if(!this.get('infowindow')) {
 				this.set('infowindow', new google.maps.InfoWindow({
 					maxWidth: 300,
@@ -268,7 +272,12 @@ var GoogleMaps = {
 		},
 		
 		setIcon: function(value) {
-			this.get('api').setIcon(value);
+			var icon = {
+				scaledSize: new google.maps.Size(32, 32),
+				url: value
+			};
+			
+			this.get('api').setIcon(icon);
 		},
 		
 		setMap: function(value) {
@@ -419,11 +428,11 @@ var GoogleMaps = {
 				}
 
 				if(!t.get('customContent')) {
-					if(!t.isCoodinate(t.get('address'))) {
-						t.model.set('content', t.get('address').split(',').join('<br>'));
+					if(!t.isCoordinate(t.get('address'))) {
+						t.set('content', t.get('address').split(',').join('<br>'));
 					}
 					else {
-						t.model.set('content', t.get('address'));
+						t.set('content', t.get('address'));
 					}
 
 					t.get('infowindow').setContent(t.buildInfoWindowContent());
@@ -1329,6 +1338,17 @@ var GoogleMaps = {
 
  						e.preventDefault();
  					}
+ 				},{
+ 					name: 'Add Polyline',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.PolylineForm({
+ 							map: t
+ 						});
+
+ 						t.showModal(view);
+
+ 						e.preventDefault();
+ 					}
  				}]
  			}));
 		},
@@ -1564,6 +1584,13 @@ var GoogleMaps = {
 				this.map.markers.push(this.model);
 			}
 
+			if(this.model.get('icon')) {
+				this.model.setIcon(this.model.get('icon'));
+			}
+			else {
+				this.model.setIcon(null);
+			}
+
 			this.model.set('isSavedToMap', true);
 
 			this.model.get('infowindow').open(this.map.api, this.model.get('api'));
@@ -1584,6 +1611,23 @@ var GoogleMaps = {
 
 			this.$el.find('.edit-location').click(function(e) {
 				t.showGeocoder();
+				e.preventDefault();
+			});
+
+			this.$el.find('.change-icon').click(function(e) {
+				
+				var modal = Craft.createElementSelectorModal('Asset', {
+				    multiSelect: false,
+				    storageKey: 'googleMapsPlugin',
+				    criteria: { kind: 'image' },
+				    onSelect: function(entries) {
+				    	t.model.set('icon', entries[0].url);
+				    	t.$el.find('.oh-google-map-map-icon img').attr('src', entries[0].url);
+				    }
+				});
+				
+
+
 				e.preventDefault();
 			});
 

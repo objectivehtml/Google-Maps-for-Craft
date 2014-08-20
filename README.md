@@ -12,8 +12,9 @@ Google Maps for Craft is a complete geolocation toolkit that interfaces with the
 2. Proximity Based Searches
 3. Multiple Markers per Entry
 4. Multiple Polygons per Entry
-5. Completely Customizable
-6. Interface with Google Maps using template tags
+5. Multiple Polylines per Entry
+6. Completely Customizable
+7. Interface with Google Maps using template tags
 
 ### Wiki
 

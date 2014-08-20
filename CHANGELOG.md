@@ -1,12 +1,6 @@
-/**
- * Google Maps for Craft
- * 
- * @package		Google Maps for Craft
- * @author		Justin Kimbrell
- * @copyright	Copyright (c) 2014, Objective HTML
- * @link 		https://github.com/objectivehtml/Google-Maps-for-Craft
- */
+## Google Maps for Craft
 
+### Changelog
 
 #### 0.2.0
 ##### 08/20/2014

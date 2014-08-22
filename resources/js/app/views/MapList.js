@@ -33,6 +33,27 @@
 				e.preventDefault();
 			});
 
+			this.$el.find('.route-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var route = t.map.routes[index];
+
+				route.set('deleted', false);
+				route.get('api').setMap(t.map.api);
+
+				t.model.get('routes')[index].deleted = false;
+
+				_.each(t.model.get('routes')[index].markers, function(marker) {
+					marker.deleted = false;
+					marker.setMap(t.map.api);
+				});
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.polygon-undo').click(function(e) {
 				var index = $(this).parent().index();
 				var polygon = t.map.polygons[index];
@@ -72,6 +93,21 @@
 				t.map.api.setZoom(14);
 				t.map.api.setCenter(marker.getPosition());
 				
+				e.preventDefault();
+			});
+
+			this.$el.find('.route-center').click(function(e) {
+				var index = $(this).parent().index();
+				var route = t.map.routes[index];
+
+				var bounds = new google.maps.LatLngBounds();
+
+				_.each(route.getLocations(), function(location) {
+					bounds.extend(new google.maps.LatLng(location.lat, location.lng));
+				});
+
+				t.map.fitBounds(bounds);
+
 				e.preventDefault();
 			});
 

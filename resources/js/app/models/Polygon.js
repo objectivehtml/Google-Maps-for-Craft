@@ -120,6 +120,11 @@
 			t.get('map').showModal(view);
 		},
 		
+		remove: function() {
+			this.set('deleted', true);
+			this.setMap(null);
+		},
+
 		buildInfoWindowContent: function() {
 			var content = this.get('content');
 			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];

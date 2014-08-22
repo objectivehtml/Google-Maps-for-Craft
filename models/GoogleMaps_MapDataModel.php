@@ -75,6 +75,19 @@ class GoogleMaps_MapDataModel extends BaseModel
         return $return;
     }
 
+    public function getRoutes()
+    {
+        $return = array();
+
+        foreach($this->routes as $route)
+        {
+            $return[] = GoogleMaps_RouteModel::populateModel((array) $route);
+
+        }
+
+        return $return;
+    }
+
     public function sortByDistanceAsc($a, $b)
     {
         return $a->distance < $b->distance ? -1 : 1;
@@ -89,7 +102,9 @@ class GoogleMaps_MapDataModel extends BaseModel
     {
         $return = array(
             'markers' => array(),
-            'polygons' => array()
+            'polygons' => array(),
+            'polylines' => array(),
+            'routes' => array()
         );
 
         foreach($this->getMarkers() as $marker)
@@ -105,6 +120,11 @@ class GoogleMaps_MapDataModel extends BaseModel
         foreach($this->getPolylines() as $polygon)
         {
             $return['polylines'][] = $polygon->getAttributes();
+        }
+
+        foreach($this->getRoutes() as $route)
+        {
+            $return['routes'][] = $route->getAttributes();
         }
 
         return json_encode($return);
@@ -137,20 +157,20 @@ class GoogleMaps_MapDataModel extends BaseModel
         $this->polylines = $polylines;
     }
 
-    public function addPolyline(GoogleMaps_PolylineModel $polyline)
-    {
-        $polygons = $this->polygons;
-
-        $polygons[] = $polyline;
-
-        $this->polygons = $polygons;
-    }
-
     public function removePolygon($index)
     {
         $polygons = $this->polygons;
 
         unset($polygons[$index]);
+
+        $this->polygons = $polygons;
+    }
+
+    public function addPolyline(GoogleMaps_PolylineModel $polyline)
+    {
+        $polygons = $this->polygons;
+
+        $polygons[] = $polyline;
 
         $this->polygons = $polygons;
     }
@@ -162,6 +182,24 @@ class GoogleMaps_MapDataModel extends BaseModel
         unset($polylines[$index]);
 
         $this->polylines = $polylines;
+    }
+
+    public function addRoute(GoogleMaps_RouteModel $route)
+    {
+        $routes = $this->routes;
+
+        $routes[] = $route;
+
+        $this->routes = $routes;
+    }
+
+    public function removeRoute($index)
+    {
+        $routes = $this->routes;
+
+        unset($routes[$index]);
+
+        $this->routes = $routes;
     }
 
     public function getStaticMapModel($options = array())
@@ -181,7 +219,8 @@ class GoogleMaps_MapDataModel extends BaseModel
             // Location Parameters
             'markers'   => array(AttributeType::Mixed, 'default' => array()),
             'polygons'   => array(AttributeType::Mixed, 'default' => array()),
-            'polylines'   => array(AttributeType::Mixed, 'default' => array())
+            'polylines'   => array(AttributeType::Mixed, 'default' => array()),
+            'routes'   => array(AttributeType::Mixed, 'default' => array())
         );
 
     }

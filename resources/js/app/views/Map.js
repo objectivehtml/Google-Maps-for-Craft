@@ -35,12 +35,15 @@
 
   		polylines: [],
 
+  		routes: [],
+
   		className: 'oh-google-map-relative',
 
   		initialize: function(options) {
   			this.markers = [];
   			this.polygons = [];
   			this.polylines = [];
+  			this.routes = [];
 
   			this.mapOptions = _.extend({}, {
 	  			zoom: 8,
@@ -78,7 +81,8 @@
   			var data = {
   				markers: [],
   				polygons: [],
-  				polylines: []
+  				polylines: [],
+  				routes: []
   			};
 
   			_.each(this.markers, function(marker, i) {
@@ -91,6 +95,10 @@
 
   			_.each(this.polylines, function(polyline, i) {
   				data.polylines.push(polyline.toJSON());
+  			});
+
+  			_.each(this.routes, function(route, i) {
+  				data.routes.push(route.toJSON());
   			});
 
   			data = JSON.stringify(data);
@@ -146,9 +154,6 @@
 		 		}
 
 	 			if(this.savedData.polylines && this.savedData.polylines.length) {
-
-						console.log(this.savedData.polylines);
-
 		 			_.each(this.savedData.polylines, function(polyline) {
 						var options = {
 							map: t,
@@ -156,6 +161,17 @@
 						};
 
 		 				t.polylines.push(new GoogleMaps.Models.Polyline(_.extend({}, options, polyline)));
+		 			});
+		 		}
+
+	 			if(this.savedData.routes && this.savedData.routes.length) {
+		 			_.each(this.savedData.routes, function(route) {
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.routes.push(new GoogleMaps.Models.Route(_.extend({}, options, route)));
 		 			});
 		 		}
 
@@ -176,7 +192,8 @@
  						var data = {
  							markers: [],
  							polygons: [],
- 							polylines: []
+ 							polylines: [],
+ 							routes: []
  						};
 
  						_.each(t.markers, function(marker) {
@@ -191,12 +208,23 @@
  							data.polylines.push(polyline.toJSON());
  						});
 
+ 						_.each(t.routes, function(route) {
+ 							data.routes.push(route.toJSON());
+ 						});
+
  						var view = new GoogleMaps.Views.MapList({
  							map: t,
  							model: new Backbone.Model(data)
  						});
 
  						t.showModal(view);
+
+ 						e.preventDefault();
+ 					}
+ 				}, {
+ 					icon: 'refresh',
+ 					click: function(e) {
+ 						t.center();
 
  						e.preventDefault();
  					}
@@ -211,6 +239,17 @@
  						t.showModal(view);
 
  						e.preventDefault();
+ 					}
+ 				},{
+ 					name: 'Add Route',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.RouteForm({
+ 							map: t
+ 						});
+
+ 						t.showModal(view);
+
+ 						e.preventDefault(); 						
  					}
  				},{
  					name: 'Add Polygon',
@@ -245,6 +284,16 @@
 
 			_.each(this.polygons, function(polygon) {
 				polygon.get('infowindow').close();
+			});
+
+			_.each(this.polylines, function(polyline) {
+				polyline.get('infowindow').close();
+			});
+
+			_.each(this.routes, function(route) {
+				_.each(route.get('markers'), function(marker) {
+					marker.get('infowindow').close();
+				});
 			});
 		},
 
@@ -316,6 +365,13 @@
 						boundsChanged = true;
 					});
 				}
+			});
+
+			_.each(this.routes, function(route) {
+				_.each(route.getLocations(), function(location) {
+					bounds.extend(new google.maps.LatLng(location.lat, location.lng));
+					boundsChanged = true;
+				});
 			});
 
 			if(boundsChanged) {

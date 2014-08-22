@@ -1,0 +1,18 @@
+<h2>Add Location</h2>
+
+<input type="text" name="location" value="{{location}}" placeholder="Enter an address, postal code, or city" class="text fullwidth" />
+
+{{#if locations}}
+<h3>Locations Found</h3>
+
+<ul class="oh-google-map-highlight-list">
+{{#each ../locations}}
+	<li><a href="#">{{this.formatted_address}}</a></li>
+{{/each}}
+</ul>
+{{/if}}
+
+<footer>
+	<button type="submit" class="btn submit">Search</button>
+	<a href="#" class="cancel">Cancel</a>
+</footer>

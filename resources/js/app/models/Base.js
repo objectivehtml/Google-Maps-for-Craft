@@ -24,6 +24,10 @@
 			delete json.infowindow;
 
 			return json;
+		},
+
+		isCoordinate: function(coord) {
+			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		}
 
 	});

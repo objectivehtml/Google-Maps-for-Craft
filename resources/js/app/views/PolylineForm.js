@@ -9,8 +9,6 @@
 		template: GoogleMaps.Template('polyline-form'),
 
 		initializeApi: function() {
-			console.log('init');
-			
 			if(!this.model) {
 				this.model = new GoogleMaps.Models.Polyline({
 					map: this.map,

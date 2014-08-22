@@ -43,11 +43,23 @@
 
 h2 .oh-google-map-small-text { margin-left: 10px; }
 
+.oh-google-map-margin-bottom, p.oh-google-map-margin-bottom { margin: 0 0 15px !important; }
+
 .oh-google-map-no-margin { margin: 0 !important; }
 .oh-google-map-no-padding { padding: 0 !important; }
 .oh-google-map-ordered-list { padding-left: 20px !important; }
 .oh-google-map-ordered-list li { margin-bottom: 5px; }
 .oh-google-map-ordered-list li:last-child { margin-bottom: 0 }
+
+.oh-google-map-icon-list { margin-bottom: 10px; }
+.oh-google-map-icon-list-icon { max-width: 15px; height: 25px; float: left; display: block; margin-right: 15px; position: relative; bottom: 3px; }
+.oh-google-map-icon-list-label { position: relative; top: 1px; }
+.oh-google-map-icon-list li { clear: both; margin-bottom: 17px; padding: 12px 10px; }
+.oh-google-map-icon-list li:hover { background: rgb(240, 240, 240); }
+.oh-google-map-icon-list li:last-child { margin-bottom: 0; }
+.oh-google-map-icon-list li:hover .oh-google-map-icon-list-action { display: block; }
+.oh-google-map-icon-list .oh-google-map-icon-list-action { display: none; float: right; margin-right: 10px; color: rgb(70, 70, 70); text-shadow: 0 0 1px white); font-size: 14px; }
+.oh-google-map-icon-list .oh-google-map-icon-list-action:first-child { margin-right: 0; }
 
 .oh-google-map-tags { margin-bottom: 10px; }
 .oh-google-map-tag { cursor: pointer; background: rgb(55, 121, 217); padding: 2px 2px 2px 7px; border-radius: 1000px; font-size: 10px; color: white; display: inline-block; margin-bottom: 5px; }

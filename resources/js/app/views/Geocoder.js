@@ -12,6 +12,8 @@
 
 		lastResponse: false,
 
+		dblclickEvent: false,
+
 		initialize: function(options) {
 			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
 
@@ -28,6 +30,23 @@
 			setTimeout(function() {
 				t.$el.find('input').focus();
 			}, 250);
+
+			this.map.api.setOptions({disableDoubleClickZoom: true});
+
+			this.dblclickEvent = google.maps.event.addListener(this.map.api, 'dblclick', function(e) {
+				t.geocode({location: e.latLng}, function(results, status) {
+					t.responseHandler(results[0]);
+					t.lastResponse = results[0];
+				});				
+			});
+		},
+
+		onDestroy: function() {
+			this.map.api.setOptions({disableDoubleClickZoom: true});
+
+			if(this.dblclickEvent) {
+				this.dblclickEvent.remove();
+			}
 		},
 
 		onRender: function() {
@@ -53,7 +72,7 @@
 			var t = this;
 
 			this.model.set('location', this.getLocation());
- 
+
 			this.geocode(this.getLocation(), function(results, status, location) {
 				if(status == "OK") {
 					if(results.length > 1 || location.location) {
@@ -111,7 +130,7 @@
 		},
 
 		isCoordinate: function(coord) {
-			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+			return _.isString(coord) ? coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/) : false;
 		},
 
 		geocode: function(location, callback) {

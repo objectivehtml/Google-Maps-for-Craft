@@ -1,0 +1,169 @@
+{{#not isSavedToMap}}
+	<h2>Add Route</h2>
+{{/not}}
+
+{{#if isSavedToMap}}
+	<h2>Edit Route</h2>
+{{/if}}
+
+<nav class="oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up">
+	<ul>
+		<li><a class="oh-google-map-tab-trigger active" href="#oh-locations-tab">Locations</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-content-tab">Content</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-options-tab">Options</a></li>
+	</ul>
+</nav>
+
+<div id="oh-locations-tab" class="oh-google-map-clearfix oh-google-map-tab">
+	
+	<!--
+	<p><span class="oh-google-map-small-text"><a href="#" class="toggle-details">{{#if hideDetails}}Show Details{{/if}}{{#not hideDetails}}Hide Details{{/not}}</a></span></p>
+	-->
+
+	{{#if locations}}
+	<ul class="oh-google-map-icon-list oh-google-map-clearfix">
+		{{#forEach ../locations}}
+		<li>
+			<img src="{{icon}}" alt="Marker Icon" class="oh-google-map-icon-list-icon" /> 
+			<span class="oh-google-map-icon-list-label">
+				{{address}} 
+				<a href="#" class="remove-location oh-google-map-icon-list-action"><span data-icon="trash"></span></a>
+				<a href="#" class="edit-location oh-google-map-icon-list-action" ><span data-icon="field"></span></a> 
+			</span>
+		</li>
+		{{/forEach}}
+	</ul>
+	{{/if}}
+
+	{{#not locations.length}}
+		<!-- <p class="oh-google-map-margin-bottom"><em>There are no locations added to this route yet.</em></p> -->
+	{{/not}}
+
+	<!--
+	<div class="details" {{#if hideDetails}}style="display:none"{{/if}}>
+		<p class="oh-google-map-small-text">You can add up to 8 locations to a single route. You can either double click the map or add enter coordinates or addresses manually.</p>
+	</div>
+	-->
+
+	<a class="btn add-location" style="margin:5px 10px">+ Add Location</a>
+
+</div>
+
+<div id="oh-content-tab" class="oh-google-map-clearfix oh-google-map-tab">
+	
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="poly-title">Title</label>
+				<input type="text" name="title" id="poly-title" value="{{title}}" class="text fullwidth" />
+			</div>
+		</div>
+	</div>
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="poly-title">Content</label>
+				<textarea name="content" id="poly-content" class="text fullwidth">{{content}}</textarea>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div id="oh-options-tab" class="oh-google-map-clearfix oh-google-map-tab">
+
+	<div class="btngroup" style="margin:5px auto 25px auto;width:260px;display:block;">
+		<label class="btn"><input type="radio" name="travelMode" value="DRIVING" {{#is travelMode "DRIVING"}}checked="checked"{{/is}} {{#not travelMode}}checked="checked"{{/not}} /> Driving</label>
+		<label class="btn"><input type="radio" name="travelMode" value="WALKING" {{#is travelMode "WALKING"}}checked="checked"{{/is}} /> Walking</label>
+		<label class="btn"><input type="radio" name="travelMode" value="BICYCLING" {{#is travelMode "BICYCLING"}}checked="checked"{{/is}} /> Bicycling</label>
+	</div>
+
+	<ul class="oh-google-map-small-block-grid-3">
+		<li>
+			<p>Avoid Ferries</p>
+
+			<div class="lightswitch {{#if avoidFerries}}on{{/if}}" tabindex="0">
+				<div class="lightswitch-container">
+					<div class="label on"></div>
+					<div class="handle"></div>
+					<div class="label off"></div>
+				</div>
+				<input type="hidden" name="avoidFerries" value="{{#if avoidFerries}}on{{/if}}" />
+			</div>
+		</li>
+		<li>
+			<p>Avoid Highways</p>
+
+			<div class="lightswitch {{#if avoidHighways}}on{{/if}}" tabindex="0">
+				<div class="lightswitch-container">
+					<div class="label on"></div>
+					<div class="handle"></div>
+					<div class="label off"></div>
+				</div>
+				<input type="hidden" name="avoidHighways" value="{{#if avoidHighways}}on{{/if}}" />
+			</div>
+		</li>
+		<li>
+			<p>Avoid Tolls</p>
+
+			<div class="lightswitch {{#if avoidTolls}}on{{/if}}" tabindex="0">
+				<div class="lightswitch-container">
+					<div class="label on"></div>
+					<div class="handle"></div>
+					<div class="label off"></div>
+				</div>
+				<input type="hidden" name="avoidTolls" value="{{#if avoidTolls}}on{{/if}}" />
+			</div>
+		</li>
+		<li>
+			<p>Calculate Duration with Traffic</p>
+
+			<div class="lightswitch {{#if durationInTraffic}}on{{/if}}" tabindex="0">
+				<div class="lightswitch-container">
+					<div class="label on"></div>
+					<div class="handle"></div>
+					<div class="label off"></div>
+				</div>
+				<input type="hidden" name="durationInTraffic" value="{{#if durationInTraffic}}on{{/if}}" />
+			</div>
+		</li>
+		<li>
+			<p>Optimize Waypoints</p>
+
+			<div class="lightswitch {{#if optimizeWaypoints}}on{{/if}}" tabindex="0">
+				<div class="lightswitch-container">
+					<div class="label on"></div>
+					<div class="handle"></div>
+					<div class="label off"></div>
+				</div>
+				<input type="hidden" name="optimizeWaypoints" value="{{#if optimizeWaypoints}}on{{/if}}" />
+			</div>
+		</li>
+		<li>
+			<p>Provide Route Alternatives</p>
+
+			<div class="lightswitch {{#if provideRouteAlternatives}}on{{/if}}" tabindex="0">
+				<div class="lightswitch-container">
+					<div class="label on"></div>
+					<div class="handle"></div>
+					<div class="label off"></div>
+				</div>
+				<input type="hidden" name="provideRouteAlternatives" value="{{#if provideRouteAlternatives}}on{{/if}}" />
+			</div>
+		</li>
+	</ul>
+
+</div>
+
+<footer>
+	{{#not isSavedToMap}}
+		<button type="submit" class="btn submit">Save Route</button>
+	{{/not}}
+
+	{{#if isSavedToMap}}
+		<button type="submit" class="btn submit">Save Changes</button>
+	{{/if}}
+	
+	<a href="#" class="cancel">Cancel</a>
+</footer>

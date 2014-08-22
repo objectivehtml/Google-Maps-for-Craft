@@ -8,11 +8,7 @@
 			GoogleMaps.Models.Base.prototype.initialize.call(this, options);
 
 			if(!this.get('api')) {
-				this.set('api', new google.maps.Marker(_.extend({}, options, {
-					map: this.get('map').api,
-					position: new google.maps.LatLng(this.get('lat'), this.get('lng')),
-					draggable: true
-				})));
+				this.initializeApi(options);
 			}
 			else {
 				this.get('api').setMap(this.get('map').api);
@@ -32,8 +28,52 @@
 			this.bindEvents();
 		},
 		
+		initializeApi: function(options) {
+			if(!_.isObject(options)) {
+				options = {};
+			}
+
+			this.set('api', new google.maps.Marker(_.extend({}, options, {
+				map: this.get('map').api,
+				position: new google.maps.LatLng(this.get('lat'), this.get('lng')),
+				draggable: this.get('draggable') === false ? false : true
+			})));
+		},
+
 		isCoordinate: function(coord) {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+		},
+
+		onEdit: function() {
+			var view = new GoogleMaps.Views.MarkerForm({
+				model: this,
+				map: this.get('map')
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		onDelete: function() {
+			var t = this;
+
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-marker-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.onCancelDeleteMarker();
+				}
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		onCancelDeleteMarker: function() {
+			this.get('map').hideModal();
 		},
 
 		buildInfoWindowContent: function() {
@@ -53,43 +93,24 @@
 			var $content = $(_return.join(''));
 
 			$content.find('.edit').click(function(e) {
-
-				var view = new GoogleMaps.Views.MarkerForm({
-					model: t,
-					map: t.get('map')
-				});
-
-				t.get('map').showModal(view);
+				t.onEdit();
 
 				e.preventDefault();
 			});
 
 			$content.find('.delete').click(function(e) {
-
-				/*
-				t.get('map').api.setCenter(latLng);
-				t.get('map').api.panBy(0, -150);
-				*/
-
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-marker-form'),
-					submit: function() {
-						t.get('api').setMap(null);
-						t.set('deleted', true);
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.onDelete();
 
 				e.preventDefault();
 			});
 
 			return $content.get(0);
+		},
+
+		remove: function() {
+			this.get('infowindow').close();
+			this.set('deleted', true);
+			this.setMap(null);
 		},
 
 		getAnimation: function() {
@@ -158,12 +179,20 @@
 		
 		setIcon: function(value) {
 			if(value) {
+				var width = this.get('scaledWidth') ? this.get('scaledWidth') : 32;
+				var height = this.get('scaledHeight') ? this.get('scaledHeight') : 32;
+
 				var icon = {
-					scaledSize: new google.maps.Size(32, 32),
+					scaledSize: new google.maps.Size(width, height),
 					url: value
 				};
 				
-				this.get('api').setIcon(icon);
+				if(this.get('scaleIcons') === false) {
+					this.get('api').setIcon(value);
+				}
+				else {
+					this.get('api').setIcon(icon);
+				}
 			}
 			else {
 				this.get('api').setIcon(null);

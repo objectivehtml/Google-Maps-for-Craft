@@ -91,6 +91,19 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
                     $polyline->isNew = false;
                 }
             }
+
+            foreach($data->routes as $index => $route)
+            {
+                if(isset($route->deleted) && $route->deleted === true)
+                {
+                    $data->removeRoute($index);
+                }
+                else
+                {
+                    $route->elementId = $this->element->id;
+                    $route->isNew = false;
+                }
+            }
         }
 
         if(isset($this->element->$handle))

@@ -26,6 +26,7 @@
 				this.originalModel = this.model.toJSON();
 			}
 
+			/*
 			this.model.onDragend = function(e) {
 				GoogleMaps.Models.Marker.prototype.onDragend.call(this, e, function() {
 					t.$el.find('.lat').html(e.latLng.lat());
@@ -37,6 +38,7 @@
 					}
 				});
 			};
+			*/
 		},
 
 		submit: function() {
@@ -131,33 +133,14 @@
 		isCoordinate: function(coord) {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		},
+
 		showGeocoder: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.Geocoder({
+				map: this.map,
 				responseHandler: function(response) {
-					t.model.set({
-						address: response.formatted_address,
-						addressComponents: response.address_components,
-						lat: response.geometry.location.lat(),
-						lng: response.geometry.location.lng()
-					});
-
-					if(!t.model.get('customContent')) {
-						if(!t.model.isCoordinate(response.formatted_address)) {
-							t.model.set('content', response.formatted_address.split(',').join('<br>'));
-						}
-						else {
-							t.model.set('content', response.formatted_address);
-						}
-					}
-
-					var view = new GoogleMaps.Views.MarkerForm({
-						model: t.model,
-						map: t.map
-					});
-
-					t.map.showModal(view);
+					t.responseHandler(response);
 				},
 				cancel: function() {
 					if(t.hasLocation()) {
@@ -171,6 +154,29 @@
 			});
 
 			this.map.showModal(view);
+		},
+
+		responseHandler: function(response) {
+			var t = this;
+			
+			t.model.set({
+				address: response.formatted_address,
+				addressComponents: response.address_components,
+				lat: response.geometry.location.lat(),
+				lng: response.geometry.location.lng()
+			});
+
+			if(!t.model.get('customContent')) {
+				if(!t.model.isCoordinate(response.formatted_address)) {
+					t.model.set('content', response.formatted_address.split(',').join('<br>'));
+				}
+				else {
+					t.model.set('content', response.formatted_address);
+				}
+			}
+
+			t.isDestroyed = false;
+			t.map.showModal(t);
 		},
 
 		/*

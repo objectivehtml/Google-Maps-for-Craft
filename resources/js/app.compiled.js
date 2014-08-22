@@ -9836,6 +9836,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return "<h2>Delete Polyline?</h2>\n\n<p>Are you sure you want to delete this polyline?</p>\n\n<footer>\n	<button type=\"submit\" class=\"btn submit\">Delete Polyline</button>\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
   });
 
+templates['delete-route-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  
+
+
+  return "<h2>Delete Route?</h2>\n\n<p>Are you sure you want to delete this route?</p>\n\n<footer>\n	<button type=\"submit\" class=\"btn submit\">Delete Route</button>\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
+  });
+
 templates['edit-marker-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -9928,7 +9937,7 @@ function program6(depth0,data) {
 function program8(depth0,data) {
   
   
-  return "\n<p>There are no polygons on the map.</p>\n";
+  return "\n<p>There are no routes on the map.</p>\n";
   }
 
 function program10(depth0,data) {
@@ -9937,7 +9946,7 @@ function program10(depth0,data) {
   buffer += "\n	<li>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "<a href=\"#\" class=\"polygon-center\">";
+  buffer += "<a href=\"#\" class=\"route-center\">";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(13, program13, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
@@ -9957,7 +9966,7 @@ function program11(depth0,data,depth1) {
 function program13(depth0,data,depth1) {
   
   var buffer = "", stack1;
-  buffer += "Polygon "
+  buffer += "Route "
     + escapeExpression(((stack1 = (depth1 && depth1.count)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
   return buffer;
   }
@@ -9965,13 +9974,13 @@ function program13(depth0,data,depth1) {
 function program15(depth0,data) {
   
   
-  return "</span> <a href=\"#\" class=\"polygon-undo oh-google-map-small-text\">Undo Delete</a>";
+  return "</span> <a href=\"#\" class=\"route-undo oh-google-map-small-text\">Undo Delete</a>";
   }
 
 function program17(depth0,data) {
   
   
-  return "\n<p>There are no polylines on the map.</p>\n";
+  return "\n<p>There are no polygons on the map.</p>\n";
   }
 
 function program19(depth0,data) {
@@ -9980,7 +9989,7 @@ function program19(depth0,data) {
   buffer += "\n	<li>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "<a href=\"#\" class=\"polyline-center\">";
+  buffer += "<a href=\"#\" class=\"polygon-center\">";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(20, program20, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
@@ -9994,12 +10003,49 @@ function program19(depth0,data) {
 function program20(depth0,data,depth1) {
   
   var buffer = "", stack1;
-  buffer += "Polyline "
+  buffer += "Polygon "
     + escapeExpression(((stack1 = (depth1 && depth1.count)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
   return buffer;
   }
 
 function program22(depth0,data) {
+  
+  
+  return "</span> <a href=\"#\" class=\"polygon-undo oh-google-map-small-text\">Undo Delete</a>";
+  }
+
+function program24(depth0,data) {
+  
+  
+  return "\n<p>There are no polylines on the map.</p>\n";
+  }
+
+function program26(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n	<li>";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "<a href=\"#\" class=\"polyline-center\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(27, program27, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a>";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(29, program29, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</li>\n";
+  return buffer;
+  }
+function program27(depth0,data,depth1) {
+  
+  var buffer = "", stack1;
+  buffer += "Polyline "
+    + escapeExpression(((stack1 = (depth1 && depth1.count)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+  return buffer;
+  }
+
+function program29(depth0,data) {
   
   
   return "</span> <a href=\"#\" class=\"polyline-undo oh-google-map-small-text\">Undo Delete</a>";
@@ -10011,17 +10057,23 @@ function program22(depth0,data) {
   buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
   stack1 = helpers.each.call(depth0, (depth0 && depth0.markers), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n</ol>\n\n<h2>Polygons</h2>\n\n";
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  buffer += "\n</ol>\n\n<h2>Routes</h2>\n\n<a href=\"#\" class=\"cancel oh-google-map-close\">&times; close</a>\n\n";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.routes)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.routes)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
-  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polygons), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polygons), options));
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.routes), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.routes), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ol>\n\n<h2>Polygons</h2>\n\n";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polygons), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polygons), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>\n\n<h2>Polylines</h2>\n\n";
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
-  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polylines), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polylines), options));
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(26, program26, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polylines), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polylines), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>";
   return buffer;
@@ -10417,6 +10469,214 @@ function program15(depth0,data) {
   buffer += "\n	\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
   return buffer;
   });
+
+templates['route-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  
+  return "\n	<h2>Add Route</h2>\n";
+  }
+
+function program3(depth0,data) {
+  
+  
+  return "\n	<h2>Edit Route</h2>\n";
+  }
+
+function program5(depth0,data) {
+  
+  
+  return "Show Details";
+  }
+
+function program7(depth0,data) {
+  
+  
+  return "Hide Details";
+  }
+
+function program9(depth0,data,depth1) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n	<ul class=\"oh-google-map-icon-list oh-google-map-clearfix\">\n		";
+  stack1 = (helper = helpers.forEach || (depth1 && depth1.forEach),options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth1 && depth1.locations), options) : helperMissing.call(depth0, "forEach", (depth1 && depth1.locations), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	</ul>\n	";
+  return buffer;
+  }
+function program10(depth0,data) {
+  
+  var buffer = "", stack1, helper;
+  buffer += "\n		<li>\n			<img src=\"";
+  if (helper = helpers.icon) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.icon); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" alt=\"Marker Icon\" class=\"oh-google-map-icon-list-icon\" /> \n			<span class=\"oh-google-map-icon-list-label\">\n				";
+  if (helper = helpers.address) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.address); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + " \n				<a href=\"#\" class=\"remove-location oh-google-map-icon-list-action\"><span data-icon=\"trash\"></span></a>\n				<a href=\"#\" class=\"edit-location oh-google-map-icon-list-action\" ><span data-icon=\"field\"></span></a> \n			</span>\n		</li>\n		";
+  return buffer;
+  }
+
+function program12(depth0,data) {
+  
+  
+  return "\n		<!-- <p class=\"oh-google-map-margin-bottom\"><em>There are no locations added to this route yet.</em></p> -->\n	";
+  }
+
+function program14(depth0,data) {
+  
+  
+  return "style=\"display:none\"";
+  }
+
+function program16(depth0,data) {
+  
+  
+  return "checked=\"checked\"";
+  }
+
+function program18(depth0,data) {
+  
+  
+  return "on";
+  }
+
+function program20(depth0,data) {
+  
+  
+  return "\n		<button type=\"submit\" class=\"btn submit\">Save Route</button>\n	";
+  }
+
+function program22(depth0,data) {
+  
+  
+  return "\n		<button type=\"submit\" class=\"btn submit\">Save Changes</button>\n	";
+  }
+
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<nav class=\"oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up\">\n	<ul>\n		<li><a class=\"oh-google-map-tab-trigger active\" href=\"#oh-locations-tab\">Locations</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-content-tab\">Content</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-options-tab\">Options</a></li>\n	</ul>\n</nav>\n\n<div id=\"oh-locations-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	\n	<!--\n	<p><span class=\"oh-google-map-small-text\"><a href=\"#\" class=\"toggle-details\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.hideDetails), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.hideDetails), options) : helperMissing.call(depth0, "not", (depth0 && depth0.hideDetails), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a></span></p>\n	-->\n\n	";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.locations), {hash:{},inverse:self.noop,fn:self.programWithDepth(9, program9, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n	";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.locations)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.locations)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n	<!--\n	<div class=\"details\" ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.hideDetails), {hash:{},inverse:self.noop,fn:self.program(14, program14, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += ">\n		<p class=\"oh-google-map-small-text\">You can add up to 8 locations to a single route. You can either double click the map or add enter coordinates or addresses manually.</p>\n	</div>\n	-->\n\n	<a class=\"btn add-location\" style=\"margin:5px 10px\">+ Add Location</a>\n\n</div>\n\n<div id=\"oh-content-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n	\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Title</label>\n				<input type=\"text\" name=\"title\" id=\"poly-title\" value=\"";
+  if (helper = helpers.title) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.title); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"text fullwidth\" />\n			</div>\n		</div>\n	</div>\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-12\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"poly-title\">Content</label>\n				<textarea name=\"content\" id=\"poly-content\" class=\"text fullwidth\">";
+  if (helper = helpers.content) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.content); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<div id=\"oh-options-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<div class=\"btngroup\" style=\"margin:5px auto 25px auto;width:260px;display:block;\">\n		<label class=\"btn\"><input type=\"radio\" name=\"travelMode\" value=\"DRIVING\" ";
+  stack1 = (helper = helpers.is || (depth0 && depth0.is),options={hash:{},inverse:self.noop,fn:self.program(16, program16, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.travelMode), "DRIVING", options) : helperMissing.call(depth0, "is", (depth0 && depth0.travelMode), "DRIVING", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " ";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(16, program16, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.travelMode), options) : helperMissing.call(depth0, "not", (depth0 && depth0.travelMode), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " /> Driving</label>\n		<label class=\"btn\"><input type=\"radio\" name=\"travelMode\" value=\"WALKING\" ";
+  stack1 = (helper = helpers.is || (depth0 && depth0.is),options={hash:{},inverse:self.noop,fn:self.program(16, program16, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.travelMode), "WALKING", options) : helperMissing.call(depth0, "is", (depth0 && depth0.travelMode), "WALKING", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " /> Walking</label>\n		<label class=\"btn\"><input type=\"radio\" name=\"travelMode\" value=\"BICYCLING\" ";
+  stack1 = (helper = helpers.is || (depth0 && depth0.is),options={hash:{},inverse:self.noop,fn:self.program(16, program16, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.travelMode), "BICYCLING", options) : helperMissing.call(depth0, "is", (depth0 && depth0.travelMode), "BICYCLING", options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += " /> Bicycling</label>\n	</div>\n\n	<ul class=\"oh-google-map-small-block-grid-3\">\n		<li>\n			<p>Avoid Ferries</p>\n\n			<div class=\"lightswitch ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.avoidFerries), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" tabindex=\"0\">\n				<div class=\"lightswitch-container\">\n					<div class=\"label on\"></div>\n					<div class=\"handle\"></div>\n					<div class=\"label off\"></div>\n				</div>\n				<input type=\"hidden\" name=\"avoidFerries\" value=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.avoidFerries), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" />\n			</div>\n		</li>\n		<li>\n			<p>Avoid Highways</p>\n\n			<div class=\"lightswitch ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.avoidHighways), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" tabindex=\"0\">\n				<div class=\"lightswitch-container\">\n					<div class=\"label on\"></div>\n					<div class=\"handle\"></div>\n					<div class=\"label off\"></div>\n				</div>\n				<input type=\"hidden\" name=\"avoidHighways\" value=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.avoidHighways), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" />\n			</div>\n		</li>\n		<li>\n			<p>Avoid Tolls</p>\n\n			<div class=\"lightswitch ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.avoidTolls), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" tabindex=\"0\">\n				<div class=\"lightswitch-container\">\n					<div class=\"label on\"></div>\n					<div class=\"handle\"></div>\n					<div class=\"label off\"></div>\n				</div>\n				<input type=\"hidden\" name=\"avoidTolls\" value=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.avoidTolls), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" />\n			</div>\n		</li>\n		<li>\n			<p>Calculate Duration with Traffic</p>\n\n			<div class=\"lightswitch ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.durationInTraffic), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" tabindex=\"0\">\n				<div class=\"lightswitch-container\">\n					<div class=\"label on\"></div>\n					<div class=\"handle\"></div>\n					<div class=\"label off\"></div>\n				</div>\n				<input type=\"hidden\" name=\"durationInTraffic\" value=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.durationInTraffic), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" />\n			</div>\n		</li>\n		<li>\n			<p>Optimize Waypoints</p>\n\n			<div class=\"lightswitch ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.optimizeWaypoints), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" tabindex=\"0\">\n				<div class=\"lightswitch-container\">\n					<div class=\"label on\"></div>\n					<div class=\"handle\"></div>\n					<div class=\"label off\"></div>\n				</div>\n				<input type=\"hidden\" name=\"optimizeWaypoints\" value=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.optimizeWaypoints), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" />\n			</div>\n		</li>\n		<li>\n			<p>Provide Route Alternatives</p>\n\n			<div class=\"lightswitch ";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.provideRouteAlternatives), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" tabindex=\"0\">\n				<div class=\"lightswitch-container\">\n					<div class=\"label on\"></div>\n					<div class=\"handle\"></div>\n					<div class=\"label off\"></div>\n				</div>\n				<input type=\"hidden\" name=\"provideRouteAlternatives\" value=\"";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.provideRouteAlternatives), {hash:{},inverse:self.noop,fn:self.program(18, program18, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" />\n			</div>\n		</li>\n	</ul>\n\n</div>\n\n<footer>\n	";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(20, program20, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n	";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(22, program22, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n	\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
+  return buffer;
+  });
+
+templates['route-location-form'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data,depth1) {
+  
+  var buffer = "", stack1;
+  buffer += "\n<h3>Locations Found</h3>\n\n<ul class=\"oh-google-map-highlight-list\">\n";
+  stack1 = helpers.each.call(depth0, (depth1 && depth1.locations), {hash:{},inverse:self.noop,fn:self.program(2, program2, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ul>\n";
+  return buffer;
+  }
+function program2(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n	<li><a href=\"#\">"
+    + escapeExpression(((stack1 = (depth0 && depth0.formatted_address)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</a></li>\n";
+  return buffer;
+  }
+
+  buffer += "<h2>Add Location</h2>\n\n<input type=\"text\" name=\"location\" value=\"";
+  if (helper = helpers.location) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.location); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"Enter an address, postal code, or city\" class=\"text fullwidth\" />\n\n";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.locations), {hash:{},inverse:self.noop,fn:self.programWithDepth(1, program1, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<footer>\n	<button type=\"submit\" class=\"btn submit\">Search</button>\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
+  return buffer;
+  });
 }());
 var GoogleMaps = {
 	Views: {},
@@ -10528,6 +10788,10 @@ var GoogleMaps = {
 			delete json.infowindow;
 
 			return json;
+		},
+
+		isCoordinate: function(coord) {
+			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		}
 
 	});
@@ -10543,11 +10807,7 @@ var GoogleMaps = {
 			GoogleMaps.Models.Base.prototype.initialize.call(this, options);
 
 			if(!this.get('api')) {
-				this.set('api', new google.maps.Marker(_.extend({}, options, {
-					map: this.get('map').api,
-					position: new google.maps.LatLng(this.get('lat'), this.get('lng')),
-					draggable: true
-				})));
+				this.initializeApi(options);
 			}
 			else {
 				this.get('api').setMap(this.get('map').api);
@@ -10567,8 +10827,52 @@ var GoogleMaps = {
 			this.bindEvents();
 		},
 		
+		initializeApi: function(options) {
+			if(!_.isObject(options)) {
+				options = {};
+			}
+
+			this.set('api', new google.maps.Marker(_.extend({}, options, {
+				map: this.get('map').api,
+				position: new google.maps.LatLng(this.get('lat'), this.get('lng')),
+				draggable: this.get('draggable') === false ? false : true
+			})));
+		},
+
 		isCoordinate: function(coord) {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+		},
+
+		onEdit: function() {
+			var view = new GoogleMaps.Views.MarkerForm({
+				model: this,
+				map: this.get('map')
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		onDelete: function() {
+			var t = this;
+
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-marker-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.onCancelDeleteMarker();
+				}
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		onCancelDeleteMarker: function() {
+			this.get('map').hideModal();
 		},
 
 		buildInfoWindowContent: function() {
@@ -10588,43 +10892,24 @@ var GoogleMaps = {
 			var $content = $(_return.join(''));
 
 			$content.find('.edit').click(function(e) {
-
-				var view = new GoogleMaps.Views.MarkerForm({
-					model: t,
-					map: t.get('map')
-				});
-
-				t.get('map').showModal(view);
+				t.onEdit();
 
 				e.preventDefault();
 			});
 
 			$content.find('.delete').click(function(e) {
-
-				/*
-				t.get('map').api.setCenter(latLng);
-				t.get('map').api.panBy(0, -150);
-				*/
-
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-marker-form'),
-					submit: function() {
-						t.get('api').setMap(null);
-						t.set('deleted', true);
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.onDelete();
 
 				e.preventDefault();
 			});
 
 			return $content.get(0);
+		},
+
+		remove: function() {
+			this.get('infowindow').close();
+			this.set('deleted', true);
+			this.setMap(null);
 		},
 
 		getAnimation: function() {
@@ -10693,12 +10978,20 @@ var GoogleMaps = {
 		
 		setIcon: function(value) {
 			if(value) {
+				var width = this.get('scaledWidth') ? this.get('scaledWidth') : 32;
+				var height = this.get('scaledHeight') ? this.get('scaledHeight') : 32;
+
 				var icon = {
-					scaledSize: new google.maps.Size(32, 32),
+					scaledSize: new google.maps.Size(width, height),
 					url: value
 				};
 				
-				this.get('api').setIcon(icon);
+				if(this.get('scaleIcons') === false) {
+					this.get('api').setIcon(value);
+				}
+				else {
+					this.get('api').setIcon(icon);
+				}
 			}
 			else {
 				this.get('api').setIcon(null);
@@ -11024,6 +11317,11 @@ var GoogleMaps = {
 			t.get('map').showModal(view);
 		},
 		
+		remove: function() {
+			this.set('deleted', true);
+			this.setMap(null);
+		},
+
 		buildInfoWindowContent: function() {
 			var content = this.get('content');
 			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
@@ -11312,6 +11610,565 @@ var GoogleMaps = {
 
 	"use strict";
 
+	GoogleMaps.Models.Route = GoogleMaps.Models.Base.extend({
+
+		initialize: function(options) {
+			var t = this;
+
+			GoogleMaps.Models.Base.prototype.initialize.call(this, options);
+
+			if(!this.get('api')) {
+				this.set('api', new google.maps.DirectionsRenderer(_.extend({}, options, {
+					draggable: false,
+					map: this.get('map').api,
+					suppressInfoWindows: true,
+					suppressMarkers: true,
+					preserveViewport: true,
+					infoWindow: new google.maps.InfoWindow({
+						content: 'test'
+					})
+				})));
+			}
+			else {
+				this.get('api').setMap(this.get('map').api);
+			}
+
+			if(this.get('markers')) {
+				var markers = [];
+
+				_.each(this.get('markers'), function(marker, i) {
+					markers.push(new GoogleMaps.Models.RouteMarker(_.extend({}, marker, {
+						location: t.getLocations()[i],
+						route: t,
+						map: t.get('map'),
+						onDragend: function(e) {
+							GoogleMaps.Models.RouteMarker.prototype.onDragend.call(this, e, function() {
+								t.onDragend.call(t, e);
+							});
+						} 
+					})));
+				});
+
+				this.set('markers', markers);
+			}
+
+			if(this.getLocations().length) {
+				t.render(t.getDirectionsRequestObject());				
+			}
+
+
+			/*
+			if(this.get('icon')) {
+				this.setIcon(this.get('icon'));
+			}
+
+			if(!this.get('infowindow')) {
+				this.set('infowindow', new google.maps.InfoWindow({
+					maxWidth: 300,
+					content: this.buildInfoWindowContent()
+				}));
+			}
+
+			this.bindEvents();
+			*/
+		},
+
+		remove: function() {
+			this.get('api').setMap(null);
+			this.set('deleted', true);
+
+			_.each(this.getMarkers(), function(marker) {
+				marker.remove();
+			});
+		},
+
+		getDirectionsRequestObject: function() {
+			return {
+				origin: this.getOrigin(),
+				destination: this.getDestination(),
+				waypoints: this.getWaypoints(),
+				avoidFerries: this.get('avoidFerries'),
+				avoidHighways: this.get('avoidHighways'),
+				avoidTolls: this.get('avoidTolls'),
+				durationInTraffic: this.get('durationInTraffic'),
+				optimizeWaypoints: this.get('optimizeWaypoints'),
+				provideRouteAlternatives: this.get('provideRouteAlternatives'),
+				transitOptions: this.get('transitOptions'),
+				unitSystem: this.get('unitSystem')
+			};
+		},
+
+		setDraggable: function(value) {
+			this.get('api').setOptions({draggable: value});
+		},
+
+		getOrigin: function() {
+			var locations = this.getLocations();
+			var location = locations[0];
+
+			if(location) {
+				return new google.maps.LatLng(location.lat, location.lng);
+			}
+
+			return null;
+		},
+
+		getDestination: function() {
+			var locations = this.getLocations();
+
+			if(locations.length < 2) {
+				return null;
+			}
+
+			var location = locations[locations.length - 1];
+
+			if(location) {
+				return new google.maps.LatLng(location.lat, location.lng);
+			}
+
+			return null;
+		},
+
+		render: function(request, callback) {
+			var t = this; // , markers = [];
+
+			if(!_.isObject(request)) {
+				request = this.getDirectionsRequestObject();
+			}
+
+			this.directionsRequest(request, function(result, status) {
+				if(status == 'OK') {
+					//t.get('infowindow').setContent(t.buildInfoWindowContent());
+					t.setDirections(result);
+					t.setMap(t.get('map').api);
+
+					/*
+					var existing = this.get('markers');
+
+					if(existing) {
+						_.each(existing, function(marker) {
+							marker.setMap(null);
+						});
+					}
+
+					_.each(result.routes[0].legs, function(leg, i) {
+
+						if(i == 0) {
+							var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-a.png&ax=44&ay=48&scale=2';
+						}
+						else {
+							var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=2';
+						}
+
+						markers.push(new GoogleMaps.Models.RouteMarker({
+							scaledWidth: 22,
+							scaledHeight: 40,
+							icon: icon,
+							map: t.get('map'),
+							lat: leg.start_location.lat(),
+							lng: leg.start_location.lng(),
+							address: leg.start_address,
+							content: leg.start_address 
+						}));
+
+						if(i == result.routes[0].legs.length - 1) {
+							icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i + 1)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=2';
+						
+							markers.push(new GoogleMaps.Models.RouteMarker({
+								scaledWidth: 22,
+								scaledHeight: 40,
+								icon: icon,
+								map: t.get('map'),
+								lat: leg.end_location.lat(),
+								lng: leg.end_location.lng(),
+								address: leg.end_address,
+								content: leg.end_address 
+							}));
+						}
+					});
+
+					t.set('markers', markers);
+					*/
+				}
+			});
+		},
+
+		getWaypoints: function() {
+			var waypoints = [], locations = this.getLocations();
+
+			if(locations.length < 3) {
+				return [];
+			}
+
+			_.each(locations, function(location, i) {
+				if(i > 0 && i < locations.length - 1) {
+					waypoints.push({
+						location: new google.maps.LatLng(location.lat, location.lng),
+						stopover: true
+					});
+				}
+			});
+
+			return waypoints;
+		},
+
+		directionsRequest: function(request, callback) {
+			if(_.isFunction(request)) {
+				callback = request;
+			}
+
+			if(!_.isObject(request)) {
+				request = {};
+			}
+
+			request = _.extend({}, request, {
+				origin: this.getOrigin(),
+				destination: this.getDestination(),
+				waypoints: this.getWaypoints(),
+				travelMode: this.get('travelMode') ? this.get('travelMode') : (request.travelMode ? request.travelMode : google.maps.TravelMode.DRIVING)
+			});
+
+			if(!request.origin || !request.destination) {
+				return;
+			}
+
+			var t = this, service = new google.maps.DirectionsService();
+
+			return service.route(request, function(result, status) {
+				if(_.isFunction(callback)) {
+					callback.call(t, result, status);
+				}
+			});
+		},
+		
+		buildInfoWindowContent: function() {
+			var content = this.get('content');
+			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
+
+			var t = this;
+
+			_return.push([
+					'<div class="oh-google-map-infowindow-actions">',
+						'<a href="#" class="edit">Edit</a> | ',
+						'<a href="#" class="delete">Delete</a>',
+					'</div>',
+				'</div>'
+			].join(''));
+
+			var $content = $(_return.join(''));
+
+			$content.find('.edit').click(function(e) {
+
+				var view = new GoogleMaps.Views.RouteForm({
+					model: t,
+					map: t.get('map'),		
+					onDragend: function(e) {
+						// view.render();
+					}
+				});
+
+				t.get('map').showModal(view);
+
+				e.preventDefault();
+			});
+
+			$content.find('.delete').click(function(e) {
+
+				/*
+				t.get('map').api.setCenter(latLng);
+				t.get('map').api.panBy(0, -150);
+				*/
+
+				var view = new GoogleMaps.Views.BaseForm({
+					template: GoogleMaps.Template('delete-route-form'),
+					submit: function() {
+						t.get('api').setMap(null);
+						t.set('deleted', true);
+						t.get('map').hideModal();
+						t.get('map').updateHiddenField();
+					},
+					cancel: function() {
+						t.get('map').hideModal();
+					}
+				});
+
+				t.get('map').showModal(view);
+
+				e.preventDefault();
+			});
+
+			return $content.get(0);
+		},
+
+		getDirections: function() {
+			return this.get('api').getDirections();
+		},
+
+		addLocation: function(location) {
+			var t = this;
+			var locations = this.getLocations();
+			var i = locations.length;
+
+			if(!locations) {
+				locations = [];
+			}
+
+			locations.push(location);
+
+			this.set('locations', locations);
+
+			var marker = new GoogleMaps.Models.RouteMarker({
+				scaledWidth: 22,
+				scaledHeight: 40,
+				route: this,
+				map: this.get('map'),
+				lat: location.lat,
+				lng: location.lng,
+				address: location.address,
+				draggable: true,
+				content: location.address.split(',').join('<br>'),
+				location: location,
+				onDragend: function(e) {
+					GoogleMaps.Models.RouteMarker.prototype.onDragend.call(this, e, function() {
+						t.onDragend.call(t, e);
+					});
+				} 
+			});
+
+			this.addMarker(marker);
+		},
+
+		removeLocation: function(index) {
+			var locations = this.getLocations();
+
+			if(locations[index]) {
+				locations.splice(index, 1);
+			}
+
+			this.set('locations', locations);
+
+			this.removeMarker(index);
+		},
+
+		addMarker: function(marker) {
+			var markers = this.getMarkers();
+
+			if(!markers) {
+				markers = [];
+			}
+
+			markers.push(marker);
+
+			this.updateMarkerIcons();
+			this.set('markers', markers);
+		},
+
+		removeMarker: function(index) {
+			var markers = this.getMarkers();
+
+			if(markers[index]) {
+				markers[index].setMap(null);
+				markers.splice(index, 1);
+			}
+
+			this.updateMarkerIcons();
+			this.set('markers', markers);
+		},
+
+		onDragend: function(e) {},
+
+		updateMarkerIcons: function() {
+			var t = this;
+
+			_.each(this.getMarkers(), function(marker, i) {
+				if(i == 0) {
+					var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-a.png&ax=44&ay=48&scale=2';
+				}
+				else {
+					var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=2';
+				}
+
+				t.getLocation(i).icon = icon;
+
+				marker.set('icon', icon);
+				marker.setIcon(icon);
+			});
+		},
+
+		getLocations: function() {
+			return this.get('locations');
+		},
+
+		getLocation: function(i) {
+			var locations = this.get('locations');
+
+			if(locations[i]) {
+				return locations[i];
+			}
+
+			return null;
+		},
+
+		getMarkers: function() {
+			return this.get('markers');
+		},
+
+		getMarker: function(i) {
+			var markers = this.get('markers');
+
+			if(markers[i]) {
+				return markers[i];
+			}
+
+			return null;
+		},
+
+		getMap: function() {
+			return this.get('api').getMap();
+		},
+
+		getPanel: function() {
+			return this.get('api').getPanel();
+		},
+
+		getRouteIndex: function() {
+			return this.get('api').getRouteIndex();
+		},
+
+		setDirections: function(value) {
+			this.get('api').setDirections(value);
+		},
+		
+		setMap: function(value) {
+			this.get('api').setMap(value);
+		},
+		
+		setOptions: function(value) {
+			this.get('api').setOptions(value);
+		},
+		
+		setPosition: function(value) {
+			this.get('api').setPosition(value);
+		},
+		
+		setPanel: function(value) {
+			this.get('api').setPanel(value);
+		},
+		
+		setVisible: function(value) {
+			this.get('api').setVisible(value);
+		},
+		
+		setRouteIndex: function(value) {
+			this.get('api').setRouteIndex(value);
+		},
+
+		bindEvents: function() {
+			var t = this;
+
+			google.maps.event.addListener(this.get('api'), 'directions_changed', function() {
+				t.onDirectionsChanged.apply(t, arguments);
+			});
+		},
+
+		onDirectionsChanged: function() {}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Models.RouteMarker = GoogleMaps.Models.Marker.extend({
+
+		originalMarker: false,
+
+		initialize: function(options) {
+			this.set('draggable', false);
+			this.set('isSavedToMap', true);
+
+			GoogleMaps.Models.Marker.prototype.initialize.call(this, options);
+
+			this.originalMarker = $.extend(true, {}, this.toJSON());
+		},
+
+		onEdit: function() {	
+			var view = new GoogleMaps.Views.RouteForm({
+				model: this.get('route'),
+				map: this.get('map')
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		onDelete: function() {	
+			var t = this;
+
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-route-form'),
+				submit: function() {
+					t.get('route').remove();
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.onCancelDeleteMarker();
+				}
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		toJSON: function() {
+			var json = GoogleMaps.Models.Marker.prototype.toJSON.call(this);
+
+			delete json.route;
+
+			return json;
+		},
+
+		revert: function() {
+			this.set(this.originalMarker);
+			this.setPosition(new google.maps.LatLng(this.get('lat'), this.get('lng')));
+		},
+
+		onDragend: function(e, callback) {
+			var t = this;
+
+			GoogleMaps.Models.Marker.prototype.onDragend.call(this, e, function() {
+				t.set('lat', e.latLng.lat());
+				t.set('lng', e.latLng.lng());
+
+				t.get('location').lat = e.latLng.lat();
+				t.get('location').lng = e.latLng.lng();
+				t.get('location').address = t.get('address');
+				t.get('route').render();
+
+				if(_.isFunction(callback)) {
+					callback(e);
+				}
+			});
+		}
+
+		/*
+		,
+
+		onClick: function() {
+			_.each(this.get('route').getMarkers(), function(marker) {
+				marker.get('infowindow').close();
+			});
+
+			this.get('infowindow').open(this.get('map').api, this.get('api'));
+		}
+		*/
+	});
+
+}());
+(function() {
+
+	"use strict";
+
 	GoogleMaps.Views.ItemView = Backbone.Marionette.ItemView.extend({
 
 		initialize: function(options) {	
@@ -11472,6 +12329,8 @@ var GoogleMaps = {
 
 		lastResponse: false,
 
+		dblclickEvent: false,
+
 		initialize: function(options) {
 			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
 
@@ -11488,6 +12347,23 @@ var GoogleMaps = {
 			setTimeout(function() {
 				t.$el.find('input').focus();
 			}, 250);
+
+			this.map.api.setOptions({disableDoubleClickZoom: true});
+
+			this.dblclickEvent = google.maps.event.addListener(this.map.api, 'dblclick', function(e) {
+				t.geocode({location: e.latLng}, function(results, status) {
+					t.responseHandler(results[0]);
+					t.lastResponse = results[0];
+				});				
+			});
+		},
+
+		onDestroy: function() {
+			this.map.api.setOptions({disableDoubleClickZoom: true});
+
+			if(this.dblclickEvent) {
+				this.dblclickEvent.remove();
+			}
 		},
 
 		onRender: function() {
@@ -11513,7 +12389,7 @@ var GoogleMaps = {
 			var t = this;
 
 			this.model.set('location', this.getLocation());
- 
+
 			this.geocode(this.getLocation(), function(results, status, location) {
 				if(status == "OK") {
 					if(results.length > 1 || location.location) {
@@ -11571,7 +12447,7 @@ var GoogleMaps = {
 		},
 
 		isCoordinate: function(coord) {
-			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+			return _.isString(coord) ? coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/) : false;
 		},
 
 		geocode: function(location, callback) {
@@ -11645,12 +12521,15 @@ var GoogleMaps = {
 
   		polylines: [],
 
+  		routes: [],
+
   		className: 'oh-google-map-relative',
 
   		initialize: function(options) {
   			this.markers = [];
   			this.polygons = [];
   			this.polylines = [];
+  			this.routes = [];
 
   			this.mapOptions = _.extend({}, {
 	  			zoom: 8,
@@ -11688,7 +12567,8 @@ var GoogleMaps = {
   			var data = {
   				markers: [],
   				polygons: [],
-  				polylines: []
+  				polylines: [],
+  				routes: []
   			};
 
   			_.each(this.markers, function(marker, i) {
@@ -11701,6 +12581,10 @@ var GoogleMaps = {
 
   			_.each(this.polylines, function(polyline, i) {
   				data.polylines.push(polyline.toJSON());
+  			});
+
+  			_.each(this.routes, function(route, i) {
+  				data.routes.push(route.toJSON());
   			});
 
   			data = JSON.stringify(data);
@@ -11756,9 +12640,6 @@ var GoogleMaps = {
 		 		}
 
 	 			if(this.savedData.polylines && this.savedData.polylines.length) {
-
-						console.log(this.savedData.polylines);
-
 		 			_.each(this.savedData.polylines, function(polyline) {
 						var options = {
 							map: t,
@@ -11766,6 +12647,17 @@ var GoogleMaps = {
 						};
 
 		 				t.polylines.push(new GoogleMaps.Models.Polyline(_.extend({}, options, polyline)));
+		 			});
+		 		}
+
+	 			if(this.savedData.routes && this.savedData.routes.length) {
+		 			_.each(this.savedData.routes, function(route) {
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.routes.push(new GoogleMaps.Models.Route(_.extend({}, options, route)));
 		 			});
 		 		}
 
@@ -11786,7 +12678,8 @@ var GoogleMaps = {
  						var data = {
  							markers: [],
  							polygons: [],
- 							polylines: []
+ 							polylines: [],
+ 							routes: []
  						};
 
  						_.each(t.markers, function(marker) {
@@ -11801,12 +12694,23 @@ var GoogleMaps = {
  							data.polylines.push(polyline.toJSON());
  						});
 
+ 						_.each(t.routes, function(route) {
+ 							data.routes.push(route.toJSON());
+ 						});
+
  						var view = new GoogleMaps.Views.MapList({
  							map: t,
  							model: new Backbone.Model(data)
  						});
 
  						t.showModal(view);
+
+ 						e.preventDefault();
+ 					}
+ 				}, {
+ 					icon: 'refresh',
+ 					click: function(e) {
+ 						t.center();
 
  						e.preventDefault();
  					}
@@ -11821,6 +12725,17 @@ var GoogleMaps = {
  						t.showModal(view);
 
  						e.preventDefault();
+ 					}
+ 				},{
+ 					name: 'Add Route',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.RouteForm({
+ 							map: t
+ 						});
+
+ 						t.showModal(view);
+
+ 						e.preventDefault(); 						
  					}
  				},{
  					name: 'Add Polygon',
@@ -11855,6 +12770,16 @@ var GoogleMaps = {
 
 			_.each(this.polygons, function(polygon) {
 				polygon.get('infowindow').close();
+			});
+
+			_.each(this.polylines, function(polyline) {
+				polyline.get('infowindow').close();
+			});
+
+			_.each(this.routes, function(route) {
+				_.each(route.get('markers'), function(marker) {
+					marker.get('infowindow').close();
+				});
 			});
 		},
 
@@ -11928,6 +12853,13 @@ var GoogleMaps = {
 				}
 			});
 
+			_.each(this.routes, function(route) {
+				_.each(route.getLocations(), function(location) {
+					bounds.extend(new google.maps.LatLng(location.lat, location.lng));
+					boundsChanged = true;
+				});
+			});
+
 			if(boundsChanged) {
 				this.fitBounds(bounds);
 			}
@@ -11983,6 +12915,27 @@ var GoogleMaps = {
 				e.preventDefault();
 			});
 
+			this.$el.find('.route-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var route = t.map.routes[index];
+
+				route.set('deleted', false);
+				route.get('api').setMap(t.map.api);
+
+				t.model.get('routes')[index].deleted = false;
+
+				_.each(t.model.get('routes')[index].markers, function(marker) {
+					marker.deleted = false;
+					marker.setMap(t.map.api);
+				});
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.polygon-undo').click(function(e) {
 				var index = $(this).parent().index();
 				var polygon = t.map.polygons[index];
@@ -12022,6 +12975,21 @@ var GoogleMaps = {
 				t.map.api.setZoom(14);
 				t.map.api.setCenter(marker.getPosition());
 				
+				e.preventDefault();
+			});
+
+			this.$el.find('.route-center').click(function(e) {
+				var index = $(this).parent().index();
+				var route = t.map.routes[index];
+
+				var bounds = new google.maps.LatLngBounds();
+
+				_.each(route.getLocations(), function(location) {
+					bounds.extend(new google.maps.LatLng(location.lat, location.lng));
+				});
+
+				t.map.fitBounds(bounds);
+
 				e.preventDefault();
 			});
 
@@ -12087,6 +13055,7 @@ var GoogleMaps = {
 				this.originalModel = this.model.toJSON();
 			}
 
+			/*
 			this.model.onDragend = function(e) {
 				GoogleMaps.Models.Marker.prototype.onDragend.call(this, e, function() {
 					t.$el.find('.lat').html(e.latLng.lat());
@@ -12098,6 +13067,7 @@ var GoogleMaps = {
 					}
 				});
 			};
+			*/
 		},
 
 		submit: function() {
@@ -12192,33 +13162,14 @@ var GoogleMaps = {
 		isCoordinate: function(coord) {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		},
+
 		showGeocoder: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.Geocoder({
+				map: this.map,
 				responseHandler: function(response) {
-					t.model.set({
-						address: response.formatted_address,
-						addressComponents: response.address_components,
-						lat: response.geometry.location.lat(),
-						lng: response.geometry.location.lng()
-					});
-
-					if(!t.model.get('customContent')) {
-						if(!t.model.isCoordinate(response.formatted_address)) {
-							t.model.set('content', response.formatted_address.split(',').join('<br>'));
-						}
-						else {
-							t.model.set('content', response.formatted_address);
-						}
-					}
-
-					var view = new GoogleMaps.Views.MarkerForm({
-						model: t.model,
-						map: t.map
-					});
-
-					t.map.showModal(view);
+					t.responseHandler(response);
 				},
 				cancel: function() {
 					if(t.hasLocation()) {
@@ -12232,6 +13183,29 @@ var GoogleMaps = {
 			});
 
 			this.map.showModal(view);
+		},
+
+		responseHandler: function(response) {
+			var t = this;
+			
+			t.model.set({
+				address: response.formatted_address,
+				addressComponents: response.address_components,
+				lat: response.geometry.location.lat(),
+				lng: response.geometry.location.lng()
+			});
+
+			if(!t.model.get('customContent')) {
+				if(!t.model.isCoordinate(response.formatted_address)) {
+					t.model.set('content', response.formatted_address.split(',').join('<br>'));
+				}
+				else {
+					t.model.set('content', response.formatted_address);
+				}
+			}
+
+			t.isDestroyed = false;
+			t.map.showModal(t);
 		},
 
 		/*
@@ -12642,8 +13616,6 @@ var GoogleMaps = {
 		template: GoogleMaps.Template('polyline-form'),
 
 		initializeApi: function() {
-			console.log('init');
-			
 			if(!this.model) {
 				this.model = new GoogleMaps.Models.Polyline({
 					map: this.map,
@@ -12661,6 +13633,415 @@ var GoogleMaps = {
 				this.model.set('isSavedToMap', true);
 			}
 		}			
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Views.RouteForm = GoogleMaps.Views.BaseForm.extend({
+
+		geocoder: false,
+
+		template: GoogleMaps.Template('route-form'),
+
+		map: false,
+
+		api: false,
+
+		dblclickEvent: false,
+
+		originalRoute: false,
+
+		initialize: function(options) {
+			var t = this;
+
+			this.geocoder = new google.maps.Geocoder();
+
+			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
+
+			this.initializeApi();
+
+			this.originalRoute = $.extend(true, {}, this.model.toJSON());
+
+			/*
+			this.model.get('infowindow').close();
+			this.model.get('api').setDraggable(true);
+			this.model.get('api').setEditable(true);
+			*/
+
+			this.api = this.model.get('api');
+		},
+
+		initializeApi: function() {
+			if(!this.model) {
+				this.model = new GoogleMaps.Models.Route({
+					map: this.map,
+					locations: [],
+					hideDetails: true,
+					isNew: true,
+					isSavedToMap: false,		
+					onDragend: function(e) {
+						view.render();
+					}
+				});
+			}
+		},
+
+		onRender: function() {
+			var t = this;
+
+			GoogleMaps.Views.BaseForm.prototype.onRender.call(this);
+
+			/*
+			this.model.onMouseup = function() {
+				setTimeout(function() {
+					// t.model.set('points', t.api.getPath().getArray());
+					t.render();
+				}, 200);
+			};
+
+			*/
+
+			this.model.onDragend = function() {
+				t.render();
+			};
+
+			this.$el.find('.toggle-details').click(function(e) {
+				var $panel = t.$el.find('.details');
+
+				if($panel.css('display') == 'none') {
+					$panel.show();			
+					t.model.set('hideDetails', false);		
+					$(this).html('Hide Details');
+				}
+				else {
+					$panel.hide();
+					t.model.set('hideDetails', true);
+					$(this).html('Show Details');
+				}
+
+				t.$el.find('input').focus();
+
+				e.preventDefault();
+			});
+
+			this.$el.find('input').keypress(function(e) {
+				if(e.keyCode == 13) {
+					t.$el.find('.add-location').click();
+					e.preventDefault();
+				}
+			}).focus();
+
+			this.$el.find('.edit-location').click(function(e) {
+				var index = $(this).parents('li').index();
+				var markers = t.model.getMarkers();
+
+				if(markers[index]) {
+					var view = new GoogleMaps.Views.RouteMarkerForm({
+						map: t.map,
+						model: markers[index],
+						submit: function() {
+
+							GoogleMaps.Views.RouteMarkerForm.prototype.submit.call(this);
+
+							this.model.get('location').lat = this.model.get('lat');
+							this.model.get('location').lng = this.model.get('lng');
+							this.model.get('location').address = this.model.get('address');
+							this.model.get('location').icon = this.model.get('icon');
+
+							t.model.render();
+
+							t.isDestroyed = false;
+							t.map.showModal(t);
+						},
+						cancel: function() {
+							t.isDestroyed = false;
+							t.map.showModal(t);
+						}
+					});
+
+					t.map.showModal(view);
+				}
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.remove-location').click(function(e) {
+				var index = $(this).parents('li').index();
+
+				t.model.removeLocation(index);
+
+				if(t.model.getLocations().length > 1) {
+					t.model.render();
+				}
+				else {
+					t.model.setMap(null);	
+				}
+
+				t.render();
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.add-location').click(function(e) {
+				var view = new GoogleMaps.Views.Geocoder({
+					map: t.map,
+					responseHandler: function(response) {
+						t.model.addLocation({
+							address: response.formatted_address,
+							lat: response.geometry.location.lat(),
+							lng: response.geometry.location.lng(),
+							isSavedToMap: false
+						});
+
+						t.isDestroyed = false;
+						t.model.render(t.getOptions());
+						t.model.updateMarkerIcons();
+						t.map.showModal(t);
+					},
+					cancel: function() {
+						t.isDestroyed = false;
+						t.map.showModal(t);
+					}
+				});
+
+				t.map.showModal(view);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.lightswitch').lightswitch({
+				onChange: function() {
+					t.model.render(t.getOptions());
+				}
+			});
+
+			this.$el.find('[name="travelMode"]').click(function(e) {
+				t.model.render(t.getOptions());
+			});
+
+			this.$el.find('select').change(function() {
+				t.model.render(t.getOptions());
+			});
+		},
+
+		getSwitchOption: function(name) {
+			var value = this.$el.find('[name="'+name+'"]').val();
+
+			return value != "" ? true : false;
+		},
+
+		getOptions: function() {
+			return {
+				avoidFerries: this.getSwitchOption('avoidFerries'),
+				avoidHighways: this.getSwitchOption('avoidHighways'),
+				avoidTolls: this.getSwitchOption('avoidTolls'),
+				durationInTraffic: this.getSwitchOption('durationInTraffic'),
+				optimizeWaypoints: this.getSwitchOption('optimizeWaypoints'),
+				provideRouteAlternatives: this.getSwitchOption('provideRouteAlternatives'),
+				transitOptions: {},
+				travelMode: this.$el.find('[name="travelMode"]:checked').val(),
+				unitSystem: google.maps.UnitSystem.IMPERIAL
+			};
+		},
+
+		onShow: function() {
+			var t = this;
+
+			_.each(this.model.getMarkers(), function(marker, i) {
+				marker.setDraggable(true);
+			});
+
+			this.map.closeInfoWindows();
+
+			this.map.api.setOptions({
+				disableDoubleClickZoom: true
+			});
+
+			this.dblclickEvent = google.maps.event.addListener(this.map.api, 'dblclick', function(e) {
+				t.geocoder.geocode({location: e.latLng}, function(results, status) {
+					t.model.addLocation({
+						address: status == 'OK' ? results[0].formatted_address : '',
+						lat: e.latLng.lat(),
+						lng: e.latLng.lng(),
+						isSavedToMap: false
+					});
+					t.model.render(t.getOptions());
+					t.model.updateMarkerIcons();
+					t.render();
+				});				
+			});
+
+			setTimeout(function() {
+				t.$el.find('input').focus();
+			}, 250);
+
+		},
+
+		onDestroy: function() {
+
+			_.each(this.model.getMarkers(), function(marker, i) {
+				marker.setDraggable(false);
+			});
+
+			if(this.dblclickEvent) {
+				this.dblclickEvent.remove();
+			}
+
+			this.map.api.setOptions({disableDoubleClickZoom: false});
+
+			/*
+			this.model.onMouseup = function() {};
+
+			this.model.onDragend = function() {};
+
+			if(!this.model.get('isSavedToMap') && this.model.get('isNew')) {
+				this.api.setMap(null);
+			}
+
+			this.map.api.setOptions({
+				disableDoubleClickZoom: false
+			});
+
+			*/
+		},
+
+		isCoordinate: function(coord) {
+			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+		},
+
+		saveToMap: function() {
+			if(!this.model.get('isSavedToMap')) {
+				this.map.routes.push(this.model);
+				this.model.set('isSavedToMap', true);
+			}
+
+			_.each(this.model.getLocations(), function(location, i) {
+				location.isSavedToMap = true;
+			});
+		},
+
+		submit: function() {
+			var t = this;
+
+			this.saveToMap();
+
+			this.model.set(this.getOptions());
+			this.model.set({
+				title: this.$el.find('[name="title"]').val(),
+				content: this.$el.find('[name="content"]').val()
+			});
+
+			this.model.setDraggable(false);
+
+			if(this.model.get('infowindow')) {
+				this.model.get('infowindow').setOptions({
+					content: this.model.buildInfoWindowContent()
+				});
+			}
+
+			_.each(this.model.getLocations(), function(location, i) {
+				var marker = t.model.getMarker(i);
+
+				/*
+				marker.set('lat', location.lat);
+				marker.set('lng', location.lng);
+				marker.set('location', location);
+				*/
+
+				marker.originalMarker = $.extend(true, {}, marker.toJSON());
+			});
+
+			this.originalRoute = $.extend(true, {}, this.model.toJSON());
+
+			this.map.hideModal();
+			this.map.updateHiddenField();
+		},
+
+		cancel: function() {
+			var t = this, locations = [], markers = [];
+
+			_.each(this.model.getLocations(), function(location, i) {
+				if(location.isSavedToMap !== false) {
+					locations.push(location);
+					markers.push(t.model.getMarker(i));
+				}
+				else {
+					t.model.getMarker(i).setMap(null);
+				}
+			});
+
+			this.model.set('locations', locations);
+			this.model.set('markers', markers);
+
+			_.each(markers, function(marker, i) {
+				marker.revert();
+				marker.set('location', t.originalRoute.locations[i]);
+			});
+
+			this.model.set(this.originalRoute);
+
+			if(!this.model.getLocations().length) {
+				this.model.setMap(null);
+			}
+			else {
+				this.model.render();
+			}
+
+			this.model.updateMarkerIcons();
+			this.map.updateHiddenField();
+			this.map.hideModal();
+		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Views.RouteLocationForm = GoogleMaps.Views.Geocoder.extend({
+
+		template: GoogleMaps.Template('route-location-form')
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Views.RouteMarkerForm = GoogleMaps.Views.MarkerForm.extend({
+
+		submit: function() {
+			this.model.set({
+				title: this.$el.find('[name="title"]').val(),
+				content: this.$el.find('[name="content"]').val()
+			});
+
+			if(this.model.get('content') != this.model.get('address').split(',').join('<br>')) {
+				this.model.set('customContent', true);
+			}
+
+			var latLng = new google.maps.LatLng(this.model.get('lat'), this.model.get('lng'));
+
+			this.model.get('infowindow').setOptions({content: this.model.buildInfoWindowContent()});
+			this.model.get('api').setPosition(latLng);
+
+			if(this.model.get('icon')) {
+				this.model.get('location').icon = this.model.get('icon');
+				this.model.setIcon(this.model.get('icon'));
+			}
+			else {
+				this.model.get('location').icon = null;
+				this.model.setIcon(false);
+			}
+
+			// this.model.get('infowindow').open(this.map.api, this.model.get('api'));
+		}
 
 	});
 

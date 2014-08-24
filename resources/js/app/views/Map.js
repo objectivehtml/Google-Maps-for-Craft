@@ -103,7 +103,7 @@
 
   			data = JSON.stringify(data);
 
-  			this.$el.find('.field-data').val(data).html(data);
+  			this.$el.parents('.oh-google-map-fieldtype').next('.field-data').val(data).html(data);
   		},
 
 		onRender: function() {
@@ -127,7 +127,7 @@
  				e.preventDefault();
  			});
 
- 			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
+ 			// this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 50);
 
  			if(this.savedData) {
 	 			if(this.savedData.markers && this.savedData.markers.length) {

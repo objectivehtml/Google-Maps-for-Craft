@@ -18,6 +18,11 @@ class GoogleMapsVariable
         return craft()->googleMaps_templates->staticMap($data, $options);
     }
 
+    public function directions($options = array())
+    {
+        return craft()->googleMaps_directions->route($options);
+    }
+
     public function data($id, $data = array(), $options = array())
     {
         return craft()->googleMaps_templates->data($id, $data, $options);

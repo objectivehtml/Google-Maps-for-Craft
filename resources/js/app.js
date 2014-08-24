@@ -1301,13 +1301,13 @@ var GoogleMaps = {
 			var t = this;
 
 			_.each(this.getMarkers(), function(marker, i) {
-				if(i == 0) {
+				if(i < t.getMarkers().length - 1) {
 					var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-a.png&ax=44&ay=48&scale=2';
 				}
 				else {
 					var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=2';
 				}
-
+				
 				t.getLocation(i).icon = icon;
 
 				marker.set('icon', icon);
@@ -1320,7 +1320,7 @@ var GoogleMaps = {
 		},
 
 		getLocation: function(i) {
-			var locations = this.get('locations');
+			var locations = this.getLocations();
 
 			if(locations[i]) {
 				return locations[i];
@@ -1334,7 +1334,7 @@ var GoogleMaps = {
 		},
 
 		getMarker: function(i) {
-			var markers = this.get('markers');
+			var markers = this.getMarkers();
 
 			if(markers[i]) {
 				return markers[i];
@@ -1909,7 +1909,7 @@ var GoogleMaps = {
 
   			data = JSON.stringify(data);
 
-  			this.$el.find('.field-data').val(data).html(data);
+  			this.$el.parents('.oh-google-map-fieldtype').next('.field-data').val(data).html(data);
   		},
 
 		onRender: function() {
@@ -1933,7 +1933,7 @@ var GoogleMaps = {
  				e.preventDefault();
  			});
 
- 			this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 100);
+ 			// this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 50);
 
  			if(this.savedData) {
 	 			if(this.savedData.markers && this.savedData.markers.length) {

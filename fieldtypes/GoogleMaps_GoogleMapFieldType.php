@@ -197,7 +197,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         craft()->templates->includeCssResource('googlemaps/css/app.css');
         craft()->templates->includeJsFile('//maps.googleapis.com/maps/api/js?key=&sensor=false');
 
-        craft()->templates->includeJs("new GoogleMaps.Fieldtype('#$namespacedId-field .oh-google-maps-wrapper', {
+        craft()->templates->includeJs("new GoogleMaps.Fieldtype('#$namespacedId-field .oh-google-map-wrapper', {
             fieldname: '$name',
             savedData: ".(!empty($value) ? $value->toJson() : "false").",
             width: '".$this->getSettings()->defaultMapWidth."',
@@ -207,6 +207,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         })");
 
         return craft()->templates->render('googlemaps/fieldtype', array(
+            'name' => $name
         ));
     }
 

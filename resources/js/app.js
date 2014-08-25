@@ -57,6 +57,11 @@ var GoogleMaps = {
 				zoom: options.zoom
 			});
 
+			setTimeout(function() {
+				map.redraw();
+				map.updateHiddenField();
+			}, 100);
+
 			App.content.show(map);
 		});
 
@@ -1883,6 +1888,10 @@ var GoogleMaps = {
   			}); 
   		},
 
+		redraw: function() {
+			google.maps.event.trigger(this.api, 'resize');
+		},
+		
   		updateHiddenField: function() {
   			var data = {
   				markers: [],

@@ -77,6 +77,10 @@
   			}); 
   		},
 
+		redraw: function() {
+			google.maps.event.trigger(this.api, 'resize');
+		},
+		
   		updateHiddenField: function() {
   			var data = {
   				markers: [],

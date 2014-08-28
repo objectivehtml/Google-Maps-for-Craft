@@ -49,6 +49,18 @@ class GoogleMaps_MapDataModel extends BaseModel
         return $return;
     }
 
+    public function getMarker($index)
+    {
+        $markers = $this->getMarkers();
+
+        if(isset($markers[$index]))
+        {
+            return $markers[$index];
+        }
+
+        return null;
+    }
+
     public function getPolygons()
     {
         $return = array();
@@ -60,6 +72,18 @@ class GoogleMaps_MapDataModel extends BaseModel
         }
 
         return $return;
+    }
+
+    public function getPolygon($index)
+    {
+        $polygons = $this->getPolygons();
+
+        if(isset($polygons[$index]))
+        {
+            return $polygons[$index];
+        }
+
+        return null;
     }
 
     public function getPolylines()
@@ -75,6 +99,18 @@ class GoogleMaps_MapDataModel extends BaseModel
         return $return;
     }
 
+    public function getPolyline($index)
+    {
+        $polylines = $this->getPolylines();
+
+        if(isset($polylines[$index]))
+        {
+            return $polylines[$index];
+        }
+
+        return null;
+    }
+
     public function getRoutes()
     {
         $return = array();
@@ -86,6 +122,18 @@ class GoogleMaps_MapDataModel extends BaseModel
         }
 
         return $return;
+    }
+
+    public function getRoute($index)
+    {
+        $routes = $this->getRoutes();
+
+        if(isset($routes[$index]))
+        {
+            return $routes[$index];
+        }
+
+        return null;
     }
 
     public function sortByDistanceAsc($a, $b)

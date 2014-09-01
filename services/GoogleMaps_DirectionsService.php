@@ -19,9 +19,7 @@ class GoogleMaps_DirectionsService extends BaseApplicationComponent
 
         $response = (string) $response->getResponse()->getBody();
 
-        // $this->cacheResponse($encodedAddress, $response);
-
-        return json_decode($response);
+        return new GoogleMaps_DirectionsModel((array) json_decode($response));
 
         /*
     	$encodedAddress = urlencode($address);

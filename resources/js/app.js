@@ -168,7 +168,7 @@ var GoogleMaps = {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		},
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.MarkerForm({
 				model: this,
 				map: this.get('map')
@@ -177,7 +177,7 @@ var GoogleMaps = {
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -217,13 +217,13 @@ var GoogleMaps = {
 			var $content = $(_return.join(''));
 
 			$content.find('.edit').click(function(e) {
-				t.onEdit();
+				t.edit();
 
 				e.preventDefault();
 			});
 
 			$content.find('.delete').click(function(e) {
-				t.onDelete();
+				t.delete();
 
 				e.preventDefault();
 			});
@@ -612,7 +612,7 @@ var GoogleMaps = {
 			}
 		},	
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.PolygonForm({
 				api: this.get('api'),
 				map: this.get('map'),
@@ -622,7 +622,7 @@ var GoogleMaps = {
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -665,7 +665,7 @@ var GoogleMaps = {
 
 			$content.find('.edit').click(function(e) {
 				
-				t.onEdit();
+				t.edit();
 
 				/*
 				t.get('map').api.setCenter(latLng);
@@ -708,7 +708,7 @@ var GoogleMaps = {
 
 				*/
 
-				t.onDelete();
+				t.delete();
 
 				e.preventDefault();
 			});
@@ -898,7 +898,7 @@ var GoogleMaps = {
 			return;
 		},
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.PolylineForm({
 				api: this.get('api'),
 				map: this.get('map'),
@@ -908,7 +908,7 @@ var GoogleMaps = {
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -1184,15 +1184,7 @@ var GoogleMaps = {
 
 			$content.find('.edit').click(function(e) {
 
-				var view = new GoogleMaps.Views.RouteForm({
-					model: t,
-					map: t.get('map'),		
-					onDragend: function(e) {
-						// view.render();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.edit();
 
 				e.preventDefault();
 			});
@@ -1204,25 +1196,40 @@ var GoogleMaps = {
 				t.get('map').api.panBy(0, -150);
 				*/
 
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-route-form'),
-					submit: function() {
-						t.get('api').setMap(null);
-						t.set('deleted', true);
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.delete();
 
 				e.preventDefault();
 			});
 
 			return $content.get(0);
+		},
+
+		edit: function() {
+			var view = new GoogleMaps.Views.RouteForm({
+				model: this,
+				map: this.get('map')
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		delete: function() {
+			var t = this;
+			
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-route-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.get('map').hideModal();
+				}
+			});
+
+			this.get('map').showModal(view);
 		},
 
 		getDirections: function() {
@@ -1418,7 +1425,7 @@ var GoogleMaps = {
 			this.originalMarker = $.extend(true, {}, this.toJSON());
 		},
 
-		onEdit: function() {	
+		edit: function() {	
 			var view = new GoogleMaps.Views.RouteForm({
 				model: this.get('route'),
 				map: this.get('map')
@@ -1427,7 +1434,7 @@ var GoogleMaps = {
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {	
+		delete: function() {	
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -2224,6 +2231,26 @@ var GoogleMaps = {
 
 			this.$el.find('.cancel').click(function(e) {
 				t.map.hideModal(false);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.edit').click(function(e) {
+				var prop = $(this).data('property');
+				var index = $(this).parents('li').index();
+				var data = t.map[prop][index];
+
+				data.edit();
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.delete').click(function(e) {
+				var prop = $(this).data('property');
+				var index = $(this).parents('li').index();
+				var data = t.map[prop][index];
+
+				data.edit();
 
 				e.preventDefault();
 			});

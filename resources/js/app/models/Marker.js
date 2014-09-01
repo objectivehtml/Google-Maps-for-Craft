@@ -44,7 +44,7 @@
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		},
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.MarkerForm({
 				model: this,
 				map: this.get('map')
@@ -53,7 +53,7 @@
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -93,13 +93,13 @@
 			var $content = $(_return.join(''));
 
 			$content.find('.edit').click(function(e) {
-				t.onEdit();
+				t.edit();
 
 				e.preventDefault();
 			});
 
 			$content.find('.delete').click(function(e) {
-				t.onDelete();
+				t.delete();
 
 				e.preventDefault();
 			});

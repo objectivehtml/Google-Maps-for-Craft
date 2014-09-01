@@ -251,15 +251,7 @@
 
 			$content.find('.edit').click(function(e) {
 
-				var view = new GoogleMaps.Views.RouteForm({
-					model: t,
-					map: t.get('map'),		
-					onDragend: function(e) {
-						// view.render();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.edit();
 
 				e.preventDefault();
 			});
@@ -271,25 +263,40 @@
 				t.get('map').api.panBy(0, -150);
 				*/
 
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-route-form'),
-					submit: function() {
-						t.get('api').setMap(null);
-						t.set('deleted', true);
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.delete();
 
 				e.preventDefault();
 			});
 
 			return $content.get(0);
+		},
+
+		edit: function() {
+			var view = new GoogleMaps.Views.RouteForm({
+				model: this,
+				map: this.get('map')
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		delete: function() {
+			var t = this;
+			
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-route-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.get('map').hideModal();
+				}
+			});
+
+			this.get('map').showModal(view);
 		},
 
 		getDirections: function() {

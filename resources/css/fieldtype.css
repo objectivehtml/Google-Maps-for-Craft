@@ -48,9 +48,11 @@ h2 .oh-google-map-small-text { margin-left: 10px; }
 .oh-google-map-no-margin { margin: 0 !important; }
 .oh-google-map-no-padding { padding: 0 !important; }
 .oh-google-map-ordered-list { padding-left: 20px !important; }
-.oh-google-map-ordered-list li { margin-bottom: 5px; }
+.oh-google-map-ordered-list li { margin-bottom: 5px;padding: 5px 0; }
 .oh-google-map-ordered-list li:last-child { margin-bottom: 0 }
-
+.oh-google-map-ordered-list .actions { float: right; display: none; }
+.oh-google-map-ordered-list .actions a { padding: 5px; }
+.oh-google-map-ordered-list li:hover .actions { display: block; }
 .oh-google-map-icon-list { margin-bottom: 10px; }
 .oh-google-map-icon-list-icon { max-width: 15px; height: 25px; float: left; display: block; margin-right: 15px; position: relative; bottom: 3px; }
 .oh-google-map-icon-list-label { position: relative; top: 1px; }

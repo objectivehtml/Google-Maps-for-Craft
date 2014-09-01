@@ -15,7 +15,7 @@
 			this.originalMarker = $.extend(true, {}, this.toJSON());
 		},
 
-		onEdit: function() {	
+		edit: function() {	
 			var view = new GoogleMaps.Views.RouteForm({
 				model: this.get('route'),
 				map: this.get('map')
@@ -24,7 +24,7 @@
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {	
+		delete: function() {	
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({

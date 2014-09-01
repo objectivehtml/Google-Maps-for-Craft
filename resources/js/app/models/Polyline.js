@@ -20,7 +20,7 @@
 			return;
 		},
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.PolylineForm({
 				api: this.get('api'),
 				map: this.get('map'),
@@ -30,7 +30,7 @@
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({

@@ -17,6 +17,26 @@
 				e.preventDefault();
 			});
 
+			this.$el.find('.edit').click(function(e) {
+				var prop = $(this).data('property');
+				var index = $(this).parents('li').index();
+				var data = t.map[prop][index];
+
+				data.edit();
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.delete').click(function(e) {
+				var prop = $(this).data('property');
+				var index = $(this).parents('li').index();
+				var data = t.map[prop][index];
+
+				data.edit();
+
+				e.preventDefault();
+			});
+
 			this.$el.find('.marker-undo').click(function(e) {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];

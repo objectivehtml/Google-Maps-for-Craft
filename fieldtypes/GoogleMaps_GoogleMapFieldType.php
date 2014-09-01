@@ -110,7 +110,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         {
             $this->element->getContent()->{$handle} = $data->toJson();
 
-            // craft()->content->saveContent($this->element);
+            craft()->content->saveContent($this->element);
         }
         
         parent::onAfterElementSave();

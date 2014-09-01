@@ -9910,7 +9910,7 @@ function program1(depth0,data) {
 
 function program3(depth0,data) {
   
-  var buffer = "", stack1;
+  var buffer = "", stack1, helper, options;
   buffer += "\n	<li>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
@@ -9918,6 +9918,8 @@ function program3(depth0,data) {
     + escapeExpression(((stack1 = (depth0 && depth0.address)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</a>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.deleted), options) : helperMissing.call(depth0, "not", (depth0 && depth0.deleted), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</li>\n";
   return buffer;
@@ -9937,33 +9939,41 @@ function program6(depth0,data) {
 function program8(depth0,data) {
   
   
-  return "\n<p>There are no routes on the map.</p>\n";
+  return "<span class=\"actions\"><a href=\"#\" class=\"edit\" data-property=\"markers\"><span data-icon=\"edit\"></span></a> <a href=\"#\" class=\"delete\" data-property=\"markers\"><span data-icon=\"trash\"></span></a></span>";
   }
 
 function program10(depth0,data) {
+  
+  
+  return "\n<p>There are no routes on the map.</p>\n";
+  }
+
+function program12(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n	<li>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "<a href=\"#\" class=\"route-center\">";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth0),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(13, program13, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(13, program13, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(15, program15, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a>";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(15, program15, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.deleted), options) : helperMissing.call(depth0, "not", (depth0 && depth0.deleted), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</li>\n";
   return buffer;
   }
-function program11(depth0,data,depth1) {
+function program13(depth0,data,depth1) {
   
   var stack1;
   return escapeExpression(((stack1 = (depth1 && depth1.title)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
   }
 
-function program13(depth0,data,depth1) {
+function program15(depth0,data,depth1) {
   
   var buffer = "", stack1;
   buffer += "Route "
@@ -9971,36 +9981,44 @@ function program13(depth0,data,depth1) {
   return buffer;
   }
 
-function program15(depth0,data) {
+function program17(depth0,data) {
   
   
   return "</span> <a href=\"#\" class=\"route-undo oh-google-map-small-text\">Undo Delete</a>";
   }
 
-function program17(depth0,data) {
+function program19(depth0,data) {
+  
+  
+  return "<span class=\"actions\"><a href=\"#\" class=\"edit\" data-property=\"routes\"><span data-icon=\"edit\"></span></a> <a href=\"#\" class=\"delete\" data-property=\"routes\"><span data-icon=\"trash\"></span></a></span>";
+  }
+
+function program21(depth0,data) {
   
   
   return "\n<p>There are no polygons on the map.</p>\n";
   }
 
-function program19(depth0,data) {
+function program23(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n	<li>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "<a href=\"#\" class=\"polygon-center\">";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth0),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(13, program13, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(20, program20, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(24, program24, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a>";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(22, program22, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(26, program26, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(28, program28, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.deleted), options) : helperMissing.call(depth0, "not", (depth0 && depth0.deleted), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</li>\n";
   return buffer;
   }
-function program20(depth0,data,depth1) {
+function program24(depth0,data,depth1) {
   
   var buffer = "", stack1;
   buffer += "Polygon "
@@ -10008,36 +10026,44 @@ function program20(depth0,data,depth1) {
   return buffer;
   }
 
-function program22(depth0,data) {
+function program26(depth0,data) {
   
   
   return "</span> <a href=\"#\" class=\"polygon-undo oh-google-map-small-text\">Undo Delete</a>";
   }
 
-function program24(depth0,data) {
+function program28(depth0,data) {
+  
+  
+  return "<span class=\"actions\"><a href=\"#\" class=\"edit\" data-property=\"polygons\"><span data-icon=\"edit\"></span></a> <a href=\"#\" class=\"delete\" data-property=\"polygons\"><span data-icon=\"trash\"></span></a></span>";
+  }
+
+function program30(depth0,data) {
   
   
   return "\n<p>There are no polylines on the map.</p>\n";
   }
 
-function program26(depth0,data) {
+function program32(depth0,data) {
   
   var buffer = "", stack1, helper, options;
   buffer += "\n	<li>";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "<a href=\"#\" class=\"polyline-center\">";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(11, program11, data, depth0),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(13, program13, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(27, program27, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(33, program33, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a>";
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(29, program29, data),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(35, program35, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(37, program37, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.deleted), options) : helperMissing.call(depth0, "not", (depth0 && depth0.deleted), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</li>\n";
   return buffer;
   }
-function program27(depth0,data,depth1) {
+function program33(depth0,data,depth1) {
   
   var buffer = "", stack1;
   buffer += "Polyline "
@@ -10045,10 +10071,16 @@ function program27(depth0,data,depth1) {
   return buffer;
   }
 
-function program29(depth0,data) {
+function program35(depth0,data) {
   
   
   return "</span> <a href=\"#\" class=\"polyline-undo oh-google-map-small-text\">Undo Delete</a>";
+  }
+
+function program37(depth0,data) {
+  
+  
+  return "<span class=\"actions\"><a href=\"#\" class=\"edit\" data-property=\"polylines\"><span data-icon=\"edit\"></span></a> <a href=\"#\" class=\"delete\" data-property=\"polylines\"><span data-icon=\"trash\"></span></a></span>";
   }
 
   buffer += "<h2>Markers</h2>\n\n<a href=\"#\" class=\"cancel oh-google-map-close\">&times; close</a>\n\n";
@@ -10058,22 +10090,22 @@ function program29(depth0,data) {
   stack1 = helpers.each.call(depth0, (depth0 && depth0.markers), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>\n\n<h2>Routes</h2>\n\n<a href=\"#\" class=\"cancel oh-google-map-close\">&times; close</a>\n\n";
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(8, program8, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.routes)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.routes)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.routes)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.routes)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
-  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(10, program10, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.routes), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.routes), options));
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(12, program12, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.routes), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.routes), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>\n\n<h2>Polygons</h2>\n\n";
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(17, program17, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(21, program21, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polygons)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
-  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(19, program19, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polygons), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polygons), options));
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(23, program23, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polygons), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polygons), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>\n\n<h2>Polylines</h2>\n\n";
-  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(24, program24, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(30, program30, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.polylines)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
-  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(26, program26, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polylines), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polylines), options));
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(32, program32, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polylines), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polylines), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>";
   return buffer;
@@ -10840,7 +10872,7 @@ var GoogleMaps = {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		},
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.MarkerForm({
 				model: this,
 				map: this.get('map')
@@ -10849,7 +10881,7 @@ var GoogleMaps = {
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -10889,13 +10921,13 @@ var GoogleMaps = {
 			var $content = $(_return.join(''));
 
 			$content.find('.edit').click(function(e) {
-				t.onEdit();
+				t.edit();
 
 				e.preventDefault();
 			});
 
 			$content.find('.delete').click(function(e) {
-				t.onDelete();
+				t.delete();
 
 				e.preventDefault();
 			});
@@ -11284,7 +11316,7 @@ var GoogleMaps = {
 			}
 		},	
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.PolygonForm({
 				api: this.get('api'),
 				map: this.get('map'),
@@ -11294,7 +11326,7 @@ var GoogleMaps = {
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -11337,7 +11369,7 @@ var GoogleMaps = {
 
 			$content.find('.edit').click(function(e) {
 				
-				t.onEdit();
+				t.edit();
 
 				/*
 				t.get('map').api.setCenter(latLng);
@@ -11380,7 +11412,7 @@ var GoogleMaps = {
 
 				*/
 
-				t.onDelete();
+				t.delete();
 
 				e.preventDefault();
 			});
@@ -11570,7 +11602,7 @@ var GoogleMaps = {
 			return;
 		},
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.PolylineForm({
 				api: this.get('api'),
 				map: this.get('map'),
@@ -11580,7 +11612,7 @@ var GoogleMaps = {
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -11856,15 +11888,7 @@ var GoogleMaps = {
 
 			$content.find('.edit').click(function(e) {
 
-				var view = new GoogleMaps.Views.RouteForm({
-					model: t,
-					map: t.get('map'),		
-					onDragend: function(e) {
-						// view.render();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.edit();
 
 				e.preventDefault();
 			});
@@ -11876,25 +11900,40 @@ var GoogleMaps = {
 				t.get('map').api.panBy(0, -150);
 				*/
 
-				var view = new GoogleMaps.Views.BaseForm({
-					template: GoogleMaps.Template('delete-route-form'),
-					submit: function() {
-						t.get('api').setMap(null);
-						t.set('deleted', true);
-						t.get('map').hideModal();
-						t.get('map').updateHiddenField();
-					},
-					cancel: function() {
-						t.get('map').hideModal();
-					}
-				});
-
-				t.get('map').showModal(view);
+				t.delete();
 
 				e.preventDefault();
 			});
 
 			return $content.get(0);
+		},
+
+		edit: function() {
+			var view = new GoogleMaps.Views.RouteForm({
+				model: this,
+				map: this.get('map')
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		delete: function() {
+			var t = this;
+			
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-route-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.set('deleted', true);
+					t.get('map').hideModal();
+					t.get('map').updateHiddenField();
+				},
+				cancel: function() {
+					t.get('map').hideModal();
+				}
+			});
+
+			this.get('map').showModal(view);
 		},
 
 		getDirections: function() {
@@ -12090,7 +12129,7 @@ var GoogleMaps = {
 			this.originalMarker = $.extend(true, {}, this.toJSON());
 		},
 
-		onEdit: function() {	
+		edit: function() {	
 			var view = new GoogleMaps.Views.RouteForm({
 				model: this.get('route'),
 				map: this.get('map')
@@ -12099,7 +12138,7 @@ var GoogleMaps = {
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {	
+		delete: function() {	
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -12896,6 +12935,26 @@ var GoogleMaps = {
 
 			this.$el.find('.cancel').click(function(e) {
 				t.map.hideModal(false);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.edit').click(function(e) {
+				var prop = $(this).data('property');
+				var index = $(this).parents('li').index();
+				var data = t.map[prop][index];
+
+				data.edit();
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.delete').click(function(e) {
+				var prop = $(this).data('property');
+				var index = $(this).parents('li').index();
+				var data = t.map[prop][index];
+
+				data.edit();
 
 				e.preventDefault();
 			});

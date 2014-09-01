@@ -90,7 +90,7 @@
 			}
 		},	
 
-		onEdit: function() {
+		edit: function() {
 			var view = new GoogleMaps.Views.PolygonForm({
 				api: this.get('api'),
 				map: this.get('map'),
@@ -100,7 +100,7 @@
 			this.get('map').showModal(view);
 		},
 
-		onDelete: function() {
+		delete: function() {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -143,7 +143,7 @@
 
 			$content.find('.edit').click(function(e) {
 				
-				t.onEdit();
+				t.edit();
 
 				/*
 				t.get('map').api.setCenter(latLng);
@@ -186,7 +186,7 @@
 
 				*/
 
-				t.onDelete();
+				t.delete();
 
 				e.preventDefault();
 			});

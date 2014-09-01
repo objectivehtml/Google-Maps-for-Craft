@@ -7,6 +7,8 @@ class GoogleMaps_DirectionsService extends BaseApplicationComponent
 
 	public $expirationLength = 365; // In days
 
+    protected $options = array();
+
     public function route($options)
     {
         $url = $this->getUrl($options);
@@ -19,7 +21,7 @@ class GoogleMaps_DirectionsService extends BaseApplicationComponent
 
         $response = (string) $response->getResponse()->getBody();
 
-        return new GoogleMaps_DirectionsModel((array) json_decode($response));
+        return new GoogleMaps_DirectionsModel(array_merge((array) json_decode($response), array('options' => $options)));
 
         /*
     	$encodedAddress = urlencode($address);

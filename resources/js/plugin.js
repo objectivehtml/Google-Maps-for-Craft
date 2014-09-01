@@ -1105,7 +1105,9 @@ var GoogleMaps = {
 				waypoints: this.getWaypoints()
 			};
 
-			request = _.extend(request, this.directionsRequestOptions);
+			request = _.extend(this.directionsRequestOptions, request);
+
+			console.log(request);
 
 			this.directionsService.route(request, function(response, status) {
 				t.lastResponse = response;

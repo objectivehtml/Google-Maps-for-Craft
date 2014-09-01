@@ -5,7 +5,7 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
 {
     public function scripts()
     {
-        craft()->templates->includeJsFile('//maps.google.com/maps/api/js?sensor=true');
+        craft()->templates->includeJsFile('//maps.google.com/maps/api/js?sensor=true&libraries=geometry');
         craft()->templates->includeJsResource('googlemaps/js/vendor/base.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/underscore.js');
         craft()->templates->includeJsResource('googlemaps/js/plugin.js');

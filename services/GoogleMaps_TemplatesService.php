@@ -8,6 +8,7 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
         craft()->templates->includeJsFile('//maps.google.com/maps/api/js?sensor=true&libraries=geometry');
         craft()->templates->includeJsResource('googlemaps/js/vendor/base.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/underscore.js');
+        craft()->templates->includeJsResource('googlemaps/js/vendor/markerclusterer.js');
         craft()->templates->includeJsResource('googlemaps/js/plugin.js');
     }
 
@@ -54,8 +55,6 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
 
     public function geocode($location)
     {
-        var_dump(craft()->googleMaps_geocoder->geocode($location));exit();
-
         return craft()->googleMaps_geocoder->geocode($location);
     }
 

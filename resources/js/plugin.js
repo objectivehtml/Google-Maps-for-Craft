@@ -30,6 +30,10 @@ var GoogleMaps = {
 
 		options: {},
 
+		clustering: false,
+
+		clusteringOptions: {},
+
 		markers: [],
 
 		polygons: [],
@@ -74,6 +78,10 @@ var GoogleMaps = {
 			this.options = _.extend({}, defaultMapOptions, this.options);
 
 			this.api = new google.maps.Map(node, this.options);
+
+			if(this.clustering) {
+				this.clusterer = new MarkerClusterer(this.api, this.markers, this.clusteringOptions);
+			}
 
 			this.bindEvents();
 
@@ -305,6 +313,8 @@ var GoogleMaps = {
 
 	GoogleMaps.Marker = GoogleMaps.BaseClass.extend({
 
+		clustering: false,
+
 		content: false,
 
 		geocoder: false,
@@ -346,9 +356,13 @@ var GoogleMaps = {
 
 			if(this.lat && this.lng) {
 				this.api = new google.maps.Marker(_.extend({
-					map: this.map.api,
+					map: !this.shouldCluster() ? this.map.api : null,
 					position: new google.maps.LatLng(this.lat, this.lng)
 				}, this.options));
+
+				if(this.shouldCluster()) {
+					this.map.clusterer.addMarker(this.api);
+				}
 
 				this.map.addMarker(this, this.fitBounds);
 
@@ -358,9 +372,13 @@ var GoogleMaps = {
 				this.geocoder.geocode({address: this.address}, function(results, status) {
 					if(status == 'OK') {
 						t.api = new google.maps.Marker(_.extend({
-							map: t.map.api,
+							map: !t.shouldCluster() ? t.map.api : null,
 							position: new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng())
 						}, t.options));
+
+						if(t.shouldCluster()) {
+							t.map.clusterer.addMarker(t.api);
+						}
 
 						t.map.addMarker(t, t.fitBounds);
 
@@ -368,6 +386,10 @@ var GoogleMaps = {
 					}
 				});
 			}
+		},
+
+		shouldCluster: function() {
+			return this.clustering && this.map.clusterer;
 		},
 
 		createInfoWindow: function(marker) {

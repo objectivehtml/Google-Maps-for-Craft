@@ -170,18 +170,18 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
             $lat = $this->queryParams['lat'];
             $lng = $this->queryParams['lng'];
         }
+
+        if(isset($lat) && isset($lng))
+        {
+            $query->addSelect($handle.'_googlemaps_locations.'.$handle.'_distance');
+            $query->join('(SELECT *, ROUND((((ACOS(SIN('.$lat.' * PI() / 180) * SIN('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) + COS('.$lat.' * PI() / 180) * COS('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) * COS(('.$lng.' - '.craft()->db->tablePrefix.'googlemaps_locations.lng) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) * 1), 1) AS '.$handle.'_distance FROM '.craft()->db->tablePrefix.'googlemaps_locations '.(isset($this->queryParams['distance']) ? 'HAVING '.$handle.'_distance ' . $this->queryParams['distanceOperator'] . ' ' . $this->queryParams['distance'] . ' OR ' . $handle .'_distance IS NULL' : '').' ORDER BY '.$handle.'_distance ASC) '.$handle.'_googlemaps_locations', 'elements.id='.$handle.'_googlemaps_locations.elementId');
+        }
         else
         {
-            return;
+            $query->addSelect('0 as map_distance');
         }
 
-        $this->queryParams['lat'] = $lat;
-        $this->queryParams['lng'] = $lng;
-
-        $query->addSelect($handle.'_googlemaps_locations.'.$handle.'_distance');
-        $query->join('(SELECT *, ROUND((((ACOS(SIN('.$lat.' * PI() / 180) * SIN('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) + COS('.$lat.' * PI() / 180) * COS('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) * COS(('.$lng.' - '.craft()->db->tablePrefix.'googlemaps_locations.lng) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) * 1), 1) AS '.$handle.'_distance FROM '.craft()->db->tablePrefix.'googlemaps_locations '.(isset($this->queryParams['distance']) ? 'HAVING '.$handle.'_distance ' . $this->queryParams['distanceOperator'] . ' ' . $this->queryParams['distance'] . ' OR ' . $handle .'_distance IS NULL' : '').' ORDER BY '.$handle.'_distance ASC) '.$handle.'_googlemaps_locations', 'elements.id='.$handle.'_googlemaps_locations.elementId');
-       
-        $query->order($handle.'_distance asc');
+        // $query->order($handle.'_distance asc');
     }
 
     public function getInputHtml($name, $value)

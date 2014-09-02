@@ -238,7 +238,9 @@ var GoogleMaps = {
 			this.polylines.push(polyline);
 			
 			if(_.isUndefined(fitBounds) || fitBounds) {
-				console.log('addPolyline');
+				_.each(polyline.getPath().getArray(), function(path) {
+					t.bounds.extend(path);
+				});
 			}
 		},
 
@@ -1129,8 +1131,6 @@ var GoogleMaps = {
 
 			request = _.extend(this.directionsRequestOptions, request);
 
-			console.log(request);
-
 			this.directionsService.route(request, function(response, status) {
 				t.lastResponse = response;
 				t.lastResponseStatus = status;
@@ -1270,11 +1270,15 @@ var GoogleMaps = {
 
 		bounds: false,
 
+		clustering: false,
+
 		fitBounds: true,
 
 		markers: [],
 
 		iconSize: false,
+
+		objects: ['markers', 'polygons', 'polylines', 'routes'],
 
 		constructor: function(map, data, options) {
 			var t = this;
@@ -1283,7 +1287,7 @@ var GoogleMaps = {
 
 			this.base(options);
 
-			if(data.markers) {
+			if(data.markers && this.objects.indexOf('markers') >= 0) {
 				_.each(data.markers, function(marker, i) {
 					var icon = marker.icon;
 
@@ -1291,7 +1295,9 @@ var GoogleMaps = {
 						lat: marker.lat,
 						lng: marker.lng,
 						content: marker.content,
-						fitBounds: t.fitBounds
+						fitBounds: t.fitBounds,
+						clustering: t.clustering,
+						iconSize: t.iconSize
 					});
 
 					if(t.iconSize) {
@@ -1304,7 +1310,7 @@ var GoogleMaps = {
 				});
 			}
 
-			if(data.polygons) {
+			if(data.polygons && this.objects.indexOf('polygons') >= 0) {
 				_.each(data.polygons, function(polygon, i) {
 
 					polygon = new GoogleMaps.Polygon(map, polygon.points, {
@@ -1323,7 +1329,7 @@ var GoogleMaps = {
 				});
 			}
 
-			if(data.polylines) {
+			if(data.polylines && this.objects.indexOf('polylines') >= 0) {
 				_.each(data.polylines, function(polyline, i) {
 
 					polyline = new GoogleMaps.Polyline(map, polyline.points, {
@@ -1340,7 +1346,7 @@ var GoogleMaps = {
 				});
 			}
 
-			if(data.routes) {
+			if(data.routes && this.objects.indexOf('routes') >= 0) {
 				_.each(data.routes, function(route, i) {
 
 					route = new GoogleMaps.Route(map, {

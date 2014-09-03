@@ -2,6 +2,16 @@
 
 ### Changelog
 
+#### 0.3.0
+##### 09/02/2014
+
+- (Feature) Added new GoogleMaps_DirectionsModel to make it easier to directions data
+- (Feature) Added ability to plot directions responses directly to a map
+- (Feature) Added marker clustering
+- (Feature) Added marker clustering to marker in the data template tag.
+- (Bug Fix) Plugin.js now properly centers polylines in the bounds
+- (Bug Fix) Fixed some JS errors in the field type
+
 #### 0.2.1
 ##### 09/01/2014
 

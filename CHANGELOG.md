@@ -2,6 +2,12 @@
 
 ### Changelog
 
+#### 0.3.1
+##### 09/04/2014
+
+- (Bug Fix) Fixed an issue with the MapList view showing the edit modal when the delete button was clicked.
+
+
 #### 0.3.0
 ##### 09/02/2014
 

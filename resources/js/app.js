@@ -2062,6 +2062,8 @@ var GoogleMaps = {
 	  						marker = new GoogleMaps.Models.Marker({
 	  							map: t
 	  						});
+
+	  						t.markers.push(marker);
 	  					}
 
 	  					t.geocoder.geocode({address: address.join(' ')}, function(results, status) {
@@ -2083,38 +2085,6 @@ var GoogleMaps = {
 	  							t.center();
 	  						}
 	  					});
-
-
-	  					/*
-
-						if(this.model.get('content') != this.model.get('address').split(',').join('<br>')) {
-							this.model.set('customContent', true);
-						}
-
-						var latLng = new google.maps.LatLng(this.model.get('lat'), this.model.get('lng'));
-
-						this.model.get('infowindow').setOptions({content: this.model.buildInfoWindowContent()});
-						this.model.get('api').setPosition(latLng);
-
-						if(!this.model.get('isSavedToMap')) {
-							this.map.markers.push(this.model);
-						}
-
-						if(this.model.get('icon')) {
-							this.model.setIcon(this.model.get('icon'));
-						}
-						else {
-							this.model.setIcon(false);
-						}
-
-						this.model.set('isSavedToMap', true);
-
-						this.model.get('infowindow').open(this.map.api, this.model.get('api'));
-
-						this.map.center();
-						this.map.hideModal();
-						this.map.updateHiddenField();
-						*/
 					}
   				};
 

@@ -2,6 +2,17 @@
 
 ### Changelog
 
+#### 0.4.0
+##### 09/05/2014
+
+- (Feature) Added ability to customize which buttons appear on the map
+- (Feature) Added ability to define address fields in the field type which when populated will automatically plot a new marker or edit the first marker on the map (if one exists)
+- (Feature) Added server-side Geocoder functionality to work just like the client-side but not require JS.
+- (Bug Fix) Fixed an issue with deleted and editing items from the map list view and user hits cancel, they aren't redirected back to the map list view
+- (Bug Fix) Fixed a couple issues with the MapDataModel that caused issues when fetching and manipulating existing map objects
+
+- (Bug Fix) Fixed an issue with the MapList view showing the edit modal when the delete button was clicked.
+
 #### 0.3.1
 ##### 09/04/2014
 

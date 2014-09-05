@@ -95,6 +95,8 @@ class GoogleMaps_MarkerModel extends BaseModel
             'addressComponents'   => array(AttributeType::Mixed, 'default' => array()),
             'locationId'   => array(AttributeType::Mixed, 'default' => false),
             'elementId'   => array(AttributeType::Mixed, 'default' => false),
+            'isNew' => array(AttributeType::Bool, 'default' => true),
+            'deleted' => array(AttributeType::Bool, 'default' => false),
         );
     }
 
@@ -113,5 +115,10 @@ class GoogleMaps_MarkerModel extends BaseModel
         cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
         
         return $angle * $earthRadius * 0.00062137;
+    }
+
+    public static function defaultContent($content)
+    {
+       return implode('<br>', explode(',', $content));
     }
 }

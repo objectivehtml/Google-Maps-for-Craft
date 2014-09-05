@@ -16,7 +16,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
     }
 
     public function onAfterElementSave()
-    {
+    {  
         $handle = $this->model->handle;
         
         $data = $this->element->$handle;
@@ -25,7 +25,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         {
             foreach($data->markers as $index => $marker)
             {
-                if(isset($marker->deleted) && $marker->deleted === true)
+                if($marker->deleted)
                 {
                     if(isset($marker->locationId))
                     {
@@ -68,7 +68,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
             foreach($data->polygons as $index => $polygon)
             {
-                if(isset($polygon->deleted) && $polygon->deleted === true)
+                if($polygon->deleted)
                 {
                     $data->removePolygon($index);
                 }
@@ -81,7 +81,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
             foreach($data->polylines as $index => $polyline)
             {
-                if(isset($polyline->deleted) && $polyline->deleted === true)
+                if($polyline->deleted)
                 {
                     $data->removePolyline($index);
                 }
@@ -94,7 +94,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
             foreach($data->routes as $index => $route)
             {
-                if(isset($route->deleted) && $route->deleted === true)
+                if($route->deleted)
                 {
                     $data->removeRoute($index);
                 }
@@ -197,6 +197,8 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         craft()->templates->includeCssResource('googlemaps/css/app.css');
         craft()->templates->includeJsFile('//maps.googleapis.com/maps/api/js?key=&sensor=false');
 
+        $addressFields = $this->getSettings()->addressFields;
+
         craft()->templates->includeJs("
         new GoogleMaps.Fieldtype('#$namespacedId-field .oh-google-map-wrapper', {
             fieldname: '$name',
@@ -204,7 +206,9 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
             width: '".$this->getSettings()->defaultMapWidth."',
             height: '".$this->getSettings()->defaultMapHeight."',
             center: '".$this->getSettings()->defaultMapCenter."',
-            zoom: ".$this->getSettings()->defaultMapZoom."
+            zoom: ".$this->getSettings()->defaultMapZoom.",
+            showButtons: ".json_encode($this->getSettings()->displayButtons).",
+            addressFields: ".($addressFields ? json_encode(explode("\r\n", $this->getSettings()->addressFields)) : 'false')."
         });");
 
         return craft()->templates->render('googlemaps/fieldtype', array(
@@ -222,11 +226,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
         craft()->templates->includeJs("
             (function() {
-                console.log('".$namespacedId."');
-
                 var canvas = $('.oh-google-map:not(.initialized)').first().addClass('initialized');
-
-                console.log(canvas);
 
                 canvas.css({
                     width: '{$this->getSettings()->defaultMapWidth}',
@@ -271,7 +271,18 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
             }());
         ");
 
+        $fields = array();
+
+        foreach(craft()->googleMaps_templates->getGoogleMapsFieldTypes() as $field)
+        {
+            $fields[] = array(
+                'label' => $field->name,
+                'value' => $field->id
+            );
+        }
+
         return craft()->templates->render('googlemaps/fieldtype-settings', array(
+            'fields' => $fields,
             'settings' => $this->getSettings()
         ));
     }
@@ -283,6 +294,16 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
             'defaultMapZoom' => array(AttributeType::Number, 'default' => '10'),
             'defaultMapWidth' => array(AttributeType::String, 'default' => '100%'),
             'defaultMapHeight' => array(AttributeType::String, 'default' => '400px'),
+            'displayButtons' => array(AttributeType::Mixed, 'default' => array(
+                'list',
+                'refresh',
+                'markers', 
+                'routes', 
+                'polylines', 
+                'polygons'
+            )),
+            'addressFields' => array(AttributeType::Mixed, 'default' => false),
+            // 'addressFields' => array(AttributeType::Mixed, 'default' => array())
         );
     }
 }

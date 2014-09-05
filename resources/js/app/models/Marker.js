@@ -53,7 +53,7 @@
 			this.get('map').showModal(view);
 		},
 
-		delete: function() {
+		delete: function(showMapList) {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -61,19 +61,26 @@
 				submit: function() {
 					t.get('api').setMap(null);
 					t.set('deleted', true);
-					t.get('map').hideModal();
 					t.get('map').updateHiddenField();
+					
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+					else {
+						t.get('map').hideModal();
+					}
 				},
 				cancel: function() {
-					t.onCancelDeleteMarker();
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+					else {
+						t.get('map').hideModal();
+					}
 				}
 			});
 
 			this.get('map').showModal(view);
-		},
-
-		onCancelDeleteMarker: function() {
-			this.get('map').hideModal();
 		},
 
 		buildInfoWindowContent: function() {

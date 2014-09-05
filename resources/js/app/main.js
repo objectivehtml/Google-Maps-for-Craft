@@ -54,7 +54,9 @@ var GoogleMaps = {
 				width: options.width,
 				height: options.height,
 				position: new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1])),
-				zoom: options.zoom
+				zoom: options.zoom,
+				showButtons: options.showButtons,
+				addressFields: options.addressFields
 			});
 
 			setTimeout(function() {

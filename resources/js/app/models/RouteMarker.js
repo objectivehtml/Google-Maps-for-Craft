@@ -24,22 +24,8 @@
 			this.get('map').showModal(view);
 		},
 
-		delete: function() {	
-			var t = this;
-
-			var view = new GoogleMaps.Views.BaseForm({
-				template: GoogleMaps.Template('delete-route-form'),
-				submit: function() {
-					t.get('route').remove();
-					t.get('map').hideModal();
-					t.get('map').updateHiddenField();
-				},
-				cancel: function() {
-					t.onCancelDeleteMarker();
-				}
-			});
-
-			this.get('map').showModal(view);
+		delete: function() {
+			this.get('route').delete();
 		},
 
 		toJSON: function() {

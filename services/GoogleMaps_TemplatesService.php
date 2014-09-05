@@ -124,4 +124,31 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
     {
         craft()->templates->includeJs('new GoogleMaps.Marker('.$id.','.json_encode((object) $options).');');
     }
+
+    private function _populateField($result)
+    {
+        if ($result['settings'])
+        {
+            $result['settings'] = JsonHelper::decode($result['settings']);
+        }
+
+        return new FieldModel($result);
+    }
+
+    public function getGoogleMapsFieldTypes($type = 'GoogleMaps_GoogleMap')
+    {
+        $fields = craft()->db->createCommand()
+            ->select('id, groupId, name, handle, context, instructions, translatable, type, settings')
+            ->from('fields')
+            ->order('name')
+            ->where('type = :type', array(':type' => $type))
+            ->queryAll();
+
+        foreach($fields as $index => $field)
+        {
+            $fields[$index] = $this->_populateField($field);
+        }
+
+        return $fields;
+    }
 }

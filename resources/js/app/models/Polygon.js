@@ -100,7 +100,7 @@
 			this.get('map').showModal(view);
 		},
 
-		delete: function() {
+		delete: function(showMapList) {
 			var t = this;
 
 			var view = new GoogleMaps.Views.BaseForm({
@@ -109,17 +109,28 @@
 					t.get('api').setMap(null);
 					t.get('infowindow').close();
 					t.set('deleted', true);
-					t.get('map').hideModal();
 					t.get('map').updateHiddenField();
+					
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+					else {
+						t.get('map').hideModal();
+					}
 				},
 				cancel: function() {
-					t.get('map').hideModal();
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+					else {
+						t.get('map').hideModal();
+					}
 				}
 			});
 
 			t.get('map').showModal(view);
 		},
-		
+
 		remove: function() {
 			this.set('deleted', true);
 			this.setMap(null);
@@ -180,12 +191,6 @@
 			});
 
 			$content.find('.delete').click(function(e) {
-				/*
-				t.get('map').api.setCenter(latLng);
-				t.get('map').api.panBy(0, -150);
-
-				*/
-
 				t.delete();
 
 				e.preventDefault();

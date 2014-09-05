@@ -9,15 +9,25 @@
 		template: GoogleMaps.Template('button-bar'),
 
 		initialize: function(options) {
+			var t = this;
+
 			if(!this.model) {
 				this.model = new Backbone.Model();
 			}
 
 			Backbone.Marionette.ItemView.prototype.initialize.call(this, options);
 		
-			if(this.options.buttons) {
-				this.model.set('buttons', this.options.buttons);
+			var buttons = [];
+
+			if(this.options.showButtons) {
+				_.each(this.options.buttons, function(button, i) {
+					if(t.options.showButtons.indexOf(button.name) >= 0) {
+						buttons.push(button);
+					}
+				});
 			}
+
+			this.model.set('buttons', buttons);
 		},
 
 		onRender: function() {

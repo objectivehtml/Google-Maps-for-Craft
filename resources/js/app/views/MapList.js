@@ -32,7 +32,7 @@
 				var index = $(this).parents('li').index();
 				var data = t.map[prop][index];
 
-				data.delete();
+				data.delete(true);
 
 				e.preventDefault();
 			});

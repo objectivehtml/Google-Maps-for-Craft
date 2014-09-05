@@ -30,6 +30,9 @@ class GoogleMaps_RouteModel extends BaseModel
             'transitOptions' => array(AttributeType::Mixed, 'default' => (object) array()),
             'unitSystem' => array(AttributeType::String, 'default' => 'IMPERIAL'),
             'travelMode' => array(AttributeType::String, 'default' => 'DRIVING'),
+            'isNew' => array(AttributeType::Bool, 'default' => true),
+            'elementId'   => array(AttributeType::Mixed, 'default' => false),
+            'deleted' => array(AttributeType::Bool, 'default' => false),
         );
     }
 }

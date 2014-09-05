@@ -9,6 +9,11 @@ class GoogleMaps_GeocoderService extends BaseApplicationComponent
 
     public function geocode($address)
     {
+        if(is_array($address))
+        {
+            $address = implode(' ', $address);
+        }
+
     	$encodedAddress = urlencode($address);
     	
     	$url = $this->url.'?address='.$encodedAddress;

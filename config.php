@@ -11,4 +11,13 @@ return array(
 	// Define the public url for the directory for the static map cache
 	'staticMapCacheUrl' => false,
 
+	'availableMapButtons' => array(
+		array('label' => 'List', 'value' => 'list'),
+		array('label' => 'Refresh', 'value' => 'refresh'),
+		array('label' => 'Markers', 'value' => 'markers'),
+		array('label' => 'Routes', 'value' => 'routes'),
+		array('label' => 'Polygons', 'value' => 'polygons'),
+		array('label' => 'Polylines', 'value' => 'polylines'),
+	)
+
 );

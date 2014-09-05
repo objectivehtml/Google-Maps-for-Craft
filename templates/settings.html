@@ -1,0 +1,44 @@
+{% import "_includes/forms" as forms %}
+
+<h2>{{ "Geocoder Settings"|t }}</h2>
+
+<p>{{ "Google Maps for Craft stores all of the geolocation data for your maps within the Google Maps field type. This means all the data must be entered in this field for searching and just general ease of use. However, sometimes data entry is best stored in individual text fields you created for your entries. Geocoder allow you to map custom fields which are used to created the address string that is geocoded. So when an entry is created or updated, the map is updated with the address the user entered within the fields but will also appear as a marker on the map. If the user changes this address, the marker on the map will also be updated. Geocoder uses a server-side geocoding API, which means your map will be updated when the entry form is submitted." }}</p>
+
+<hr>
+
+{{ forms.lightswitchField({
+	first: true,
+	label: "Enable Geocoder?"|t,
+	id: 'enableGeocoder',
+	name: 'enableGeocoder',
+	on: settings.enableGeocoder,
+	onLabel: "On"|t,
+	offLabel: "Off"|t
+}) }}
+
+{{ forms.checkboxSelectField({
+	label: "Google Map Fields"|t,
+	instructions: "Which Google Map fields do you wish to populate with the geocoder response? If multiple fields are specified, any defined map fields within the given section will be updated with the response."|t,
+	id: 'mapFields',
+	name: 'mapFields',
+	options: fields,
+	values: settings.mapFields|length ? settings.mapFields : [false]
+}) }}
+
+{{ forms.checkboxSelectField({
+	label: "Geocode Sections"|t,
+	instructions: "With which sections would like to trigger a geocoding request?"|t,
+	id: 'geocodeSections',
+	name: 'geocodeSections',
+	options: sections,
+	values: settings.geocodeSections|length ? settings.geocodeSections : [false]
+}) }}
+
+{{ forms.textareaField({
+	label: "Geocode Fields"|t,
+	instructions: "Enter the handles of each field you wish to include in the geocoding request. Multiple fields may be entered, just be sure to use the return key to delimit each field. The address string will be concatenated in the order in which the fields are defined."|t,
+	id: 'geocodeFields',
+	name: 'geocodeFields',
+	value: settings.geocodeFields,
+	rows: 10
+}) }}

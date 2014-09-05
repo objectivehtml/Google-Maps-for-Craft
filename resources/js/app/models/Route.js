@@ -257,12 +257,6 @@
 			});
 
 			$content.find('.delete').click(function(e) {
-
-				/*
-				t.get('map').api.setCenter(latLng);
-				t.get('map').api.panBy(0, -150);
-				*/
-
 				t.delete();
 
 				e.preventDefault();
@@ -280,19 +274,29 @@
 			this.get('map').showModal(view);
 		},
 
-		delete: function() {
+		delete: function(showMapList) {
 			var t = this;
-			
-			var view = new GoogleMaps.Views.BaseForm({
-				template: GoogleMaps.Template('delete-route-form'),
+
+			var view = new GoogleMaps.Views.DeleteRouteForm({
+				model: this,
 				submit: function() {
-					t.get('api').setMap(null);
-					t.set('deleted', true);
-					t.get('map').hideModal();
+					t.remove();
 					t.get('map').updateHiddenField();
+			
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+					else {
+						t.get('map').hideModal();
+					}
 				},
 				cancel: function() {
-					t.get('map').hideModal();
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+					else {
+						t.get('map').hideModal();
+					}
 				}
 			});
 

@@ -53,3 +53,20 @@
 	errors: settings.getErrors('defaultMapHeight')
 }) }}
 
+{{ forms.checkboxSelectField({
+	label: "Default Buttons"|t,
+	instructions: "Which buttons should be shown on the map?"|t,
+	id: 'displayButtons',
+	name: 'displayButtons',
+	options: craft.config.get('availableMapButtons', 'googlemaps'),
+	values: settings.displayButtons
+}) }}
+
+{{ forms.textareaField({
+	label: "Address Fields"|t,
+	instructions: "If you want to enter address data into custom fields and have the marker appear on the map, enter the field handles here. This serves the same functionality as the Geocoder, but works on the client-side with JavaScript (versus the server-side API). When any of the defined fields are blurred, the map will be automatically updated. Multiple fields may be entered, just be sure to use the return key to delimit each field."|t,
+	id: 'addressFields',
+	name: 'addressFields',
+	value: settings.addressFields,
+	rows: 10
+}) }}

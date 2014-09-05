@@ -26,6 +26,9 @@ class GoogleMaps_PolygonModel extends BaseModel
             'strokeOpacity' => array(AttributeType::Mixed, 'default' => null),
             'fillColor' => array(AttributeType::Mixed, 'default' => null),
             'fillOpacity' => array(AttributeType::Mixed, 'default' => null),
+            'isNew' => array(AttributeType::Bool, 'default' => true),
+            'elementId'   => array(AttributeType::Mixed, 'default' => false),
+            'deleted' => array(AttributeType::Bool, 'default' => false),
         );
     }
 }

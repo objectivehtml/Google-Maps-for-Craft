@@ -23,7 +23,10 @@ class GoogleMaps_PolylineModel extends BaseModel
             'hideDetails' => array(AttributeType::Mixed, 'default' => true),
             'strokeColor' => array(AttributeType::Mixed, 'default' => null),
             'strokeWeight' => array(AttributeType::Mixed, 'default' => null),
-            'strokeOpacity' => array(AttributeType::Mixed, 'default' => null)
+            'strokeOpacity' => array(AttributeType::Mixed, 'default' => null),
+            'isNew' => array(AttributeType::Bool, 'default' => true),
+            'elementId'   => array(AttributeType::Mixed, 'default' => false),
+            'deleted' => array(AttributeType::Bool, 'default' => false),
         );
     }
 }

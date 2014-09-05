@@ -13,6 +13,65 @@ class GoogleMaps_MapDataModel extends BaseModel
         }
 
         parent::__construct($data);
+
+        $markers = array();
+
+        foreach($this->markers as $marker)
+        {
+            if(get_class($marker) != 'Craft\GoogleMaps_MarkerModel')
+            {
+                $marker = GoogleMaps_MarkerModel::populateModel((array) $marker);
+            }
+
+            $markers[] = $marker;
+        }
+
+        $this->markers = $markers;
+
+
+        $routes = array();
+
+        foreach($this->routes as $route)
+        {
+            if(get_class($route) != 'Craft\GoogleMaps_RouteModel')
+            {
+                $route = GoogleMaps_RouteModel::populateModel((array) $route);
+            }
+
+            $routes[] = $route;
+        }
+
+        $this->routes = $routes;
+
+
+        $polygons = array();
+
+        foreach($this->polygons as $polygon)
+        {
+            if(get_class($polygon) != 'Craft\GoogleMaps_PolygonModel')
+            {
+                $polygon = GoogleMaps_PolygonModel::populateModel((array) $polygon);
+            }
+
+            $polygons[] = $polygon;
+        }
+
+        $this->polygons = $polygons;
+
+
+        $polylines = array();
+
+        foreach($this->polylines as $polyline)
+        {
+            if(get_class($polyline) != 'Craft\GoogleMaps_PolylineModel')
+            {
+                $polyline = GoogleMaps_PolylineModel::populateModel((array) $polyline);
+            }
+
+            $polylines[] = $polyline;
+        }
+
+        $this->polylines = $polylines;
     }
 
     public function markers()
@@ -24,10 +83,8 @@ class GoogleMaps_MapDataModel extends BaseModel
     {
         $return = array();
 
-        foreach($this->markers as $marker)
+        foreach($this->markers as $index => $marker)
         {
-            $marker = GoogleMaps_MarkerModel::populateModel((array) $marker);
-
             if($this->queryParams)
             {
                 if($marker->isWithinProximity($this->queryParams))
@@ -67,8 +124,12 @@ class GoogleMaps_MapDataModel extends BaseModel
 
         foreach($this->polygons as $polygon)
         {
-            $return[] = GoogleMaps_PolygonModel::populateModel((array) $polygon);
+            if(get_class($polygon) != 'Craft\GoogleMaps_PolygonModel')
+            {
+                $polygon = GoogleMaps_PolygonModel::populateModel((array) $polygon);
+            }
 
+            $return[] = $polygon;
         }
 
         return $return;
@@ -92,8 +153,12 @@ class GoogleMaps_MapDataModel extends BaseModel
 
         foreach($this->polylines as $polyline)
         {
-            $return[] = GoogleMaps_PolylineModel::populateModel((array) $polyline);
+            if(get_class($polyline) != 'Craft\GoogleMaps_PolylineModel')
+            {
+                $polyline = GoogleMaps_PolylineModel::populateModel((array) $polyline);
+            }
 
+            $return[] = $polyline;
         }
 
         return $return;
@@ -117,8 +182,12 @@ class GoogleMaps_MapDataModel extends BaseModel
 
         foreach($this->routes as $route)
         {
-            $return[] = GoogleMaps_RouteModel::populateModel((array) $route);
+            if(get_class($route) != 'Craft\GoogleMaps_RouteModel')
+            {
+                $route = GoogleMaps_RouteModel::populateModel((array) $route);
+            }
 
+            $return[] = $route;
         }
 
         return $return;

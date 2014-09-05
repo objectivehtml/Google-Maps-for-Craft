@@ -14,7 +14,7 @@ function program1(depth0,data) {
   buffer += " class=\"oh-google-map-control-button small\">";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.icon), {hash:{},inverse:self.noop,fn:self.programWithDepth(4, program4, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = helpers['if'].call(depth0, (depth0 && depth0.name), {hash:{},inverse:self.noop,fn:self.programWithDepth(6, program6, data, depth0),data:data});
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.label), {hash:{},inverse:self.noop,fn:self.programWithDepth(6, program6, data, depth0),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "</a></li>\n";
   return buffer;
@@ -41,7 +41,7 @@ function program6(depth0,data,depth1) {
   
   var buffer = "", stack1;
   buffer += " "
-    + escapeExpression(((stack1 = (depth1 && depth1.name)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+    + escapeExpression(((stack1 = (depth1 && depth1.label)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
   return buffer;
   }
 

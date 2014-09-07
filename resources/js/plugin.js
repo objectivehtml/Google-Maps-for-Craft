@@ -1378,4 +1378,102 @@ var GoogleMaps = {
 
 	});
 
+	GoogleMaps.CurrentLocation = GoogleMaps.BaseClass.extend({
+
+		fitBounds: true,
+
+		circleOptions: {},
+
+		markerOptions: {},
+
+		map: false,
+
+		constructor: function(map, options) {
+			this.map = map;
+
+			this.map.currentLocation = this;
+
+			this.circleOptions = {};
+			this.markerOptions = {};
+
+			this.base(options);
+
+			this.api = new GeolocationMarker(this.map.api, this.circleOptions, this.markerOptions);
+
+			this.bindEvents();
+		},
+
+		bindEvents: function() {
+			var t = this;
+
+			google.maps.event.addListener(this.api, 'accuracy_changed', function() {
+				t.onAccuracyChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'geolocation_error', function() {
+				t.onGeolocationError.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'position_changed', function() {
+				t.onPositionChanged.apply(t, arguments);
+			});
+		},
+
+		getAccuracy: function() {
+			return this.api.getAccuracy();
+		},
+		
+		getBounds: function() {
+			return this.api.getBounds();
+		},
+		
+		getMap: function() {
+			return this.api.getMap();
+		},
+		
+		getMinimumAccuracy: function() {
+			return this.api.getMinimumAccuracy();
+		},
+		
+		getPosition: function() {
+			return this.api.getPosition();
+		},
+		
+		getPositionOptions: function() {
+			return this.api.getPositionOptions();
+		},
+
+		setCircleOptions: function(value) {
+			this.api.setCircleOptions(value);
+		},
+		
+		setMap: function(value) {
+			this.api.setMap(value);
+		},
+		
+		setMarkerOptions: function(value) {
+			this.api.setMarkerOptions(value);
+		},
+		
+		setMinimumAccuracy: function(value) {
+			this.api.setMinimumAccuracy(value);
+		},
+		
+		setPositionOptions: function(value) {
+			this.api.setPositionOptions(value);
+		},
+
+		onAccuracyChanged: function() {},
+		
+		onGeolocationError: function() {},
+
+		onPositionChanged: function() {
+			if(this.fitBounds) {
+				this.map.bounds.extend(this.getPosition());
+				this.map.fitBounds(this.map.bounds);
+			}
+		}
+
+	});
+
 }());

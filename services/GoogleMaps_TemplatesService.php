@@ -9,6 +9,7 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
         craft()->templates->includeJsResource('googlemaps/js/vendor/base.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/underscore.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/markerclusterer.js');
+        craft()->templates->includeJsResource('googlemaps/js/vendor/geolocationmarker.js');
         craft()->templates->includeJsResource('googlemaps/js/plugin.js');
     }
 
@@ -51,6 +52,11 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
         craft()->templates->includeJs('var '.$options['id'].' = new GoogleMaps.Map(document.getElementById("oh-map-'.$options['id'].'"), '.json_encode((object) $mapOptions).');');
 
         return TemplateHelper::getRaw(PHP_EOL.'<div id="oh-map-'.$options['id'].'" class="oh-google-map-canvas" style="width:'.$options['width'].';height:'.$options['height'].'"></div>');
+    }
+
+    public function currentLocation($id, $options = array())
+    {
+        craft()->templates->includeJs('new GoogleMaps.CurrentLocation('.$id.', '.json_encode((object) $options).');');
     }
 
     public function geocode($location)

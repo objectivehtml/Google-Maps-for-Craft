@@ -57,4 +57,9 @@ class GoogleMapsVariable
     {
         return craft()->googleMaps_templates->polyline($id, $points, $options);
     }
+
+    public function currentLocation($id, $options = array())
+    {
+        return craft()->googleMaps_templates->currentLocation($id, $options);
+    }
 }

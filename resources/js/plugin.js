@@ -1009,7 +1009,7 @@ var GoogleMaps = {
 					lng: marker.lng,
 					content: marker.content,
 					fitBounds: t.fitBounds,
-					iconSize: [marker.scaledWidth, marker.scaledHeight]
+					iconSize: marker.scaledWidth && marker.scaledHeight ? [marker.scaledWidth, marker.scaledHeight] : false
 				});
 
 				if(t.iconSize) {
@@ -1050,18 +1050,6 @@ var GoogleMaps = {
 				content: location.address.split(',').join('<br>'),
 				fitBounds: this.fitBounds
 			});
-
-			/*
-			var marker = new GoogleMaps.Marker({
-				iconSize: this.iconSize,
-				map: this.map,
-				lat: location.lat,
-				lng: location.lng,
-				address: location.address,
-				draggable: false,
-				content: location.address.split(',').join('<br>')
-			});
-			*/
 
 			this.addMarker(marker);
 			this.directionsRequest();

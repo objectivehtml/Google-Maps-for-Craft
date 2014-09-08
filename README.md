@@ -12,16 +12,18 @@ Google Maps for Craft is a complete geolocation toolkit that interfaces with the
 2. Proximity Based Searches (for store finders)
 3. Advanced geocoding support
 4. Full directions support for walking, driving, and bicycling
-5. Multiple Map Fields per Entry
-5. Multiple Markers per Field
-6. Multiple Routes per Field
-7. Multiple Polygons per Field
-8. Multiple Polylines per Field
-9. Custom marker icons and infowindow content
-10. Customizable polygons and polylines
-10. Marker clustering
-11. Easy to use template tags
-12. No JavaScript required*
+5. Full support for HTML5 Geolocation
+6. Fetch entries in proximity to a user's current location
+7. Multiple Map Fields per Entry
+8. Multiple Markers per Field
+9. Multiple Routes per Field
+10. Multiple Polygons per Field
+11. Multiple Polylines per Field
+12. Custom marker icons and infowindow content
+13. Customizable polygons and polylines
+14. Marker clustering
+15. Easy to use template tags
+16. No JavaScript required*
 
 *No JavaScript required for out the box features. Advanced use cases may require additional JavaScript for some functionality.
 

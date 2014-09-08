@@ -2,6 +2,12 @@
 
 ### Changelog
 
+#### 0.5.0
+##### 09/08/2014
+
+- (Feature) Added full support for HTML5 geolocation with CurrentLocation
+- (Bug Fix) Fixed an issue with icon size being passed a value if an a scaled dimension had not been set
+
 #### 0.4.0
 ##### 09/05/2014
 

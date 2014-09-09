@@ -83,7 +83,7 @@ class GoogleMapsPlugin extends BasePlugin
                     {
                         if($value = $content->getAttribute(trim($field)))
                         {
-                            if(!empty(trim($value)))
+                            if(!empty($value = trim($value)))
                             {
                                 $address[] = trim($value);
                             }

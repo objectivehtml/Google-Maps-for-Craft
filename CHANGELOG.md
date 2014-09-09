@@ -2,6 +2,11 @@
 
 ### Changelog
 
+#### 0.5.1
+##### 09/09/2014
+
+- (Feature) Added ability to change the map type within the fieldtype
+
 #### 0.5.0
 ##### 09/08/2014
 

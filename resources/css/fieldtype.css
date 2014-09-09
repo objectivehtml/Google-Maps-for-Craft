@@ -21,11 +21,13 @@
 .oh-google-map-controls { position: absolute; top: 15px; left: 15px; z-index: 100; transition: left .25s; -webkit-transition: left .25s; -moz-transition: left .25s; -o-transition: left .25s; -ms-transition: left .25s; z-index: 99;  }
 .oh-google-map-controls.hide { left: -100%; }
 
-.oh-google-map-zoom-control { position: absolute; top: 10px; right: 10px; z-index: 100; }
-.oh-google-map-zoom-control .oh-google-map-control-button { font-weight: 100; font-size: 18px; display: block; margin: 0 0 5px 0; }
+.oh-google-map-side-controls { position: absolute; top: 10px; right: 10px; z-index: 100; }
+.oh-google-map-side-controls .oh-google-map-control-button { font-weight: 100; font-size: 18px; display: block; margin: 0 0 5px 0; }
+.oh-google-map-side-controls i { font-size: 14px; }
 
 .oh-google-map-control-button { text-align: center; font-size: 16px; background: white; background: rga(255, 255, 255, .6); display: inline-block; padding: 10px 12px; color: rgb(20, 20, 20); text-shadow: 0 1px 0 white; border-radius: 3px; border-top: 1px solid rgb(240, 240, 240); border-left: 1px solid rgb(240, 240, 240); border-right: 1px solid rgb(230, 230, 230); border-bottom: 1px solid rgb(200, 200, 200); box-shadow: 0 0 5px rgba(0, 0, 0, .1); }
 .oh-google-map-control-button:hover { text-decoration: none; }
+.oh-google-map-control-button.active,
 .oh-google-map-control-button:active { background: rgb(250, 250, 250); border-top-color: rgb(180, 180, 0); border-left-color: rgb(180, 180, 180); border-right-color: rgb(180, 180, 180); border-bottom-color: rgb(150, 150, 150); box-shadow: 0 0 5px rgba(0, 0, 0, .3) inset; }
 .oh-google-map-control-button.small { font-size: 13px; padding: 6px 8px; }
 

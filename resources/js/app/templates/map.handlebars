@@ -2,9 +2,21 @@
 
 <div class="oh-google-map-controls"></div>
 
-<div class="oh-google-map-zoom-control">
+<div class="oh-google-map-side-controls">
 	<a href="#" class="oh-google-map-control-button oh-google-map-zoom-in">&plus;</a>
 	<a href="#" class="oh-google-map-control-button oh-google-map-zoom-out">&minus;</a>
+	<a href="#" class="oh-google-map-control-button oh-google-map-map-type"><i data-icon="settings"></i></a>
 </div>
 
 <div class="oh-google-map" style="width:{{width}}; height:{{height}}"></div>
+
+<div id="oh-google-map-map-type-menu" class="menu" data-align="right">
+	<h6>Map Type</h6>
+
+	<ul class="padded">
+		<li><a href="#" data-type="roadmap">Roadmap</a></li>
+		<li><a href="#" data-type="satellite">Satellite</a></li>
+		<li><a href="#" data-type="terrain">Terrain</a></li>
+		<li><a href="#" data-type="hybrid">Hybrid</a></li>
+	</ul>
+</div>

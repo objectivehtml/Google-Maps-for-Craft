@@ -363,7 +363,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<div class=\"oh-google-map-window\"></div>\n\n<div class=\"oh-google-map-controls\"></div>\n\n<div class=\"oh-google-map-zoom-control\">\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-zoom-in\">&plus;</a>\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-zoom-out\">&minus;</a>\n</div>\n\n<div class=\"oh-google-map\" style=\"width:";
+  buffer += "<div class=\"oh-google-map-window\"></div>\n\n<div class=\"oh-google-map-controls\"></div>\n\n<div class=\"oh-google-map-side-controls\">\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-zoom-in\">&plus;</a>\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-zoom-out\">&minus;</a>\n	<a href=\"#\" class=\"oh-google-map-control-button oh-google-map-map-type\"><i data-icon=\"settings\"></i></a>\n</div>\n\n<div class=\"oh-google-map\" style=\"width:";
   if (helper = helpers.width) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.width); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -371,7 +371,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   if (helper = helpers.height) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.height); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\"></div>";
+    + "\"></div>\n\n<div id=\"oh-google-map-map-type-menu\" class=\"menu\" data-align=\"right\">\n	<h6>Map Type</h6>\n\n	<ul class=\"padded\">\n		<li><a href=\"#\" data-type=\"roadmap\">Roadmap</a></li>\n		<li><a href=\"#\" data-type=\"satellite\">Satellite</a></li>\n		<li><a href=\"#\" data-type=\"terrain\">Terrain</a></li>\n		<li><a href=\"#\" data-type=\"hybrid\">Hybrid</a></li>\n	</ul>\n</div>";
   return buffer;
   });
 

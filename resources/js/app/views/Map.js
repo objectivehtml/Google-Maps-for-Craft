@@ -51,7 +51,8 @@
 
   			this.mapOptions = _.extend({}, {
 	  			zoom: 8,
-	  			disableDefaultUI: true
+	  			disableDefaultUI: true,
+	  			mapType: google.maps.MapTypeId.ROADMAP
 	  		});
 
   			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
@@ -60,6 +61,7 @@
   				this.model = new Backbone.Model();
   			}
 
+  			/*
   			if(this.position) {
   				this.mapOptions.center = this.position;
   			}
@@ -67,6 +69,7 @@
   			if(this.zoom) {
   				this.mapOptions.zoom = this.zoom;
   			}
+  			*/
 
   			this.model.set({
   				fieldname: this.fieldname,
@@ -134,6 +137,49 @@
 
  				e.preventDefault();
  			});
+
+			this.mapTypeMenu = new Garnish.Menu(this.$el.find('#oh-google-map-map-type-menu'), {
+				attachToElement: this.$el.find('.oh-google-map-map-type')
+			});
+
+			this.$el.find('.oh-google-map-map-type').click(function(e) {
+				var $t = $(this);
+
+				if($t.hasClass('active')) {
+					$t.removeClass('active');
+					t.mapTypeMenu.hide();
+				}
+				else {
+					$t.addClass('active');
+					t.mapTypeMenu.show();
+				}
+
+				e.preventDefault();
+			});
+
+			this.$el.find('#oh-google-map-map-type-menu a').click(function(e) {
+				var $t = $(this);
+				var type = $t.data('type').toUpperCase();
+
+				if(google.maps.MapTypeId[type]) {
+					t.mapOptions.mapType = google.maps.MapTypeId[type];
+					t.setMapTypeId(google.maps.MapTypeId[type]);
+				}
+				else {
+					t.mapOptions.mapType = google.maps.MapTypeId.ROADMAP;
+					t.setMapTypeId(google.maps.MapTypeId.ROADMAP);
+				}
+
+				$('#oh-google-map-map-type-menu .sel').removeClass('sel');
+
+				t.$el.find('.oh-google-map-map-type').removeClass('active');
+
+				$t.addClass('sel');
+
+				e.preventDefault();
+			});
+
+			this.$el.find('#oh-google-map-map-type-menu a[data-type="'+t.mapOptions.mapType+'"]').addClass('sel');
 
  			// this.$el.find('.oh-google-map-window').css('max-height', parseInt(this.height.replace('px', '')) - 50);
 
@@ -407,22 +453,6 @@
 			this.setZoom(this.getZoom() - 1);
 		},
 
-		getZoom: function() {
-			return this.api.getZoom();
-		},
-
-		setZoom: function(x) {
-			if(x < 0) {
-				x = 0;
-			}
-
-			if(x > 20) {
-				x = 20;
-			}
-
-			this.api.setZoom(x);
-		},
-
 		center: function() {
 			var t = this, bounds = new google.maps.LatLngBounds();
 			var boundsChanged = false;
@@ -468,12 +498,96 @@
 			this.api.fitBounds(bounds);
 		},
 
+		getBounds: function() {
+			return this.api.getBounds();
+		},
+
+		getCenter: function() {
+			return this.api.getCenter();
+		},
+
 		getCanvas: function() {
 			return this.$el.find('.oh-google-map').get(0);
 		},
 
 		getMapOptions: function() {
 			return this.mapOptions;
+		},
+
+		getDiv: function() {
+			return this.api.getDiv()
+		},
+
+		getHeading: function() {
+			return this.api.getHeading();
+		},
+
+		getMapTypeId: function() {
+			return this.api.getMapTypeId();
+		},
+
+		getProjection: function() {
+			return this.api.getProjection();
+		},
+
+		getStreetView: function() {
+			return this.api.getStreetView();
+		},
+
+		getTilt: function() {
+			return this.api.getCenter();
+		},
+
+		getZoom: function() {
+			return this.api.getZoom();
+		},
+
+		panBy: function(x, y) {
+			this.api.panBy(x, y);
+		},
+
+		panTo: function(value) {
+			this.api.panTo(value);
+		},
+
+		panToBounds: function(value) {
+			this.api.panToBounds(value);
+		},
+
+		setCenter: function(value) {
+			this.api.setCenter(value);
+		},
+
+		setHeading: function(value) {
+			this.api.setHeading(value);
+		},
+
+		setMapTypeId: function(value) {
+			this.api.setMapTypeId(value);
+		},
+
+		setOptions: function(value) {
+			this.api.setOptions(value);
+		},
+
+		setStreetView: function(value) {
+			this.api.setStreetView(value);
+		},
+
+		setTilt: function(value) {
+			this.api.setTilt(value);
+		},
+
+		setZoom: function(x) {
+			if(x < 0) {
+				x = 0;
+			}
+
+			if(x > 20) {
+				x = 20;
+			}
+
+			this.api.setZoom(x);
 		}
 
 	});

@@ -2,6 +2,11 @@
 
 ### Changelog
 
+#### 0.5.2
+##### 09/11/2014
+
+- (Bug Fix) Didn't update the version in 0.5.1, so now it becomes 0.5.2
+
 #### 0.5.1
 ##### 09/09/2014
 

@@ -81,9 +81,9 @@ class GoogleMapsPlugin extends BasePlugin
 
                     foreach(explode("\r\n", $settings->geocodeFields) as $field)
                     {
-                        if($value = $content->getAttribute(trim($field)))
+                        if($value = trim($content->getAttribute(trim($field))))
                         {
-                            if(!empty($value = trim($value)))
+                            if(!empty($value))
                             {
                                 $address[] = trim($value);
                             }

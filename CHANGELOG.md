@@ -2,6 +2,11 @@
 
 ### Changelog
 
+#### 0.5.3
+##### 09/11/2014
+
+- (Bug Fix) Fixed a critical JS issue that was preventing a map from working upon instantiation. Bug was a result of a recent refactor
+
 #### 0.5.2
 ##### 09/11/2014
 

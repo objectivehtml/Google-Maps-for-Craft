@@ -49,13 +49,14 @@
   			this.polylines = [];
   			this.routes = [];
 
+  			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
+
   			this.mapOptions = _.extend({}, {
 	  			zoom: 8,
 	  			disableDefaultUI: true,
-	  			mapType: google.maps.MapTypeId.ROADMAP
-	  		});
-
-  			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
+	  			mapType: google.maps.MapTypeId.ROADMAP,
+	  			center: new google.maps.LatLng(0, 0)
+	  		}, (options.mapOptions ? options.mapOptions : {}));
 
   			if(!this.model) {
   				this.model = new Backbone.Model();

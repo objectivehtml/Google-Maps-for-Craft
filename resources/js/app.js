@@ -53,8 +53,10 @@ var GoogleMaps = {
 				savedData: options.savedData,
 				width: options.width,
 				height: options.height,
-				position: new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1])),
-				zoom: options.zoom,
+				mapOptions: {
+					center: new google.maps.LatLng(parseFloat(coord[0]), parseFloat(coord[1])),
+					zoom: options.zoom
+				},
 				showButtons: options.showButtons,
 				addressFields: options.addressFields
 			});
@@ -1903,13 +1905,14 @@ var GoogleMaps = {
   			this.polylines = [];
   			this.routes = [];
 
+  			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
+
   			this.mapOptions = _.extend({}, {
 	  			zoom: 8,
 	  			disableDefaultUI: true,
-	  			mapType: google.maps.MapTypeId.ROADMAP
-	  		});
-
-  			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
+	  			mapType: google.maps.MapTypeId.ROADMAP,
+	  			center: new google.maps.LatLng(0, 0)
+	  		}, (options.mapOptions ? options.mapOptions : {}));
 
   			if(!this.model) {
   				this.model = new Backbone.Model();

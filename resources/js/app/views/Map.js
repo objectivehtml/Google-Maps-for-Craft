@@ -518,6 +518,13 @@
 				}
 			});
 
+			_.each(this.circles, function(circle) {
+				if(!circle.get('deleted')) {
+					bounds.union(circle.getBounds());
+					boundsChanged = true;
+				}
+			});
+
 			_.each(this.routes, function(route) {
 				_.each(route.getLocations(), function(location) {
 					bounds.extend(new google.maps.LatLng(location.lat, location.lng));

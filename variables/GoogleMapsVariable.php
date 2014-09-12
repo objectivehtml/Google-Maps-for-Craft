@@ -58,6 +58,11 @@ class GoogleMapsVariable
         return craft()->googleMaps_templates->polyline($id, $points, $options);
     }
 
+    public function circle($id, $options = array())
+    {
+        return craft()->googleMaps_templates->circle($id, $options);
+    }
+
     public function currentLocation($id, $options = array())
     {
         return craft()->googleMaps_templates->currentLocation($id, $options);

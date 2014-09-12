@@ -780,6 +780,7 @@ var GoogleMaps = {
 				}));
 			}
 		},
+
 		getDraggable: function() {
 			return this.api.getDraggable();
 		},
@@ -1357,6 +1358,7 @@ var GoogleMaps = {
 						content: circle.content,
 						fitBounds: t.fitBounds,
 						infoWindowOptions: options.infoWindowOptions ? options.infoWindowOptions : {},
+						metric: circle.metric,
 						options: {
 							center: new google.maps.LatLng(circle.lat, circle.lng),
 							radius: circle.radius,
@@ -1506,22 +1508,35 @@ var GoogleMaps = {
 
 		options: {},
 
+		infoWindowOptions: {},
+
 		map: false,
+
+		metric: 'miles',
 
 		constructor: function(map, options) {
 			this.map = map;
 
 			this.options = {};
 
+			this.infoWindowOptions = {};
+
 			this.base(options);
 
 			this.options.map = this.map.api;
+			this.options.radius = this.convertRadiusToMeters(this.options.radius, this.metric);
+
+			if(this.lat && this.lng) {
+				this.options.center = new google.maps.LatLng(this.lat, this.lng);
+			}
 
 			this.api = new google.maps.Circle(this.options);
 
 			this.bindEvents();
 
 			this.map.addCircle(this, this.fitBounds);
+
+			this.createInfoWindow();
 		},
 
 		bindEvents: function() {
@@ -1578,6 +1593,46 @@ var GoogleMaps = {
 			google.maps.event.addListener(this.api, 'rightclick', function() {
 				t.onRightclick.apply(t, arguments);
 			});
+		},
+
+		createInfoWindow: function(polygon) {
+			if(this.content) {
+				this.infoWindow = new google.maps.InfoWindow(_.extend({}, this.infoWindowOptions, {
+					content: this.content
+				}));
+			}
+		},
+		
+		convertRadiusToMeters: function(radius, metric) {
+			radius = parseFloat(radius);
+
+			if(metric == 'miles') {
+				radius *= 1609.34;
+			}
+			else if(metric == 'feet') {
+				radius *= 0.3048;
+			}
+			else if(metric == 'kilometers') {
+				radius *= 1000;
+			}
+
+			return radius;
+		},
+
+		convertRadiusFromMeters: function(radius, metric) {
+			radius = parseFloat(radius);
+
+			if(metric == 'miles') {
+				radius *= 0.000621371;
+			}
+			else if(metric == 'feet') {
+				radius *= 3.28084;
+			}
+			else if(metric == 'kilometers') {
+				radius *= 0.001;
+			}
+
+			return radius;
 		},
 
 		getBounds: function() {
@@ -1650,7 +1705,10 @@ var GoogleMaps = {
 
 		onCenterChanged: function() {},
 
-		onClick: function(e) {},
+		onClick: function(e) {
+			this.infoWindow.open(this.map.api);
+			this.infoWindow.setPosition(e.latLng);
+		},
 
 		onDblclick: function() {},
 

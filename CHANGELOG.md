@@ -2,6 +2,11 @@
 
 ### Changelog
 
+#### 0.6.2
+##### 09/12/2014
+
+- (Bug Fix) Wrapped the select element with a new div to make the select box appear consistent with the all the other drop downs in Craft. Thanks @pixelandtonic for the suggestion!
+
 #### 0.6.1
 ##### 09/12/2014
 

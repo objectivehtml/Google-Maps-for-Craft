@@ -9837,7 +9837,7 @@ function program5(depth0,data,depth1) {
     + escapeExpression(((stack1 = (depth1 && depth1.lng)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\n			</p>\n		</div>\n		<div class=\"oh-google-map-small-4 oh-google-map-columns\">\n			<label for=\"radius\">Radius</label>\n			<input type=\"text\" name=\"radius\" id=\"radius\" value=\""
     + escapeExpression(((stack1 = (depth1 && depth1.radius)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" class=\"text fullwidth\" />\n		</div>\n		<div class=\"oh-google-map-small-8 oh-google-map-columns\">\n			<label for=\"metric\">Metric</label><br>\n			<select name=\"metric\" id=\"metric\">\n				<option value=\"feet\">Feet</option>\n				<option value=\"miles\">Miles</option>\n				<option value=\"meters\">Metres</option>\n				<option value=\"kilometers\">Kilometres</option>\n			</select>\n		</div>\n	</div>\n	";
+    + "\" class=\"text fullwidth\" />\n		</div>\n		<div class=\"oh-google-map-small-8 oh-google-map-columns\">\n			<label for=\"metric\">Metric</label><br>\n\n			<div class=\"select\">\n			<select name=\"metric\" id=\"metric\">\n				<option value=\"feet\">Feet</option>\n				<option value=\"miles\">Miles</option>\n				<option value=\"meters\">Metres</option>\n				<option value=\"kilometers\">Kilometres</option>\n			</select>\n			</div>\n		</div>\n	</div>\n	";
   return buffer;
   }
 

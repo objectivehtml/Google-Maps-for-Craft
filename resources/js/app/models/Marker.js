@@ -44,10 +44,17 @@
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.MarkerForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.MarkerForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.MarkerForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);

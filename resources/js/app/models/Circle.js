@@ -124,12 +124,17 @@
 			})));
 		},
 
-		edit: function() {
-			console.log('edit');
-				
-			var view = new GoogleMaps.Views.CircleForm({
+		edit: function(showMapList) {				
+			var t = this, view = new GoogleMaps.Views.CircleForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.CircleForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);

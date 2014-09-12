@@ -20,11 +20,18 @@
 			return;
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.PolylineForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.PolylineForm({
 				api: this.get('api'),
 				map: this.get('map'),
-				model: this
+				model: this,
+				cancel: function() {
+					GoogleMaps.Views.PolylineForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);

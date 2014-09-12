@@ -265,10 +265,17 @@
 			return $content.get(0);
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.RouteForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.RouteForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.RouteForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);

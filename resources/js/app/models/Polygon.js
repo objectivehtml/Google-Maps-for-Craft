@@ -90,11 +90,18 @@
 			}
 		},	
 
-		edit: function() {
-			var view = new GoogleMaps.Views.PolygonForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.PolygonForm({
 				api: this.get('api'),
 				map: this.get('map'),
-				model: this
+				model: this,
+				cancel: function() {
+					GoogleMaps.Views.PolygonForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);

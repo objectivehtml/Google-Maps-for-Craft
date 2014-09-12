@@ -134,9 +134,9 @@ var GoogleMaps = {
 
 		initializeApi: function() {},
 
-		edit: function() {},
+		edit: function(showMapList) {},
 
-		delete: function() {},
+		delete: function(showMapList) {},
 
 		bindEvents: function() {},
 
@@ -346,12 +346,17 @@ var GoogleMaps = {
 			})));
 		},
 
-		edit: function() {
-			console.log('edit');
-				
-			var view = new GoogleMaps.Views.CircleForm({
+		edit: function(showMapList) {				
+			var t = this, view = new GoogleMaps.Views.CircleForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.CircleForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -605,10 +610,17 @@ var GoogleMaps = {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.MarkerForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.MarkerForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.MarkerForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -1056,11 +1068,18 @@ var GoogleMaps = {
 			}
 		},	
 
-		edit: function() {
-			var view = new GoogleMaps.Views.PolygonForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.PolygonForm({
 				api: this.get('api'),
 				map: this.get('map'),
-				model: this
+				model: this,
+				cancel: function() {
+					GoogleMaps.Views.PolygonForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -1347,11 +1366,18 @@ var GoogleMaps = {
 			return;
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.PolylineForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.PolylineForm({
 				api: this.get('api'),
 				map: this.get('map'),
-				model: this
+				model: this,
+				cancel: function() {
+					GoogleMaps.Views.PolylineForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -1658,10 +1684,17 @@ var GoogleMaps = {
 			return $content.get(0);
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.RouteForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.RouteForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.RouteForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -2899,7 +2932,8 @@ var GoogleMaps = {
  				markers: [],
 				polygons: [],
 				polylines: [],
-				routes: []
+				routes: [],
+				circles: []
 			};
 
 			_.each(this.markers, function(marker) {
@@ -2916,6 +2950,10 @@ var GoogleMaps = {
 
 			_.each(this.routes, function(route) {
 				data.routes.push(route.toJSON());
+			});
+
+			_.each(this.circles, function(circle) {
+				data.circles.push(circle.toJSON());
 			});
 
 			var view = new GoogleMaps.Views.MapList({
@@ -3110,6 +3148,10 @@ var GoogleMaps = {
 			}
 		},
 
+		union: function(bounds) {
+			this.fitBounds(bounds.union(this.getBounds()));
+		},
+
 		fitBounds: function(bounds) {
 			this.api.fitBounds(bounds);
 		},
@@ -3233,7 +3275,7 @@ var GoogleMaps = {
 				var index = $(this).parents('li').index();
 				var data = t.map[prop][index];
 
-				data.edit();
+				data.edit(true);
 
 				e.preventDefault();
 			});
@@ -3317,6 +3359,22 @@ var GoogleMaps = {
 				e.preventDefault();
 			});
 
+			this.$el.find('.circle-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var circle = t.map.circles[index];
+
+				circle.set('deleted', false);
+				circle.get('api').setMap(t.map.api);
+
+				t.model.get('circles')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.marker-center').click(function(e) {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
@@ -3368,6 +3426,15 @@ var GoogleMaps = {
 				});
 				
 				t.map.fitBounds(bounds);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.circle-center').click(function(e) {
+				var index = $(this).parent().index();
+				var circle = t.map.circles[index];
+
+				t.map.fitBounds(circle.getBounds());
 
 				e.preventDefault();
 			});

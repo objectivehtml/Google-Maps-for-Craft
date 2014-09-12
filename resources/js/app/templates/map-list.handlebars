@@ -49,3 +49,15 @@
 	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="polyline-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Polyline {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="polyline-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="polylines"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="polylines"><span data-icon="trash"></span></a></span>{{/not}}</li>
 {{/forEach}}
 </ol>
+
+<h2>Circles</h2>
+
+{{#not circles.length}}
+<p>There are no circles on the map.</p>
+{{/not}}
+
+<ol class="oh-google-map-ordered-list">
+{{#forEach circles}}
+	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="circle-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Circle {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="circle-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="circles"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="circles"><span data-icon="trash"></span></a></span>{{/not}}</li>
+{{/forEach}}
+</ol>

@@ -326,7 +326,8 @@
  				markers: [],
 				polygons: [],
 				polylines: [],
-				routes: []
+				routes: [],
+				circles: []
 			};
 
 			_.each(this.markers, function(marker) {
@@ -343,6 +344,10 @@
 
 			_.each(this.routes, function(route) {
 				data.routes.push(route.toJSON());
+			});
+
+			_.each(this.circles, function(circle) {
+				data.circles.push(circle.toJSON());
 			});
 
 			var view = new GoogleMaps.Views.MapList({
@@ -535,6 +540,10 @@
 			if(boundsChanged) {
 				this.fitBounds(bounds);
 			}
+		},
+
+		union: function(bounds) {
+			this.fitBounds(bounds.union(this.getBounds()));
 		},
 
 		fitBounds: function(bounds) {

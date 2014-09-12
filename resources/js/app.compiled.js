@@ -10204,6 +10204,51 @@ function program37(depth0,data) {
   return "<span class=\"actions\"><a href=\"#\" class=\"edit\" data-property=\"polylines\"><span data-icon=\"edit\"></span></a> <a href=\"#\" class=\"delete\" data-property=\"polylines\"><span data-icon=\"trash\"></span></a></span>";
   }
 
+function program39(depth0,data) {
+  
+  
+  return "\n<p>There are no circles on the map.</p>\n";
+  }
+
+function program41(depth0,data) {
+  
+  var buffer = "", stack1, helper, options;
+  buffer += "\n	<li>";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "<a href=\"#\" class=\"circle-center\">";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.title), {hash:{},inverse:self.noop,fn:self.programWithDepth(13, program13, data, depth0),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.programWithDepth(42, program42, data, depth0),data:data},helper ? helper.call(depth0, (depth0 && depth0.title), options) : helperMissing.call(depth0, "not", (depth0 && depth0.title), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</a>";
+  stack1 = helpers['if'].call(depth0, (depth0 && depth0.deleted), {hash:{},inverse:self.noop,fn:self.program(44, program44, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(46, program46, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.deleted), options) : helperMissing.call(depth0, "not", (depth0 && depth0.deleted), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</li>\n";
+  return buffer;
+  }
+function program42(depth0,data,depth1) {
+  
+  var buffer = "", stack1;
+  buffer += "Circle "
+    + escapeExpression(((stack1 = (depth1 && depth1.count)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+  return buffer;
+  }
+
+function program44(depth0,data) {
+  
+  
+  return "</span> <a href=\"#\" class=\"circle-undo oh-google-map-small-text\">Undo Delete</a>";
+  }
+
+function program46(depth0,data) {
+  
+  
+  return "<span class=\"actions\"><a href=\"#\" class=\"edit\" data-property=\"circles\"><span data-icon=\"edit\"></span></a> <a href=\"#\" class=\"delete\" data-property=\"circles\"><span data-icon=\"trash\"></span></a></span>";
+  }
+
   buffer += "<h2>Markers</h2>\n\n<a href=\"#\" class=\"cancel oh-google-map-close\">&times; close</a>\n\n";
   stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.markers)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.markers)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
@@ -10227,6 +10272,12 @@ function program37(depth0,data) {
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
   stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(32, program32, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.polylines), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.polylines), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n</ol>\n\n<h2>Circles</h2>\n\n";
+  stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(39, program39, data),data:data},helper ? helper.call(depth0, ((stack1 = (depth0 && depth0.circles)),stack1 == null || stack1 === false ? stack1 : stack1.length), options) : helperMissing.call(depth0, "not", ((stack1 = (depth0 && depth0.circles)),stack1 == null || stack1 === false ? stack1 : stack1.length), options));
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n\n<ol class=\"oh-google-map-ordered-list\">\n";
+  stack1 = (helper = helpers.forEach || (depth0 && depth0.forEach),options={hash:{},inverse:self.noop,fn:self.program(41, program41, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.circles), options) : helperMissing.call(depth0, "forEach", (depth0 && depth0.circles), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n</ol>";
   return buffer;
@@ -10959,9 +11010,9 @@ var GoogleMaps = {
 
 		initializeApi: function() {},
 
-		edit: function() {},
+		edit: function(showMapList) {},
 
-		delete: function() {},
+		delete: function(showMapList) {},
 
 		bindEvents: function() {},
 
@@ -11171,12 +11222,17 @@ var GoogleMaps = {
 			})));
 		},
 
-		edit: function() {
-			console.log('edit');
-				
-			var view = new GoogleMaps.Views.CircleForm({
+		edit: function(showMapList) {				
+			var t = this, view = new GoogleMaps.Views.CircleForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.CircleForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -11430,10 +11486,17 @@ var GoogleMaps = {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.MarkerForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.MarkerForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.MarkerForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -11881,11 +11944,18 @@ var GoogleMaps = {
 			}
 		},	
 
-		edit: function() {
-			var view = new GoogleMaps.Views.PolygonForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.PolygonForm({
 				api: this.get('api'),
 				map: this.get('map'),
-				model: this
+				model: this,
+				cancel: function() {
+					GoogleMaps.Views.PolygonForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -12172,11 +12242,18 @@ var GoogleMaps = {
 			return;
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.PolylineForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.PolylineForm({
 				api: this.get('api'),
 				map: this.get('map'),
-				model: this
+				model: this,
+				cancel: function() {
+					GoogleMaps.Views.PolylineForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -12483,10 +12560,17 @@ var GoogleMaps = {
 			return $content.get(0);
 		},
 
-		edit: function() {
-			var view = new GoogleMaps.Views.RouteForm({
+		edit: function(showMapList) {
+			var t = this, view = new GoogleMaps.Views.RouteForm({
 				model: this,
-				map: this.get('map')
+				map: this.get('map'),
+				cancel: function() {
+					GoogleMaps.Views.RouteForm.prototype.cancel.call(view);
+
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+				}
 			});
 
 			this.get('map').showModal(view);
@@ -13724,7 +13808,8 @@ var GoogleMaps = {
  				markers: [],
 				polygons: [],
 				polylines: [],
-				routes: []
+				routes: [],
+				circles: []
 			};
 
 			_.each(this.markers, function(marker) {
@@ -13741,6 +13826,10 @@ var GoogleMaps = {
 
 			_.each(this.routes, function(route) {
 				data.routes.push(route.toJSON());
+			});
+
+			_.each(this.circles, function(circle) {
+				data.circles.push(circle.toJSON());
 			});
 
 			var view = new GoogleMaps.Views.MapList({
@@ -13935,6 +14024,10 @@ var GoogleMaps = {
 			}
 		},
 
+		union: function(bounds) {
+			this.fitBounds(bounds.union(this.getBounds()));
+		},
+
 		fitBounds: function(bounds) {
 			this.api.fitBounds(bounds);
 		},
@@ -14058,7 +14151,7 @@ var GoogleMaps = {
 				var index = $(this).parents('li').index();
 				var data = t.map[prop][index];
 
-				data.edit();
+				data.edit(true);
 
 				e.preventDefault();
 			});
@@ -14142,6 +14235,22 @@ var GoogleMaps = {
 				e.preventDefault();
 			});
 
+			this.$el.find('.circle-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var circle = t.map.circles[index];
+
+				circle.set('deleted', false);
+				circle.get('api').setMap(t.map.api);
+
+				t.model.get('circles')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.marker-center').click(function(e) {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
@@ -14193,6 +14302,15 @@ var GoogleMaps = {
 				});
 				
 				t.map.fitBounds(bounds);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.circle-center').click(function(e) {
+				var index = $(this).parent().index();
+				var circle = t.map.circles[index];
+
+				t.map.fitBounds(circle.getBounds());
 
 				e.preventDefault();
 			});

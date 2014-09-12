@@ -6,9 +6,9 @@
 
 		initializeApi: function() {},
 
-		edit: function() {},
+		edit: function(showMapList) {},
 
-		delete: function() {},
+		delete: function(showMapList) {},
 
 		bindEvents: function() {},
 

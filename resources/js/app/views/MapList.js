@@ -22,7 +22,7 @@
 				var index = $(this).parents('li').index();
 				var data = t.map[prop][index];
 
-				data.edit();
+				data.edit(true);
 
 				e.preventDefault();
 			});
@@ -106,6 +106,22 @@
 				e.preventDefault();
 			});
 
+			this.$el.find('.circle-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var circle = t.map.circles[index];
+
+				circle.set('deleted', false);
+				circle.get('api').setMap(t.map.api);
+
+				t.model.get('circles')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.marker-center').click(function(e) {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
@@ -157,6 +173,15 @@
 				});
 				
 				t.map.fitBounds(bounds);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.circle-center').click(function(e) {
+				var index = $(this).parent().index();
+				var circle = t.map.circles[index];
+
+				t.map.fitBounds(circle.getBounds());
 
 				e.preventDefault();
 			});

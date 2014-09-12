@@ -38,7 +38,6 @@
 - (Feature) Added server-side Geocoder functionality to work just like the client-side but not require JS.
 - (Bug Fix) Fixed an issue with deleted and editing items from the map list view and user hits cancel, they aren't redirected back to the map list view
 - (Bug Fix) Fixed a couple issues with the MapDataModel that caused issues when fetching and manipulating existing map objects
-
 - (Bug Fix) Fixed an issue with the MapList view showing the edit modal when the delete button was clicked.
 
 #### 0.3.1

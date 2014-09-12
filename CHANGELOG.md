@@ -2,6 +2,13 @@
 
 ### Changelog
 
+#### 0.6.0
+##### 09/12/2014
+
+- (Feature) Added ability to add circles to a map from the fieldtype.
+- (Feature) Added new GoogleMaps.Circle class for the plugin.js to plot circles on the front-end
+- (Feature) Added new template tag to plot circles without the field type
+
 #### 0.5.3
 ##### 09/11/2014
 

@@ -42,6 +42,8 @@ var GoogleMaps = {
 
 		routes: [],
 
+		circles: [],
+
 		lat: 0,
 
 		lng: 0,
@@ -242,6 +244,20 @@ var GoogleMaps = {
 					t.bounds.extend(path);
 				});
 			}
+
+			this.fitBounds(this.bounds);
+		},
+
+		addCircle: function(circle, fitBounds) {
+			var t = this;
+
+			this.circles.push(circle);
+			
+			if(_.isUndefined(fitBounds) || fitBounds) {
+				t.bounds.union(circle.getBounds());
+			}
+
+			this.fitBounds(this.bounds);
 		},
 
 		addRoute: function(route, fitBounds) {
@@ -1266,7 +1282,7 @@ var GoogleMaps = {
 
 		iconSize: false,
 
-		objects: ['markers', 'polygons', 'polylines', 'routes'],
+		objects: ['markers', 'polygons', 'polylines', 'routes', 'circles'],
 
 		constructor: function(map, data, options) {
 			var t = this;
@@ -1329,6 +1345,26 @@ var GoogleMaps = {
 							strokeColor: polyline.strokeColor,
 							strokeOpacity: polyline.strokeOpacity,
 							strokeWeight: polyline.strokeWeight
+						}
+					});
+				});
+			}
+
+			if(data.circles && this.objects.indexOf('circles') >= 0) {
+				_.each(data.circles, function(circle, i) {
+					circle = new GoogleMaps.Circle(map, {
+						title: circle.title,
+						content: circle.content,
+						fitBounds: t.fitBounds,
+						infoWindowOptions: options.infoWindowOptions ? options.infoWindowOptions : {},
+						options: {
+							center: new google.maps.LatLng(circle.lat, circle.lng),
+							radius: circle.radius,
+							strokeColor: circle.strokeColor,
+							strokeOpacity: circle.strokeOpacity,
+							strokeWeight: circle.strokeWeight,
+							fillColor: circle.fillColor,
+							fillOpacity: circle.fillOpacity
 						}
 					});
 				});
@@ -1462,6 +1498,181 @@ var GoogleMaps = {
 			}
 		}
 
+	});
+
+	GoogleMaps.Circle = GoogleMaps.BaseClass.extend({
+
+		fitBounds: true,
+
+		options: {},
+
+		map: false,
+
+		constructor: function(map, options) {
+			this.map = map;
+
+			this.options = {};
+
+			this.base(options);
+
+			this.options.map = this.map.api;
+
+			this.api = new google.maps.Circle(this.options);
+
+			this.bindEvents();
+
+			this.map.addCircle(this, this.fitBounds);
+		},
+
+		bindEvents: function() {
+			var t = this;
+
+			google.maps.event.addListener(this.api, 'center_changed', function() {
+				t.onCenterChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'click', function() {
+				t.onClick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'dblclick', function() {
+				t.onDblclick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'drag', function() {
+				t.onDrag.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'dragend', function() {
+				t.onDragend.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'dragstart', function() {
+				t.onDragstart.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'mousedown', function() {
+				t.onMousedown.apply(t, arguments);
+			});
+						
+			google.maps.event.addListener(this.api, 'mousemove', function() {
+				t.onMousemove.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'mouseout', function() {
+				t.onMouseout.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'mouseover', function() {
+				t.onMouseover.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'mouseup', function() {
+				t.onMouseup.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'radius_changed', function() {
+				t.onRadiusChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.api, 'rightclick', function() {
+				t.onRightclick.apply(t, arguments);
+			});
+		},
+
+		getBounds: function() {
+			return this.api.getBounds();
+		},
+
+		getCenter: function() {
+			return this.api.getCenter();
+		},
+
+		getPosition: function() {
+			return this.api.getCenter();
+		},
+
+		getDraggable: function() {
+			return this.api.getDraggable();
+		},
+
+		getEditable: function() {
+			return this.api.getEditable();
+		},
+
+		getMap: function() {
+			return this.api.getMap();
+		},
+
+		getRadius: function() {
+			return this.api.getRadius();
+		},
+
+		getVisible: function() {
+			return this.api.getVisible();
+		},
+
+		setAnimation: function(value) {
+			this.api.setAnimation(value);
+		},
+
+		setClickable: function(value) {
+			this.api.setClickable(value);
+		},
+		
+		setCenter: function(value) {
+			this.api.setCenter(value);
+		},
+		
+		setDraggable: function(value) {
+			this.api.setDraggable(value);
+		},
+				
+		setEditable: function(value) {
+			this.api.setEditable(value);
+		},
+
+		setMap: function(value) {
+			this.api.setMap(value);
+		},
+		
+		setOptions: function(value) {
+			this.api.setOptions(value);
+		},
+		
+		setRadius: function(value) {
+			this.api.setRadius(value);
+		},
+		
+		setVisible: function(value) {
+			this.api.setVisible(value);
+		},
+
+		onCenterChanged: function() {},
+
+		onClick: function(e) {},
+
+		onDblclick: function() {},
+
+		onDrag: function() {},
+
+		onDragend: function() {},
+
+		onDragstart: function() {},
+
+		onMousedown: function() {},
+
+		onMousemove: function() {},
+
+		onMouseover: function() {},
+
+		onMouseout: function() {},
+
+		onMouseup: function() {},
+
+		onRadiusChanged: function() {},
+
+		onRightclick: function() {}
 	});
 
 }());

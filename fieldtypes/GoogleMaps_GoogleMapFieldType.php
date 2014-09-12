@@ -104,6 +104,19 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
                     $route->isNew = false;
                 }
             }
+
+            foreach($data->circles as $index => $circle)
+            {
+                if($circle->deleted)
+                {
+                    $data->removeCircle($index);
+                }
+                else
+                {
+                    $circle->elementId = $this->element->id;
+                    $circle->isNew = false;
+                }
+            }
         }
 
         if(isset($this->element->$handle))

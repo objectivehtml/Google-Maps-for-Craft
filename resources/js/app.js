@@ -130,6 +130,439 @@ var GoogleMaps = {
 
 	"use strict";
 
+	GoogleMaps.Models.BaseMapObject = GoogleMaps.Models.Base.extend({
+
+		initializeApi: function() {},
+
+		edit: function() {},
+
+		delete: function() {},
+
+		bindEvents: function() {},
+
+		// Reset map object to original settings when an object form is cancelled
+		reset: function() {},
+
+		buildInfoWindowContent: function() {
+			var content = this.get('content');
+			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
+
+			var t = this, latLng = this.getPosition();
+
+			_return.push([
+					'<div class="oh-google-map-infowindow-actions">',
+						'<a href="#" class="edit">Edit</a> | ',
+						'<a href="#" class="delete">Delete</a>',
+					'</div>',
+				'</div>'
+			].join(''));
+
+			var $content = $(_return.join(''));
+
+			$content.find('.edit').click(function(e) {
+				t.edit();
+
+				e.preventDefault();
+			});
+
+			$content.find('.delete').click(function(e) {
+				t.delete();
+
+				e.preventDefault();
+			});
+
+			return $content.get(0);
+		},
+
+		remove: function() {
+			this.get('infowindow').close();
+			this.set('deleted', true);
+			this.setMap(null);
+		},
+
+		onDragend: function(e, callback) {
+			var t = this;
+
+			t.set({
+				lat: e.latLng.lat(),
+				lng: e.latLng.lng()
+			});
+
+			this.get('map').geocoder.geocode({location: e.latLng}, function(results, status) {
+				if(status == 'OK') {
+					t.set('address', results[0].formatted_address);
+					t.set('addressComponents', results[0].address_components);
+				}
+				else {
+					t.set('address', null);
+					t.set('addressComponents', null);
+				}
+
+				if(!t.get('customContent')) {
+					if(!t.isCoordinate(t.get('address'))) {
+						t.set('content', t.get('address').split(',').join('<br>'));
+					}
+					else {
+						t.set('content', t.get('address'));
+					}
+
+					t.get('infowindow').setContent(t.buildInfoWindowContent());
+				}
+
+				t.get('map').updateHiddenField();
+				
+				if(_.isFunction(callback)) {
+					callback(e);
+				}
+			});
+		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Models.Circle = GoogleMaps.Models.BaseMapObject.extend({
+
+		strokeColor: '#000000',
+
+		strokeWeight: 3,
+
+		strokeOpacity: 0.6,
+
+		fillColor: '#666666',
+
+		fillOpacity: 0.6,
+
+		initialize: function(options) {
+			
+			if(!options.strokeColor) {
+				options.strokeColor = this.strokeColor;
+			}
+
+			if(!options.strokeOpacity) {
+				options.strokeOpacity = this.strokeOpacity;
+			}
+
+			if(!options.strokeWeight) {
+				options.strokeWeight = this.strokeWeight;
+			}
+
+			if(!options.fillColor) {
+				options.fillColor = this.fillColor;
+			}
+
+			if(!options.fillOpacity) {
+				options.fillOpacity = this.fillOpacity;
+			}
+
+			GoogleMaps.Models.Base.prototype.initialize.call(this, options);
+
+			if(!this.get('radius')) {
+				this.set('radius', 100);
+			}
+
+			if(!this.get('api')) {
+				this.initializeApi(options);
+			}
+			else {
+				this.get('api').setMap(this.get('map').api);
+			}
+
+			if(!this.get('infowindow')) {
+				this.set('infowindow', new google.maps.InfoWindow({
+					maxWidth: 300,
+					content: this.buildInfoWindowContent()
+				}));
+			}
+
+			this.bindEvents();
+		},
+
+		convertRadiusToMeters: function(radius, metric) {
+			if(!radius) {
+				radius = this.get('radius');
+			}
+
+			if(!metric) {
+				metric = this.get('metric');
+			}
+
+			radius = parseFloat(radius);
+
+			if(metric == 'miles') {
+				radius *= 1609.34;
+			}
+			else if(metric == 'feet') {
+				radius *= 0.3048;
+			}
+			else if(metric == 'kilometers') {
+				radius *= 1000;
+			}
+
+			return radius;
+		},
+
+		convertRadiusFromMeters: function(radius, metric) {
+			if(!radius) {
+				radius = this.get('radius');
+			}
+
+			if(!metric) {
+				metric = this.get('metric');
+			}
+
+			radius = parseFloat(radius);
+
+			if(metric == 'miles') {
+				radius *= 0.000621371;
+			}
+			else if(metric == 'feet') {
+				radius *= 3.28084;
+			}
+			else if(metric == 'kilometers') {
+				radius *= 0.001;
+			}
+
+			return radius;
+		},
+
+		hasLocation: function() {
+			return !_.isUndefined(this.get('lat')) && !_.isUndefined(this.get('lng'));
+		},
+		
+		initializeApi: function(options) {
+			if(!_.isObject(options)) {
+				options = {};
+			}
+
+			this.set('api', new google.maps.Circle(_.extend({}, options, {
+				map: this.hasLocation() ? this.get('map').api : null,
+				center: this.hasLocation() ? new google.maps.LatLng(this.get('lat'), this.get('lng')) : new google.maps.LatLng(0, 0),
+				radius: this.convertRadiusToMeters(),
+				draggable: this.get('draggable') ? true : false
+			})));
+		},
+
+		edit: function() {
+			console.log('edit');
+				
+			var view = new GoogleMaps.Views.CircleForm({
+				model: this,
+				map: this.get('map')
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		delete: function(showMapList) {
+			var t = this;
+
+			var view = new GoogleMaps.Views.BaseForm({
+				template: GoogleMaps.Template('delete-circle-form'),
+				submit: function() {
+					t.get('api').setMap(null);
+					t.set('deleted', true);
+					t.get('map').updateHiddenField();
+					
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+					else {
+						t.get('map').hideModal();
+					}
+
+					t.get('map').closeInfoWindows();
+				},
+				cancel: function() {
+					if(showMapList) {
+						t.get('map').showMapList();
+					}
+					else {
+						t.get('map').hideModal();
+					}
+				}
+			});
+
+			this.get('map').showModal(view);
+		},
+
+		getBounds: function() {
+			return this.get('api').getBounds();
+		},
+
+		getCenter: function() {
+			return this.get('api').getCenter();
+		},
+
+		getPosition: function() {
+			return this.get('api').getCenter();
+		},
+
+		getDraggable: function() {
+			return this.get('api').getDraggable();
+		},
+
+		getEditable: function() {
+			return this.get('api').getEditable();
+		},
+
+		getMap: function() {
+			return this.get('api').getMap();
+		},
+
+		getRadius: function() {
+			return this.get('api').getRadius();
+		},
+
+		getVisible: function() {
+			return this.get('api').getVisible();
+		},
+
+		setAnimation: function(value) {
+			this.get('api').setAnimation(value);
+		},
+
+		setClickable: function(value) {
+			this.get('api').setClickable(value);
+		},
+		
+		setCenter: function(value) {
+			this.get('api').setCenter(value);
+		},
+		
+		setDraggable: function(value) {
+			this.get('api').setDraggable(value);
+		},
+				
+		setEditable: function(value) {
+			this.get('api').setEditable(value);
+		},
+
+		setMap: function(value) {
+			this.get('api').setMap(value);
+		},
+		
+		setOptions: function(value) {
+			this.get('api').setOptions(value);
+		},
+		
+		setRadius: function(value) {
+			this.get('api').setRadius(this.convertRadiusToMeters(value));
+		},
+		
+		setVisible: function(value) {
+			this.get('api').setVisible(value);
+		},
+		
+		bindEvents: function() {
+			var t = this;
+
+			google.maps.event.addListener(this.get('api'), 'center_changed', function() {
+				t.onCenterChanged.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'click', function() {
+				t.onClick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'dblclick', function() {
+				t.onDblclick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'drag', function() {
+				t.onDrag.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'dragend', function() {
+				t.onDragend.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'dragstart', function() {
+				t.onDragstart.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mousedown', function() {
+				t.onMousedown.apply(t, arguments);
+			});
+						
+			google.maps.event.addListener(this.get('api'), 'mousemove', function() {
+				t.onMousemove.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mouseout', function() {
+				t.onMouseout.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'mouseover', function() {
+				t.onMouseover.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.get('api'), 'mouseup', function() {
+				t.onMouseup.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'radius_changed', function() {
+				t.onRadiusChanged.apply(t, arguments);
+			});
+			
+			google.maps.event.addListener(this.get('api'), 'rightclick', function() {
+				t.onRightclick.apply(t, arguments);
+			});
+		},
+
+		onCenterChanged: function() {
+			var center = this.get('api').getCenter();
+
+			this.set({
+				lat: center.lat(),
+				lng: center.lng()
+			});
+		},
+
+		onClick: function(e) {
+			this.get('map').closeInfoWindows();
+			this.get('infowindow').open(this.get('map').api);
+			this.get('infowindow').setPosition(e.latLng);
+		},
+
+		onDblclick: function() {},
+
+		onDrag: function() {},
+
+		onDragend: function() {
+			GoogleMaps.Models.BaseMapObject.prototype.onDragend.apply(this, arguments);
+		},
+
+		onDragstart: function() {},
+
+		onMousedown: function() {},
+
+		onMousemove: function() {},
+
+		onMouseover: function() {},
+
+		onMouseout: function() {},
+
+		onMouseup: function() {},
+
+		onRadiusChanged: function() {
+
+			this.set('radius', Math.round(this.convertRadiusFromMeters(this.get('api').getRadius()) * 100) / 100);
+			// this.set('radius', this.get('api').getRadius());
+		},
+
+		onRightclick: function() {}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
 	GoogleMaps.Models.Marker = GoogleMaps.Models.Base.extend({
 
 		initialize: function(options) {
@@ -1678,6 +2111,290 @@ var GoogleMaps = {
 
 	"use strict";
 
+	GoogleMaps.Views.CircleForm = GoogleMaps.Views.BaseForm.extend({
+
+		geocoder: false,
+
+		template: GoogleMaps.Template('circle-form'),
+
+		map: false,
+
+		api: false,
+
+		originalCircle: {},
+
+		initialize: function(options) {
+			var t = this;
+
+			this.model = false;
+
+			this.geocoder = new google.maps.Geocoder();
+
+			GoogleMaps.Views.BaseForm.prototype.initialize.call(this, options);
+
+			this.initializeApi();
+
+			this.model.get('infowindow').close();
+			this.model.get('api').setDraggable(true);
+			this.model.get('api').setEditable(true);
+
+			this.api = this.model.get('api');
+		},
+
+		initializeApi: function() {
+			if(!this.model) {
+				this.model = new GoogleMaps.Models.Circle({
+					map: this.map,
+					hideDetails: true,
+					isNew: true,
+					isSavedToMap: false,
+					metric: 'miles',
+					radius: 100
+				});
+			}
+
+			this.originalCircle = this.model.toJSON();
+		},
+
+		onRender: function() {
+			var t = this;
+
+			GoogleMaps.Views.BaseForm.prototype.onRender.call(this);
+
+			this.model.onRadiusChanged = function() {
+				GoogleMaps.Models.Circle.prototype.onRadiusChanged.call(this);
+
+				if(!t.isDestroyed) {
+					//t.map.updateHiddenField();
+					t.render();
+				}
+			};
+
+			this.model.onCenterChanged = function() {
+				GoogleMaps.Models.Circle.prototype.onCenterChanged.call(this);
+
+				if(!t.isDestroyed) {
+					t.render();
+				}
+			};
+
+			this.model.onDragend = function(e) {
+				GoogleMaps.Models.Circle.prototype.onDragend.call(this, e, function() {	
+					if(!t.isDestroyed) {
+						//t.map.updateHiddenField();
+						t.render();
+					}
+				});			
+			};
+
+			this.$el.find('.toggle-details').click(function(e) {
+				var $panel = t.$el.find('.details');
+
+				if($panel.css('display') == 'none') {
+					$panel.show();			
+					t.model.set('hideDetails', false);		
+					$(this).html('Hide Details');
+				}
+				else {
+					$panel.hide();
+					t.model.set('hideDetails', true);
+					$(this).html('Show Details');
+				}
+
+				t.$el.find('input').focus();
+
+				e.preventDefault();
+			});
+
+			this.$el.find('input').keypress(function(e) {
+				if(e.keyCode == 13) {
+					t.$el.find('.add-point').click();
+					e.preventDefault();
+				}
+			}).focus();
+
+			this.$el.find('.set-location').click(function(e) {
+				var view = new GoogleMaps.Views.Geocoder({
+					map: t.map,
+					responseHandler: function(response) {
+						t.model.set({
+							address: response.formatted_address,
+							addressComponents: response.address_components,
+							lat: response.geometry.location.lat(),
+							lng: response.geometry.location.lng(),
+							isSavedToMap: false
+						});
+
+						t.model.setCenter(response.geometry.location);
+
+						t.isDestroyed = false;
+						t.map.showModal(t);
+					},
+					cancel: function() {
+						t.isDestroyed = false;
+						t.map.showModal(t);
+					}
+				});
+
+				t.map.showModal(view);
+				t.model.setMap(t.map.api);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('[name="radius"]').blur(function() {
+				if(t.model.get('radius') != parseFloat($(this).val())) {
+					t.model.setRadius($(this).val());
+				}
+			});
+
+			this.$el.find('[name="metric"]').change(function() {
+				t.model.set('metric', $(this).val());
+				t.model.setRadius(t.model.get('radius'));
+			});
+
+			this.$el.find('[name="metric"]').val(this.model.get('metric'));
+
+			this.$el.find('.oh-google-map-tag a').click(function(e) {
+				var index = $(this).parent().index();
+
+				t.removePoint(index);
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.simple-color-picker').simpleColorPicker().blur(function() {
+				t.updatePolygonOptions();
+			})
+			.blur();
+
+			this.$el.find('.slider').each(function() {
+				var value = $(this).data('value');
+				var start = $(this).data('start');
+				var step = $(this).data('step');
+				var min = $(this).data('min');
+				var max = $(this).data('max');
+
+				$(this).noUiSlider({
+					start: parseFloat(value ? value : start),
+					step: parseFloat(step),
+					range: {
+						'min': parseFloat(min),
+						'max': parseFloat(max)
+					}
+				})
+				.change(function(e, value) {
+					$(this).next().val(value);
+					t.updatePolygonOptions();
+				});
+
+				$(this).next().val($(this).val());
+			});
+
+			t.updatePolygonOptions();
+		},
+
+		updatePolygonOptions: function() {
+			var options = {
+				strokeColor: this.$el.find('[name="strokeColor"]').val(),
+				strokeOpacity: this.$el.find('[name="strokeOpacity"]').val(),
+				strokeWeight: this.$el.find('[name="strokeWeight"]').val(),
+				fillColor: this.$el.find('[name="fillColor"]').val(),
+				fillOpacity: this.$el.find('[name="fillOpacity"]').val(),
+				title: this.$el.find('[name="title"]').val(),
+				content: this.$el.find('[name="content"]').val()
+			};
+
+			this.model.set(options);
+			this.api.setOptions(options);
+		},
+
+		onShow: function() {
+			var t = this;
+
+			this.map.closeInfoWindows();
+
+			this.map.api.setOptions({
+				disableDoubleClickZoom: true
+			});
+
+			setTimeout(function() {
+				t.$el.find('input').focus();
+			}, 250);
+		},
+
+		onDestroy: function() {
+
+			if(!this.model.get('isSavedToMap') && this.model.get('isNew')) {
+				this.api.setMap(null);
+			}
+
+			this.map.api.setOptions({
+				disableDoubleClickZoom: false
+			});
+		},
+
+		isCoordinate: function(coord) {
+			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
+		},
+
+		saveToMap: function() {
+			if(!this.model.get('isSavedToMap')) {
+				this.map.circles.push(this.model);
+				this.model.set('isSavedToMap', true);
+			}
+		},
+
+		submit: function() {
+			this.api.setDraggable(false);
+			this.api.setEditable(false);
+
+			this.model.set({
+				title: this.$el.find('[name="title"]').val(),
+				content: this.$el.find('[name="content"]').val()
+			});
+
+			this.saveToMap();
+			this.updatePolygonOptions();
+
+			if(this.model.get('infowindow')) {
+				this.model.get('infowindow').setOptions({
+					content: this.model.buildInfoWindowContent()
+				});
+			}
+
+			this.map.hideModal();
+			this.map.updateHiddenField();
+		},
+
+		reset: function() {
+			this.model.setRadius(this.originalCircle.radius);
+			this.model.setCenter(new google.maps.LatLng(this.originalCircle.lat, this.originalCircle.lng));
+			this.model.set(this.originalCircle);
+
+			this.model.setOptions({
+				strokeOpacity: this.originalCircle.strokeOpacity,
+				strokeColor: this.originalCircle.strokeColor,
+				strokeWeight: this.originalCircle.strokeWeight,
+				fillOpacity: this.originalCircle.fillOpacity,
+				fillColor: this.originalCircle.fillColor
+			});
+		},
+
+		cancel: function() {
+			this.reset();
+			this.model.setDraggable(false);
+			this.model.setEditable(false);
+			this.map.hideModal();
+		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
 	GoogleMaps.Views.DeleteRouteForm = GoogleMaps.Views.BaseForm.extend({
 		
 		template: GoogleMaps.Template('delete-route-form')
@@ -1893,6 +2610,8 @@ var GoogleMaps = {
 
   		routes: [],
 
+  		circles: [],
+
   		showButtons: false,
 
   		className: 'oh-google-map-relative',
@@ -1904,6 +2623,7 @@ var GoogleMaps = {
   			this.polygons = [];
   			this.polylines = [];
   			this.routes = [];
+  			this.circles = [];
 
   			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
 
@@ -1950,7 +2670,8 @@ var GoogleMaps = {
   				markers: [],
   				polygons: [],
   				polylines: [],
-  				routes: []
+  				routes: [],
+  				circles: []
   			};
 
   			_.each(this.markers, function(marker, i) {
@@ -1967,6 +2688,10 @@ var GoogleMaps = {
 
   			_.each(this.routes, function(route, i) {
   				data.routes.push(route.toJSON());
+  			});
+
+  			_.each(this.circles, function(circle, i) {
+  				data.circles.push(circle.toJSON());
   			});
 
   			data = JSON.stringify(data);
@@ -2083,6 +2808,17 @@ var GoogleMaps = {
 						};
 
 		 				t.routes.push(new GoogleMaps.Models.Route(_.extend({}, options, route)));
+		 			});
+		 		}
+
+	 			if(this.savedData.circles && this.savedData.circles.length) {
+		 			_.each(this.savedData.circles, function(circle) {
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.circles.push(new GoogleMaps.Models.Circle(_.extend({}, options, circle)));
 		 			});
 		 		}
 
@@ -2261,6 +2997,18 @@ var GoogleMaps = {
 
  						e.preventDefault();
  					}
+ 				},{
+ 					label: 'Add Circle',
+ 					name: 'circles',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.CircleForm({
+ 							map: t
+ 						});
+
+ 						t.showModal(view);
+
+ 						e.preventDefault();
+ 					}
  				}]
  			}));
 		},
@@ -2276,6 +3024,10 @@ var GoogleMaps = {
 
 			_.each(this.polylines, function(polyline) {
 				polyline.get('infowindow').close();
+			});
+
+			_.each(this.circles, function(circle) {
+				circle.get('infowindow').close();
 			});
 
 			_.each(this.routes, function(route) {

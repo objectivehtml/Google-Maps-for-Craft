@@ -45,7 +45,10 @@
 
 h2 .oh-google-map-small-text { margin-left: 10px; }
 
-.oh-google-map-margin-bottom, p.oh-google-map-margin-bottom { margin: 0 0 15px !important; }
+.oh-google-map-margin-top, p.oh-google-map-margin-top { margin-top: 15px !important; }
+.oh-google-map-margin-bottom, p.oh-google-map-margin-bottom { margin-bottom: 15px !important; }
+.oh-google-map-margin-left, p.oh-google-map-margin-left { margin-left: 15px !important; }
+.oh-google-map-margin-right, p.oh-google-map-margin-right { margin-right: 15px !important; }
 
 .oh-google-map-no-margin { margin: 0 !important; }
 .oh-google-map-no-padding { padding: 0 !important; }

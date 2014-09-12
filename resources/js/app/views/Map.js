@@ -37,6 +37,8 @@
 
   		routes: [],
 
+  		circles: [],
+
   		showButtons: false,
 
   		className: 'oh-google-map-relative',
@@ -48,6 +50,7 @@
   			this.polygons = [];
   			this.polylines = [];
   			this.routes = [];
+  			this.circles = [];
 
   			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
 
@@ -94,7 +97,8 @@
   				markers: [],
   				polygons: [],
   				polylines: [],
-  				routes: []
+  				routes: [],
+  				circles: []
   			};
 
   			_.each(this.markers, function(marker, i) {
@@ -111,6 +115,10 @@
 
   			_.each(this.routes, function(route, i) {
   				data.routes.push(route.toJSON());
+  			});
+
+  			_.each(this.circles, function(circle, i) {
+  				data.circles.push(circle.toJSON());
   			});
 
   			data = JSON.stringify(data);
@@ -227,6 +235,17 @@
 						};
 
 		 				t.routes.push(new GoogleMaps.Models.Route(_.extend({}, options, route)));
+		 			});
+		 		}
+
+	 			if(this.savedData.circles && this.savedData.circles.length) {
+		 			_.each(this.savedData.circles, function(circle) {
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.circles.push(new GoogleMaps.Models.Circle(_.extend({}, options, circle)));
 		 			});
 		 		}
 
@@ -405,6 +424,18 @@
 
  						e.preventDefault();
  					}
+ 				},{
+ 					label: 'Add Circle',
+ 					name: 'circles',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.CircleForm({
+ 							map: t
+ 						});
+
+ 						t.showModal(view);
+
+ 						e.preventDefault();
+ 					}
  				}]
  			}));
 		},
@@ -420,6 +451,10 @@
 
 			_.each(this.polylines, function(polyline) {
 				polyline.get('infowindow').close();
+			});
+
+			_.each(this.circles, function(circle) {
+				circle.get('infowindow').close();
 			});
 
 			_.each(this.routes, function(route) {

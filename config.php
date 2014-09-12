@@ -18,6 +18,7 @@ return array(
 		array('label' => 'Routes', 'value' => 'routes'),
 		array('label' => 'Polygons', 'value' => 'polygons'),
 		array('label' => 'Polylines', 'value' => 'polylines'),
+		array('label' => 'Circles', 'value' => 'circles'),
 	)
 
 );

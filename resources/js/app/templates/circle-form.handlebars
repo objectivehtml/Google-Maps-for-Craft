@@ -1,0 +1,140 @@
+<div class="oh-google-map-row">
+	<div class="oh-google-map-small-12 oh-google-map-columns">
+
+{{#not isSavedToMap}}
+	<h2>Add Circle</h2>
+{{/not}}
+
+{{#if isSavedToMap}}
+	<h2>Edit Circle</h2>
+{{/if}}
+
+<nav class="oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up">
+	<ul>
+		<li><a class="oh-google-map-tab-trigger active" href="#oh-radius-tab">Radius</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-content-tab">Content</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-options-tab">Options</a></li>
+	</ul>
+</nav>
+
+<div id="oh-radius-tab" class="oh-google-map-clearfix oh-google-map-tab">
+	
+	{{#if lat}}
+	<div class="oh-google-map-row oh-google-map-margin-bottom">
+		<div class="oh-google-map-small-12 oh-google-map-columns">
+			<p>
+				<b>Address</b><br> {{../address}} <a href="#" class="set-location oh-google-map-margin-left">Change Location</a>
+			</p>
+			<p>
+				<b>Latitude</b><br> {{../lat}}<br>
+			<p class="oh-google-map-margin-bottom">
+				<b>Longitude</b><br> {{../lng}}
+			</p>
+		</div>
+		<div class="oh-google-map-small-4 oh-google-map-columns">
+			<label for="radius">Radius</label>
+			<input type="text" name="radius" id="radius" value="{{../radius}}" class="text fullwidth" />
+		</div>
+		<div class="oh-google-map-small-8 oh-google-map-columns">
+			<label for="metric">Metric</label><br>
+			<select name="metric" id="metric">
+				<option value="feet">Feet</option>
+				<option value="miles">Miles</option>
+				<option value="meters">Metres</option>
+				<option value="kilometers">Kilometres</option>
+			</select>
+		</div>
+	</div>
+	{{/if}}
+
+	{{#not lat}}
+		<a class="btn set-location" style="margin:5px 10px">+ Set Location</a>
+	{{/not}}
+
+</div>
+
+<div id="oh-content-tab" class="oh-google-map-clearfix oh-google-map-tab">
+	
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="poly-title">Title</label>
+				<input type="text" name="title" id="poly-title" value="{{title}}" class="text fullwidth" />
+			</div>
+		</div>
+	</div>
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="poly-title">Content</label>
+				<textarea name="content" id="poly-content" class="text fullwidth">{{content}}</textarea>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div id="oh-options-tab" class="oh-google-map-clearfix oh-google-map-tab">
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="stroke-color">Stroke Color</label>
+				<input type="text" name="strokeColor" id="stroke-color" value="{{strokeColor}}" class="simple-color-picker text fullwidth" />
+			</div>
+		</div>
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="stroke-color">Fill Color</label>
+				<input type="text" name="fillColor" id="fill-color" value="{{fillColor}}" class="simple-color-picker text fullwidth" />
+			</div>
+		</div>
+	</div>
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="stroke-opacity" class="oh-google-map-small-margin-bottom">Stroke Opacity</label>
+				<div class="slider" data-value="{{strokeOpacity}}" data-start=".6" data-step=".1" data-min="0" data-max="1"></div>
+				<input type="hidden" name="strokeOpacity" id="stroke-opacity" value="{{strokeOpacity}}" />
+			</div>
+		</div>
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="fill-opacity" class="oh-google-map-small-margin-bottom">Fill Opacity</label>
+				<div class="slider" data-value="{{fillOpacity}}" data-start=".6" data-step=".1" data-min="0" data-max="1"></div>
+				<input type="hidden" name="fillOpacity" id="fill-opacity" value="{{fillOpacity}}" />
+			</div>
+		</div>
+	</div>
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-margin-bottom">
+				<label for="stroke-opacity" class="oh-google-map-small-margin-bottom">Stroke Weight</label>
+				<div class="slider" data-value="{{strokeWeight}}" data-start="3" data-step="1" data-min="0" data-max="10"></div>
+				<input type="hidden" name="strokeWeight" id="stroke-weight" value="{{strokeWeight}}" />
+			</div>
+		</div>
+		<div class="oh-google-map-column oh-google-map-large-6">
+		</div>
+	</div>
+
+</div>
+
+<footer>
+	{{#not isSavedToMap}}
+		<button type="submit" class="btn submit">Save Circle</button>
+	{{/not}}
+
+	{{#if isSavedToMap}}
+		<button type="submit" class="btn submit">Save Changes</button>
+	{{/if}}
+	
+	<a href="#" class="cancel">Cancel</a>
+</footer>
+
+</div>
+
+</div>

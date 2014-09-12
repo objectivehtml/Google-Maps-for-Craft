@@ -72,6 +72,21 @@ class GoogleMaps_MapDataModel extends BaseModel
         }
 
         $this->polylines = $polylines;
+
+
+        $circles = array();
+
+        foreach($this->circles as $circle)
+        {
+            if(get_class($circle) != 'Craft\GoogleMaps_CircleModel')
+            {
+                $circle = GoogleMaps_CircleModel::populateModel((array) $circle);
+            }
+
+            $circles[] = $circle;
+        }
+
+        $this->circles = $circles;
     }
 
     public function markers()
@@ -205,6 +220,35 @@ class GoogleMaps_MapDataModel extends BaseModel
         return null;
     }
 
+    public function getCircles()
+    {
+        $return = array();
+
+        foreach($this->circles as $circle)
+        {
+            if(get_class($circle) != 'Craft\GoogleMaps_CircleModel')
+            {
+                $circle = GoogleMaps_CircleModel::populateModel((array) $circle);
+            }
+
+            $return[] = $circle;
+        }
+
+        return $return;
+    }
+
+    public function getCircle($index)
+    {
+        $circles = $this->getCircles();
+
+        if(isset($circles[$index]))
+        {
+            return $circles[$index];
+        }
+
+        return null;
+    }
+
     public function sortByDistanceAsc($a, $b)
     {
         return $a->distance < $b->distance ? -1 : 1;
@@ -221,7 +265,8 @@ class GoogleMaps_MapDataModel extends BaseModel
             'markers' => array(),
             'polygons' => array(),
             'polylines' => array(),
-            'routes' => array()
+            'routes' => array(),
+            'circles' => array()
         );
 
         foreach($this->getMarkers() as $marker)
@@ -244,6 +289,11 @@ class GoogleMaps_MapDataModel extends BaseModel
             $return['routes'][] = $route->getAttributes();
         }
 
+        foreach($this->getCircles() as $circle)
+        {
+            $return['circles'][] = $circle->getAttributes();
+        }
+
         return json_encode($return);
     }
 
@@ -263,6 +313,24 @@ class GoogleMaps_MapDataModel extends BaseModel
         unset($markers[$index]);
 
         $this->markers = $markers;
+    }
+
+    public function addCircle(GoogleMaps_CircleModel $circle)
+    {
+        $circles = $this->circles;
+
+        $circles[] = $circle;
+
+        $this->circles = $circles;
+    }
+
+    public function removeCircle($index)
+    {
+        $circles = $this->circles;
+
+        unset($circles[$index]);
+
+        $this->circles = $circles;
     }
 
     public function addPolygon(GoogleMaps_PolygonModel $polygon)
@@ -333,11 +401,11 @@ class GoogleMaps_MapDataModel extends BaseModel
     protected function defineAttributes()
     {
         return array(
-            // Location Parameters
-            'markers'   => array(AttributeType::Mixed, 'default' => array()),
-            'polygons'   => array(AttributeType::Mixed, 'default' => array()),
-            'polylines'   => array(AttributeType::Mixed, 'default' => array()),
-            'routes'   => array(AttributeType::Mixed, 'default' => array())
+            'markers' => array(AttributeType::Mixed, 'default' => array()),
+            'polygons' => array(AttributeType::Mixed, 'default' => array()),
+            'polylines' => array(AttributeType::Mixed, 'default' => array()),
+            'routes' => array(AttributeType::Mixed, 'default' => array()),
+            'circles' => array(AttributeType::Mixed, 'default' => array())
         );
 
     }

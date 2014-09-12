@@ -2,6 +2,12 @@
 
 ### Changelog
 
+#### 0.6.1
+##### 09/12/2014
+
+- (Bug Fix) Fixed an issue that prevented circles from appearing on the map list view
+- (Bug Fix) Improved UX on map list view, if you edit a map object from this view and click cancel, you will be returned to the map list view just like the delete action.
+
 #### 0.6.0
 ##### 09/12/2014
 

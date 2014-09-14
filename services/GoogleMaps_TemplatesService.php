@@ -49,14 +49,14 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
             $this->scripts();
         }
 
-        craft()->templates->includeJs('var '.$options['id'].' = new GoogleMaps.Map(document.getElementById("oh-map-'.$options['id'].'"), '.json_encode((object) $mapOptions).');');
+        craft()->templates->includeJs('var '.$options['id'].' = new GoogleMaps.Map(document.getElementById("oh-map-'.$options['id'].'"), '.$this->jsonEncode((object) $mapOptions).');');
 
         return TemplateHelper::getRaw(PHP_EOL.'<div id="oh-map-'.$options['id'].'" class="oh-google-map-canvas" style="width:'.$options['width'].';height:'.$options['height'].'"></div>');
     }
 
     public function currentLocation($id, $options = array())
     {
-        craft()->templates->includeJs('new GoogleMaps.CurrentLocation('.$id.', '.json_encode((object) $options).');');
+        craft()->templates->includeJs('new GoogleMaps.CurrentLocation('.$id.', '.$this->jsonEncode((object) $options).');');
     }
 
     public function geocode($location)
@@ -91,7 +91,7 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
             $data = new GoogleMaps_MapDataModel((array) $value);
         }
 
-        craft()->templates->includeJs('new GoogleMaps.MapData('.$id.','.$data->toJson().','.json_encode($options).');');
+        craft()->templates->includeJs('new GoogleMaps.MapData('.$id.','.$data->toJson().','.$this->jsonEncode($options).');');
     }
 
     public function mapDataModel($data)
@@ -118,22 +118,22 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
 
     public function polygon($id, $points, $options = array())
     {
-        craft()->templates->includeJs('new GoogleMaps.Polygon('.$id.','.json_encode($points).','.json_encode((object) $options).');');
+        craft()->templates->includeJs('new GoogleMaps.Polygon('.$id.','.$this->jsonEncode($points).','.$this->jsonEncode((object) $options).');');
     }
 
     public function polyline($id, $points, $options = array())
     {
-        craft()->templates->includeJs('new GoogleMaps.Polyline('.$id.','.json_encode($points).','.json_encode((object) $options).');');
+        craft()->templates->includeJs('new GoogleMaps.Polyline('.$id.','.$this->jsonEncode($points).','.$this->jsonEncode((object) $options).');');
     }
 
     public function marker($id, $options = array())
     {
-        craft()->templates->includeJs('new GoogleMaps.Marker('.$id.','.json_encode((object) $options).');');
+        craft()->templates->includeJs('new GoogleMaps.Marker('.$id.','.$this->jsonEncode((object) $options).');');
     }
 
     public function circle($id, $options = array())
     {
-        craft()->templates->includeJs('new GoogleMaps.Circle('.$id.','.json_encode((object) $options).');');
+        craft()->templates->includeJs('new GoogleMaps.Circle('.$id.','.$this->jsonEncode((object) $options).');');
     }
 
     private function _populateField($result)
@@ -161,5 +161,15 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
         }
 
         return $fields;
+    }
+
+    public function jsonEncode($data)
+    {
+        $pattern = "/(:)(\"|')(google.maps.+)(\"|')(,)/u";
+        $data = json_encode($data);
+
+        return  preg_replace_callback("/(\"|')google.maps.\\w+.\\w+(\"|')/u", function($match) {
+            return str_replace(array('"', '\''), '', $match[0]);
+        }, $data);
     }
 }

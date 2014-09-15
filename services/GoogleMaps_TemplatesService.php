@@ -165,11 +165,8 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
 
     public function jsonEncode($data)
     {
-        $pattern = "/(:)(\"|')(google.maps.+)(\"|')(,)/u";
-        $data = json_encode($data);
-
         return  preg_replace_callback("/(\"|')google.maps.\\w+.\\w+(\"|')/u", function($match) {
             return str_replace(array('"', '\''), '', $match[0]);
-        }, $data);
+        }, json_encode($data));
     }
 }

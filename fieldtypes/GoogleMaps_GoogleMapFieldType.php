@@ -128,7 +128,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
                 $overlay->isNew = false;
             }
         }
-    
+        
         if(isset($this->element->$handle))
         {
             $this->element->getContent()->{$handle} = $data->toJson();

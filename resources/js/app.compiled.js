@@ -14197,6 +14197,7 @@ var GoogleMaps = {
   			this.polylines = [];
   			this.routes = [];
   			this.circles = [];
+  			this.groundOverlays = [];
 
   			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
 

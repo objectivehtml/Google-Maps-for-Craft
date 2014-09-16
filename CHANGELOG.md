@@ -2,6 +2,12 @@
 
 ### Changelog
 
+#### 0.7.0
+##### 09/16/2014
+
+- (Feature) Added new template tag to add GroundOverlay objects to maps
+- (Feature) Added support for GroundOverlays (called Images) within the fieldtype
+
 #### 0.6.2
 ##### 09/12/2014
 
@@ -35,7 +41,7 @@
 
 - (Feature) Added ability to change the map type within the fieldtype
 
-#### 0.5.0
+#### 0.5.0Ï
 ##### 09/08/2014
 
 - (Feature) Added full support for HTML5 geolocation with CurrentLocation

@@ -20,17 +20,14 @@ Google Maps for Craft is a complete geolocation toolkit that interfaces with the
 10. Multiple Polygons per Field
 11. Multiple Polylines per Field
 12. Multiple Circles per Field
-13. Custom marker icons and infowindow content
-14. Full customizable polygons, polylines, and cirlces
-15. Marker clustering
-16. Easy to use template tags
-17. No JavaScript required*
+13. Multiple Ground Overlays (images) per Field
+14. Custom marker icons and infowindow content
+15. Full customizable polygons, polylines, circles, and ground overlays (images)
+16. Marker clustering
+17. Easy to use template tags
+18. No JavaScript required*
 
 *No JavaScript required for out the box features. Advanced use cases may require additional JavaScript for some functionality.
-
-### Wiki
-
-For more information and documentation, [refer to the Wiki](https://github.com/objectivehtml/Google-Maps-for-Craft/wiki).
 
 ### Support
 

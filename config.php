@@ -19,6 +19,7 @@ return array(
 		array('label' => 'Polygons', 'value' => 'polygons'),
 		array('label' => 'Polylines', 'value' => 'polylines'),
 		array('label' => 'Circles', 'value' => 'circles'),
+		array('label' => 'Images', 'value' => 'images'),
 	)
 
 );

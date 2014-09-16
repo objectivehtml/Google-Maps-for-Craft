@@ -87,6 +87,21 @@ class GoogleMaps_MapDataModel extends BaseModel
         }
 
         $this->circles = $circles;
+
+
+        $groundOverlays = array();
+
+        foreach($this->groundOverlays as $overlay)
+        {
+            if(get_class($overlay) != 'Craft\GoogleMaps_GroundOverlayModel')
+            {
+                $overlay = GoogleMaps_GroundOverlayModel::populateModel((array) $overlay);
+            }
+
+            $groundOverlays[] = $overlay;
+        }
+
+        $this->groundOverlays = $groundOverlays;
     }
 
     public function markers()
@@ -220,6 +235,35 @@ class GoogleMaps_MapDataModel extends BaseModel
         return null;
     }
 
+    public function getGroundOverlays()
+    {
+        $return = array();
+
+        foreach($this->groundOverlays as $overlay)
+        {
+            if(get_class($overlay) != 'Craft\GoogleMaps_GroundOverlayModel')
+            {
+                $overlay = GoogleMaps_RouteModel::populateModel((array) $overlay);
+            }
+
+            $return[] = $overlay;
+        }
+
+        return $return;
+    }
+
+    public function getGroundOverlay($index)
+    {
+        $overlays = $this->getGroundOverlays();
+
+        if(isset($overlays[$index]))
+        {
+            return $overlays[$index];
+        }
+
+        return null;
+    }
+
     public function getCircles()
     {
         $return = array();
@@ -266,7 +310,8 @@ class GoogleMaps_MapDataModel extends BaseModel
             'polygons' => array(),
             'polylines' => array(),
             'routes' => array(),
-            'circles' => array()
+            'circles' => array(),
+            'groundOverlays' => array()
         );
 
         foreach($this->getMarkers() as $marker)
@@ -292,6 +337,11 @@ class GoogleMaps_MapDataModel extends BaseModel
         foreach($this->getCircles() as $circle)
         {
             $return['circles'][] = $circle->getAttributes();
+        }
+
+        foreach($this->getGroundOverlays() as $overlay)
+        {
+            $return['groundOverlays'][] = $overlay->getAttributes();
         }
 
         return json_encode($return);
@@ -387,6 +437,24 @@ class GoogleMaps_MapDataModel extends BaseModel
         $this->routes = $routes;
     }
 
+    public function addGroundOverlay(GoogleMaps_GroundOverlayModel $overlay)
+    {
+        $groundOverlays = $this->groundOverlays;
+
+        $groundOverlays[] = $overlay;
+
+        $this->groundOverlays = $groundOverlays;
+    }
+
+    public function removeGroundOverlay($index)
+    {
+        $groundOverlays = $this->groundOverlays;
+
+        unset($groundOverlays[$index]);
+
+        $this->groundOverlays = $groundOverlays;
+    }
+
     public function getStaticMapModel($options = array())
     {
         $options = array_merge($options, array(
@@ -405,7 +473,8 @@ class GoogleMaps_MapDataModel extends BaseModel
             'polygons' => array(AttributeType::Mixed, 'default' => array()),
             'polylines' => array(AttributeType::Mixed, 'default' => array()),
             'routes' => array(AttributeType::Mixed, 'default' => array()),
-            'circles' => array(AttributeType::Mixed, 'default' => array())
+            'circles' => array(AttributeType::Mixed, 'default' => array()),
+            'groundOverlays' => array(AttributeType::Mixed, 'default' => array()),
         );
 
     }

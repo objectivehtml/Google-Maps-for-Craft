@@ -39,6 +39,8 @@
 
   		circles: [],
 
+  		groundOverlays: [],
+
   		showButtons: false,
 
   		className: 'oh-google-map-relative',
@@ -98,7 +100,8 @@
   				polygons: [],
   				polylines: [],
   				routes: [],
-  				circles: []
+  				circles: [],
+  				groundOverlays: []
   			};
 
   			_.each(this.markers, function(marker, i) {
@@ -119,6 +122,10 @@
 
   			_.each(this.circles, function(circle, i) {
   				data.circles.push(circle.toJSON());
+  			});
+
+  			_.each(this.groundOverlays, function(overlay, i) {
+  				data.groundOverlays.push(overlay.toJSON());
   			});
 
   			data = JSON.stringify(data);
@@ -246,6 +253,17 @@
 						};
 
 		 				t.circles.push(new GoogleMaps.Models.Circle(_.extend({}, options, circle)));
+		 			});
+		 		}
+
+	 			if(this.savedData.groundOverlays && this.savedData.groundOverlays.length) {
+		 			_.each(this.savedData.groundOverlays, function(overlay) {
+						var options = {
+							map: t,
+							isSavedToMap: true
+						};
+
+		 				t.groundOverlays.push(new GoogleMaps.Models.GroundOverlay(_.extend({}, options, overlay)));
 		 			});
 		 		}
 
@@ -441,6 +459,18 @@
 
  						e.preventDefault();
  					}
+ 				},{
+ 					label: 'Add Image',
+ 					name: 'images',
+ 					click: function(e) {
+ 						var view = new GoogleMaps.Views.GroundOverlayForm({
+ 							map: t
+ 						});
+
+ 						t.showModal(view);
+
+ 						e.preventDefault();
+ 					}
  				}]
  			}));
 		},
@@ -460,6 +490,10 @@
 
 			_.each(this.circles, function(circle) {
 				circle.get('infowindow').close();
+			});
+
+			_.each(this.groundOverlays, function(overlay) {
+				overlay.get('infowindow').close();
 			});
 
 			_.each(this.routes, function(route) {
@@ -526,6 +560,13 @@
 			_.each(this.circles, function(circle) {
 				if(!circle.get('deleted')) {
 					bounds.union(circle.getBounds());
+					boundsChanged = true;
+				}
+			});
+
+			_.each(this.groundOverlays, function(overlay) {
+				if(!overlay.get('deleted')) {
+					bounds.union(overlay.getBounds());
 					boundsChanged = true;
 				}
 			});

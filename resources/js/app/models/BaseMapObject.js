@@ -15,11 +15,15 @@
 		// Reset map object to original settings when an object form is cancelled
 		reset: function() {},
 
+		getInfoWindowPosition: function() {
+			return this.getPosition();
+		},
+
 		buildInfoWindowContent: function() {
 			var content = this.get('content');
 			var _return = ['<div>', (_.isArray(content) ? content.join('') : content)];
 
-			var t = this, latLng = this.getPosition();
+			var t = this, latLng = this.getInfoWindowPosition();
 
 			_return.push([
 					'<div class="oh-google-map-infowindow-actions">',

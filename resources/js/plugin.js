@@ -44,6 +44,8 @@ var GoogleMaps = {
 
 		circles: [],
 
+		groundOverlays: [],
+
 		lat: 0,
 
 		lng: 0,
@@ -255,6 +257,18 @@ var GoogleMaps = {
 			
 			if(_.isUndefined(fitBounds) || fitBounds) {
 				t.bounds.union(circle.getBounds());
+			}
+
+			this.fitBounds(this.bounds);
+		},
+
+		addGroundOverlay: function(overlay, fitBounds) {
+			var t = this;
+
+			this.groundOverlays.push(overlay);
+			
+			if(_.isUndefined(fitBounds) || fitBounds) {
+				t.bounds.union(overlay.getBounds());
 			}
 
 			this.fitBounds(this.bounds);
@@ -626,10 +640,7 @@ var GoogleMaps = {
 
 		onAnimationChanged: function() {},
 
-		onClick: function() {
-			this.get('map').closeInfoWindows();
-			this.get('infowindow').open(this.get('map').api, this.api);
-		},
+		onClick: function() {},
 
 		onCursorChanged: function() {},
 
@@ -637,42 +648,7 @@ var GoogleMaps = {
 
 		onDrag: function() {},
 
-		onDragend: function(e, callback) {
-			var t = this;
-
-			t.set({
-				lat: e.latLng.lat(),
-				lng: e.latLng.lng()
-			});
-
-			this.get('map').geocoder.geocode({location: e.latLng}, function(results, status) {
-				if(status == 'OK') {
-					t.set('address', results[0].formatted_address);
-					t.set('addressComponents', results[0].address_components);
-				}
-				else {
-					t.set('address', null);
-					t.set('addressComponents', null);
-				}
-
-				if(!t.get('customContent')) {
-					if(!t.isCoordinate(t.get('address'))) {
-						t.set('content', t.get('address').split(',').join('<br>'));
-					}
-					else {
-						t.set('content', t.get('address'));
-					}
-
-					t.get('infowindow').setContent(t.buildInfoWindowContent());
-				}
-
-				t.get('map').updateHiddenField();
-				
-				if(_.isFunction(callback)) {
-					callback(e);
-				}
-			});
-		},
+		onDragend: function(e, callback) {},
 
 		onDraggableChanged: function() {},
 
@@ -1283,7 +1259,7 @@ var GoogleMaps = {
 
 		iconSize: false,
 
-		objects: ['markers', 'polygons', 'polylines', 'routes', 'circles'],
+		objects: ['markers', 'polygons', 'polylines', 'routes', 'circles', 'groundOverlays'],
 
 		constructor: function(map, data, options) {
 			var t = this;
@@ -1367,6 +1343,23 @@ var GoogleMaps = {
 							strokeWeight: circle.strokeWeight,
 							fillColor: circle.fillColor,
 							fillOpacity: circle.fillOpacity
+						}
+					});
+				});
+			}
+
+			if(data.groundOverlays && this.objects.indexOf('groundOverlays') >= 0) {
+				_.each(data.groundOverlays, function(overlay, i) {
+					overlay = new GoogleMaps.GroundOverlay(map, {
+						title: overlay.title,
+						content: overlay.content,
+						url: overlay.url,
+						bounds: new google.maps.LatLngBounds(
+							new google.maps.LatLng(overlay.sw.lat, overlay.sw.lng),
+							new google.maps.LatLng(overlay.ne.lat, overlay.ne.lng)
+						),
+						options: {
+							opacity: overlay.opacity
 						}
 					});
 				});
@@ -1731,6 +1724,87 @@ var GoogleMaps = {
 		onRadiusChanged: function() {},
 
 		onRightclick: function() {}
+	});
+	
+	GoogleMaps.GroundOverlay = GoogleMaps.BaseClass.extend({
+
+		fitBounds: true,
+
+		options: {},
+
+		infoWindowOptions: {},
+
+		map: false,
+
+		constructor: function(map, options) {
+			this.map = map;
+
+			this.options = {};
+
+			this.base(options);
+
+			this.options.map = this.map.api;
+
+			this.api = new google.maps.GroundOverlay(this.url, this.bounds, this.options);
+
+			if(this.content) {
+				this.infoWindow = new google.maps.InfoWindow(_.extend({}, this.infoWindowOptions, {
+					content: this.content
+				}));
+			}
+
+			this.bindEvents();
+
+			this.map.addGroundOverlay(this, this.fitBounds);
+		},
+
+		getBounds: function() {
+			return this.api.getBounds();
+		},
+
+		getMap: function() {
+			return this.api.getMap();
+		},
+
+		getOpacity: function() {
+			return this.api.getOpacity();
+		},
+
+		getUrl: function() {
+			return this.api.getUrl();
+		},
+
+		setMap: function(value) {
+			this.api.setMap(value);
+		},
+		
+		setOpacity: function(value) {
+			this.api.setOpacity(value);
+		},
+
+		setOptions: function(value) {
+			this.api.setOptions(value);
+		},
+		
+		bindEvents: function() {
+			var t = this;
+
+			google.maps.event.addListener(this.api, 'click', function() {
+				t.onClick.apply(t, arguments);
+			});
+
+			google.maps.event.addListener(this.api, 'dblclick', function() {
+				t.onDblclick.apply(t, arguments);
+			});
+		},
+
+		onClick: function(e) {
+			this.infoWindow.open(this.map.api);
+			this.infoWindow.setPosition(e.latLng);
+		},
+
+		onDblclick: function() {}
+
 	});
 
 }());

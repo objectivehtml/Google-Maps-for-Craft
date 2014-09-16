@@ -21,104 +21,114 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         
         $data = $this->element->$handle;
 
-        if(isset($data->markers))
+        foreach($data->markers as $index => $marker)
         {
-            foreach($data->markers as $index => $marker)
+            if($marker->deleted)
             {
-                if($marker->deleted)
+                if(isset($marker->locationId))
                 {
-                    if(isset($marker->locationId))
+                    $location = GoogleMaps_LocationRecord::model()->findByPk($marker->locationId);
+
+                    if($location)
                     {
-                        $location = GoogleMaps_LocationRecord::model()->findByPk($marker->locationId);
-
-                        if($location)
-                        {
-                            $location->delete();
-                        }
+                        $location->delete();
                     }
-
-                    $data->removeMarker($index);
                 }
-                else
-                {
-                    $marker->isNew = false;
-                    
-                    $marker->elementId = $this->element->id;
 
-                    $location = GoogleMaps_LocationRecord::model()->findByPk(isset($marker->locationId) ? $marker->locationId : 0);
-
-                    if(!$location)
-                    {
-                        $location = new GoogleMaps_LocationRecord;
-                        $location->elementId = $this->element->id;
-                        $location->handle = $handle;
-                    }
-
-                    $location->address = $marker->address;
-                    $location->addressComponents = $marker->addressComponents;
-                    $location->title = $marker->title;
-                    $location->content = $marker->content;
-                    $location->lat = $marker->lat;
-                    $location->lng = $marker->lng;
-                    $location->save();
-
-                    $marker->locationId = $location->id;
-                }
+                $data->removeMarker($index);
             }
-
-            foreach($data->polygons as $index => $polygon)
+            else
             {
-                if($polygon->deleted)
-                {
-                    $data->removePolygon($index);
-                }
-                else
-                {
-                    $polygon->elementId = $this->element->id;
-                    $polygon->isNew = false;
-                }
-            }
+                $marker->isNew = false;
+                
+                $marker->elementId = $this->element->id;
 
-            foreach($data->polylines as $index => $polyline)
-            {
-                if($polyline->deleted)
-                {
-                    $data->removePolyline($index);
-                }
-                else
-                {
-                    $polyline->elementId = $this->element->id;
-                    $polyline->isNew = false;
-                }
-            }
+                $location = GoogleMaps_LocationRecord::model()->findByPk(isset($marker->locationId) ? $marker->locationId : 0);
 
-            foreach($data->routes as $index => $route)
-            {
-                if($route->deleted)
+                if(!$location)
                 {
-                    $data->removeRoute($index);
+                    $location = new GoogleMaps_LocationRecord;
+                    $location->elementId = $this->element->id;
+                    $location->handle = $handle;
                 }
-                else
-                {
-                    $route->elementId = $this->element->id;
-                    $route->isNew = false;
-                }
-            }
 
-            foreach($data->circles as $index => $circle)
-            {
-                if($circle->deleted)
-                {
-                    $data->removeCircle($index);
-                }
-                else
-                {
-                    $circle->elementId = $this->element->id;
-                    $circle->isNew = false;
-                }
+                $location->address = $marker->address;
+                $location->addressComponents = $marker->addressComponents;
+                $location->title = $marker->title;
+                $location->content = $marker->content;
+                $location->lat = $marker->lat;
+                $location->lng = $marker->lng;
+                $location->save();
+
+                $marker->locationId = $location->id;
             }
         }
 
+        foreach($data->polygons as $index => $polygon)
+        {
+            if($polygon->deleted)
+            {
+                $data->removePolygon($index);
+            }
+            else
+            {
+                $polygon->elementId = $this->element->id;
+                $polygon->isNew = false;
+            }
+        }
+
+        foreach($data->polylines as $index => $polyline)
+        {
+            if($polyline->deleted)
+            {
+                $data->removePolyline($index);
+            }
+            else
+            {
+                $polyline->elementId = $this->element->id;
+                $polyline->isNew = false;
+            }
+        }
+
+        foreach($data->routes as $index => $route)
+        {
+            if($route->deleted)
+            {
+                $data->removeRoute($index);
+            }
+            else
+            {
+                $route->elementId = $this->element->id;
+                $route->isNew = false;
+            }
+        }
+
+        foreach($data->circles as $index => $circle)
+        {
+            if($circle->deleted)
+            {
+                $data->removeCircle($index);
+            }
+            else
+            {
+                $circle->elementId = $this->element->id;
+                $circle->isNew = false;
+            }
+        }
+
+        foreach($data->groundOverlays as $index => $overlay)
+        {
+            if($overlay->deleted)
+            {
+                $data->removeGroundOverlay($index);
+            }
+            else
+            {
+                $overlay->elementId = $this->element->id;
+                $overlay->isNew = false;
+            }
+        }
+    
         if(isset($this->element->$handle))
         {
             $this->element->getContent()->{$handle} = $data->toJson();

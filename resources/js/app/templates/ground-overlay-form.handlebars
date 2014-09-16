@@ -1,0 +1,99 @@
+<div class="oh-google-map-row">
+	<div class="oh-google-map-small-12 oh-google-map-columns">
+
+{{#not isSavedToMap}}
+	<h2>Add Image</h2>
+{{/not}}
+
+{{#if isSavedToMap}}
+	<h2>Edit Image</h2>
+{{/if}}
+
+<nav class="oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up">
+	<ul>
+		<li><a class="oh-google-map-tab-trigger active" href="#oh-location-tab">Location</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-content-tab">Content</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-options-tab">Options</a></li>
+	</ul>
+</nav>
+
+<div id="oh-location-tab" class="oh-google-map-clearfix oh-google-map-tab">
+	
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-medium-6 oh-google-map-columns">
+			<p><b>Southwest Location</b><br>{{#not sw}}N/A{{/not}} {{#if sw}}{{../sw.address}}<br><a href="#" class="set-location" data-prop="sw">Change Location</a>{{/if}}</p>
+
+			{{#not sw}}
+			<p><a href="#" class="btn small set-location" data-prop="sw">+ Set Location</a></p>
+			{{/not}}
+
+			<p><b>Northeast Location</b><br>{{#not ne}}N/A{{/not}} {{#if ne}}{{../ne.address}}<br><a href="#" class="set-location" data-prop="ne">Change Location</a>{{/if}}</p>
+
+			{{#not ne}}
+			<p><a href="#" class="btn small set-location" data-prop="ne">+ Set Location</a></p>
+			{{/not}}
+		</div>
+		<div class="oh-google-map-medium-6 oh-google-map-columns">
+			<div class="oh-google-map-map-icon">
+				<label>Image</label>
+				<span>{{#if url}}<img src="{{../url}}" />{{/if}}{{#not url}}<i data-icon="assets"></i>{{/not}}</span>
+				<a href="#" class="set-image">Set Image</a>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div id="oh-content-tab" class="oh-google-map-clearfix oh-google-map-tab">
+	
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="poly-title">Title</label>
+				<input type="text" name="title" id="poly-title" value="{{title}}" class="text fullwidth" />
+			</div>
+		</div>
+	</div>
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="poly-title">Content</label>
+				<textarea name="content" id="poly-content" class="text fullwidth">{{content}}</textarea>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div id="oh-options-tab" class="oh-google-map-clearfix oh-google-map-tab">
+
+	<div class="oh-google-map-row">
+		<div class="oh-google-map-column oh-google-map-large-12">
+			<div class="oh-google-map-margin-bottom">
+				<label for="opacity" class="oh-google-map-small-margin-bottom">Opacity</label>
+				<div class="slider" data-value="{{opacity}}" data-start="0" data-step=".01" data-min="0" data-max="1"></div>
+				<input type="hidden" name="opacity" id="opacity" value="{{opacity}}" />
+			</div>
+		</div>
+		<div class="oh-google-map-column oh-google-map-large-6">
+		</div>
+	</div>
+
+</div>
+
+<footer>
+	{{#not isSavedToMap}}
+		<button type="submit" class="btn submit">Save Image</button>
+	{{/not}}
+
+	{{#if isSavedToMap}}
+		<button type="submit" class="btn submit">Save Image</button>
+	{{/if}}
+	
+	<a href="#" class="cancel">Cancel</a>
+</footer>
+
+</div>
+
+</div>

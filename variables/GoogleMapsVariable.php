@@ -63,6 +63,11 @@ class GoogleMapsVariable
         return craft()->googleMaps_templates->circle($id, $options);
     }
 
+    public function groundOverlay($id, $options = array())
+    {
+        return craft()->googleMaps_templates->groundOverlay($id, $options);
+    }
+
     public function currentLocation($id, $options = array())
     {
         return craft()->googleMaps_templates->currentLocation($id, $options);

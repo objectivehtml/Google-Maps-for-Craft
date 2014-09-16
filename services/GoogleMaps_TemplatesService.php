@@ -136,6 +136,11 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
         craft()->templates->includeJs('new GoogleMaps.Circle('.$id.','.$this->jsonEncode((object) $options).');');
     }
 
+    public function groundOverlay($id, $options = array())
+    {
+        craft()->templates->includeJs('new GoogleMaps.GroundOverlay('.$id.','.$this->jsonEncode((object) $options).');');
+    }
+
     private function _populateField($result)
     {
         if ($result['settings'])

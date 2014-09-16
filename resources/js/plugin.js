@@ -428,9 +428,9 @@ var GoogleMaps = {
 			var t = this, marker = this.api;
 
 			if(this.content) {
-				this.infoWindow = new google.maps.InfoWindow(_.extend({}, this.infoWindowOptions, {
+				this.infoWindow = new google.maps.InfoWindow(_.extend({}, {
 					content: this.content
-				}));
+				}, this.infoWindowOptions));
 			}
 
 			google.maps.event.addListener(this.api, this.infoWindowTrigger, function() {
@@ -751,9 +751,9 @@ var GoogleMaps = {
 			var t = this, polygon = this.api;
 
 			if(this.content) {
-				this.infoWindow = new google.maps.InfoWindow(_.extend({}, this.infoWindowOptions, {
+				this.infoWindow = new google.maps.InfoWindow(_.extend({}, {
 					content: this.content
-				}));
+				}, this.infoWindowOptions));
 			}
 		},
 
@@ -822,7 +822,6 @@ var GoogleMaps = {
 		toJSON: function() {
 			var json = GoogleMaps.Models.Base.prototype.toJSON.call(this);
 			var points = [];
-
 
 			if(this.api.getPath()) {
 				_.each(this.api.getPath().getArray(), function(latLng) {
@@ -1354,10 +1353,8 @@ var GoogleMaps = {
 						title: overlay.title,
 						content: overlay.content,
 						url: overlay.url,
-						bounds: new google.maps.LatLngBounds(
-							new google.maps.LatLng(overlay.sw.lat, overlay.sw.lng),
-							new google.maps.LatLng(overlay.ne.lat, overlay.ne.lng)
-						),
+						sw: overlay.sw,
+						ne: overlay.ne,
 						options: {
 							opacity: overlay.opacity
 						}
@@ -1590,9 +1587,9 @@ var GoogleMaps = {
 
 		createInfoWindow: function(polygon) {
 			if(this.content) {
-				this.infoWindow = new google.maps.InfoWindow(_.extend({}, this.infoWindowOptions, {
+				this.infoWindow = new google.maps.InfoWindow(_.extend({}, {
 					content: this.content
-				}));
+				}, this.infoWindowOptions));
 			}
 		},
 		
@@ -1745,12 +1742,19 @@ var GoogleMaps = {
 
 			this.options.map = this.map.api;
 
+			if(this.sw && this.ne) {
+				this.bounds = new google.maps.LatLngBounds(
+					new google.maps.LatLng(this.sw.lat, this.sw.lng),
+					new google.maps.LatLng(this.ne.lat, this.ne.lng)
+				);
+			}
+
 			this.api = new google.maps.GroundOverlay(this.url, this.bounds, this.options);
 
 			if(this.content) {
-				this.infoWindow = new google.maps.InfoWindow(_.extend({}, this.infoWindowOptions, {
+				this.infoWindow = new google.maps.InfoWindow(_.extend({}, {
 					content: this.content
-				}));
+				}, this.infoWindowOptions));
 			}
 
 			this.bindEvents();

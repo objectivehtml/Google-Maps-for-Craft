@@ -29,6 +29,10 @@ Google Maps for Craft is a complete geolocation toolkit that interfaces with the
 
 *No JavaScript required for out the box features. Advanced use cases may require additional JavaScript for some functionality.
 
+### Wiki
+
+For more information and documentation, [refer to the Wiki](https://github.com/objectivehtml/Google-Maps-for-Craft/wiki).
+
 ### Support
 
 During the initial beta support may be limited, but will still be provided. For the benefit of others, if you have an bug, feature request, or question about implementation be sure to use the issues here in Github. If private support is required, you may email [support@objectivehtml.com](mailto:support@objectivehtml.com).

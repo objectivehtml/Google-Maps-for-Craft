@@ -56,7 +56,6 @@
 				this.model.setOptions({bounds: bounds});
 			}
 
-			this.model.set('opacity', parseFloat(this.$el.find('#opacity').val()));
 			this.model.setOpacity(this.model.get('opacity'));
 
 			this.model.setMap(this.map.api);
@@ -130,6 +129,8 @@
 				})
 				.change(function(e, value) {
 					$(this).next().val(value);
+
+					t.model.set('opacity', parseFloat(value));
 					t.updateGroundOverlay();
 				});
 
@@ -340,7 +341,8 @@
 		},
 
 		reset: function() {
-
+			this.model.set(this.originalOverlay);
+			this.updateGroundOverlay();
 		},
 
 		cancel: function() {

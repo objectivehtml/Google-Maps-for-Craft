@@ -3478,7 +3478,8 @@ var GoogleMaps = {
 				polygons: [],
 				polylines: [],
 				routes: [],
-				circles: []
+				circles: [],
+				overlays: []
 			};
 
 			_.each(this.markers, function(marker) {
@@ -3499,6 +3500,10 @@ var GoogleMaps = {
 
 			_.each(this.circles, function(circle) {
 				data.circles.push(circle.toJSON());
+			});
+
+			_.each(this.groundOverlays, function(overlay) {
+				data.overlays.push(overlay.toJSON());
 			});
 
 			var view = new GoogleMaps.Views.MapList({
@@ -3943,6 +3948,22 @@ var GoogleMaps = {
 				e.preventDefault();
 			});
 
+			this.$el.find('.overlay-undo').click(function(e) {
+				var index = $(this).parent().index();
+				var overlay = t.map.groundOverlays[index];
+
+				overlay.set('deleted', false);
+				overlay.get('api').setMap(t.map.api);
+
+				t.model.get('groundOverlays')[index].deleted = false;
+
+				t.map.center();
+				t.map.updateHiddenField();
+				t.render();
+				
+				e.preventDefault();
+			});
+
 			this.$el.find('.marker-center').click(function(e) {
 				var index = $(this).parent().index();
 				var marker = t.map.markers[index];
@@ -4003,6 +4024,15 @@ var GoogleMaps = {
 				var circle = t.map.circles[index];
 
 				t.map.fitBounds(circle.getBounds());
+
+				e.preventDefault();
+			});
+
+			this.$el.find('.overlay-center').click(function(e) {
+				var index = $(this).parent().index();
+				var overlay = t.map.groundOverlays[index];
+
+				t.map.fitBounds(overlay.getBounds());
 
 				e.preventDefault();
 			});

@@ -61,3 +61,15 @@
 	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="circle-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Circle {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="circle-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="circles"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="circles"><span data-icon="trash"></span></a></span>{{/not}}</li>
 {{/forEach}}
 </ol>
+
+<h2>Images</h2>
+
+{{#not overlays.length}}
+<p>There are no images on the map.</p>
+{{/not}}
+
+<ol class="oh-google-map-ordered-list">
+{{#forEach overlays}}
+	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="overlay-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Image {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="circle-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="groundOverlays"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="groundOverlays"><span data-icon="trash"></span></a></span>{{/not}}</li>
+{{/forEach}}
+</ol>

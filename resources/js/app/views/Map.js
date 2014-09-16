@@ -346,7 +346,8 @@
 				polygons: [],
 				polylines: [],
 				routes: [],
-				circles: []
+				circles: [],
+				overlays: []
 			};
 
 			_.each(this.markers, function(marker) {
@@ -367,6 +368,10 @@
 
 			_.each(this.circles, function(circle) {
 				data.circles.push(circle.toJSON());
+			});
+
+			_.each(this.groundOverlays, function(overlay) {
+				data.overlays.push(overlay.toJSON());
 			});
 
 			var view = new GoogleMaps.Views.MapList({

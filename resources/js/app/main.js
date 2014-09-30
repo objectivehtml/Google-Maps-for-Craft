@@ -35,19 +35,23 @@ var GoogleMaps = {
 		}
 	};
 
-	GoogleMaps.Fieldtype = function($el, options) {
+	GoogleMaps.Fieldtype = Garnish.Base.extend({
 
-		var App = new Backbone.Marionette.Application();
+		init: function($el, options) {
+			var t = this;
 
-		App.options = options;
+			this.$container = $($el);
 
-		App.addRegions({
-			content: $el
-		});
-	
-		var coord = options.center.split(',');
+			var App = new Backbone.Marionette.Application();
 
-		App.addInitializer(function() {
+			App.options = options;
+
+			App.addRegions({
+				content: $el
+			});
+		
+			var coord = options.center.split(',');
+
 			var map = new GoogleMaps.Views.Map({
 				fieldname: options.fieldname,
 				savedData: options.savedData,
@@ -61,16 +65,30 @@ var GoogleMaps = {
 				addressFields: options.addressFields
 			});
 
-			setTimeout(function() {
-				map.redraw();
-				map.updateHiddenField();
-			}, 100);
+			App.addInitializer(function() {
 
-			App.content.show(map);
-		});
+				setTimeout(function() {
+					map.redraw();
+					map.updateHiddenField();
+				}, 100);
 
-		App.start();
-	};
+				App.content.show(map);
+
+			});
+
+			t.addListener(window, 'resize', function(ev) {
+				if(map.$el.parents('.field').parent().css('display') == 'block') {
+                	map.redraw();
+                	map.center();
+
+                	t.removeListener(window, 'resize');
+                }
+            });
+
+			App.start();
+		}
+
+	});
 
 
 }());

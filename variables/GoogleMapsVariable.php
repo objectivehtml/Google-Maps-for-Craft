@@ -72,4 +72,15 @@ class GoogleMapsVariable
     {
         return craft()->googleMaps_templates->currentLocation($id, $options);
     }
+
+    public function searchEntriesWithinBounds($id, $url)
+    { 
+        craft()->templates->includeJs("
+            $id.addListener('idle', function() {
+                $.get('$url', function(data) {
+                    console.log(data);
+                });
+            });
+        ");
+    }
 }

@@ -1279,8 +1279,32 @@ var GoogleMaps = {
 
 		objects: ['markers', 'polygons', 'polylines', 'routes', 'circles', 'groundOverlays'],
 
+		markerOptions: {},
+
+		polygonOptions: {},
+
+		polylineOptions: {},
+
+		circleOptions: {},
+
+		groundOverlayOptions: {},
+
+		routeMarkerOptions: {},
+
 		constructor: function(map, data, options) {
 			var t = this;
+
+			this.markerOptions = {};
+
+			this.polygonOptions = {};
+
+			this.polylineOptions = {};
+
+			this.circleOptions = {};
+
+			this.groundOverlayOptions = {};
+
+			this.routeMarkerOptions = {};
 
 			this.bounds = new google.maps.LatLngBounds();
 
@@ -1308,13 +1332,13 @@ var GoogleMaps = {
 						content: polygon.content,
 						fitBounds: t.fitBounds,
 						infoWindowOptions: options.infoWindowOptions ? options.infoWindowOptions : {},
-						options: {
+						options: _.extend({
 							strokeColor: polygon.strokeColor,
 							strokeOpacity: polygon.strokeOpacity,
 							strokeWeight: polygon.strokeWeight,
 							fillColor: polygon.fillColor,
 							fillOpacity: polygon.fillOpacity
-						}
+						}, t.polygonOptions ? t.polygonOptions : {})
 					});
 				});
 			}
@@ -1327,11 +1351,11 @@ var GoogleMaps = {
 						content: polyline.content,
 						fitBounds: t.fitBounds,
 						infoWindowOptions: options.infoWindowOptions ? options.infoWindowOptions : {},
-						options: {
+						options: _.extend({
 							strokeColor: polyline.strokeColor,
 							strokeOpacity: polyline.strokeOpacity,
 							strokeWeight: polyline.strokeWeight
-						}
+						}, t.polylineOptions ? t.polylineOptions : {})
 					});
 				});
 			}
@@ -1344,7 +1368,7 @@ var GoogleMaps = {
 						fitBounds: t.fitBounds,
 						infoWindowOptions: options.infoWindowOptions ? options.infoWindowOptions : {},
 						metric: circle.metric,
-						options: {
+						options: _.extend({
 							center: new google.maps.LatLng(circle.lat, circle.lng),
 							radius: circle.radius,
 							strokeColor: circle.strokeColor,
@@ -1352,7 +1376,7 @@ var GoogleMaps = {
 							strokeWeight: circle.strokeWeight,
 							fillColor: circle.fillColor,
 							fillOpacity: circle.fillOpacity
-						}
+						}, t.circleOptions ? t.circleOptions : {})
 					});
 				});
 			}
@@ -1365,22 +1389,22 @@ var GoogleMaps = {
 						url: overlay.url,
 						sw: overlay.sw,
 						ne: overlay.ne,
-						options: {
+						options: _.extend({
 							opacity: overlay.opacity
-						}
+						}, t.groundOverlayOptions ? t.groundOverlayOptions : {})
 					});
 				});
 			}
 
 			if(data.routes && this.objects.indexOf('routes') >= 0) {
 				_.each(data.routes, function(route, i) {
-
 					route = new GoogleMaps.Route(map, {
 						title: route.title,
 						content: route.content,
 						fitBounds: t.fitBounds,
 						locations: route.locations,
 						markers: route.markers,
+						markerOptions: t.routeMarkerOptions ? t.routeMarkerOptions : false,
 						directionsRendererOptions: {
 							suppressMarkers: true,
 							suppressInfoWindows: true,

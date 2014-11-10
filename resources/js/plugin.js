@@ -239,7 +239,6 @@ var GoogleMaps = {
 			this.polygons.push(polygon);
 
 			if(_.isUndefined(fitBounds) || fitBounds) {
-
 				_.each(polygon.getPath().getArray(), function(path) {
 					t.bounds.extend(path);
 				});
@@ -257,33 +256,27 @@ var GoogleMaps = {
 				_.each(polyline.getPath().getArray(), function(path) {
 					t.bounds.extend(path);
 				});
+				
+				this.fitBounds(this.bounds);
 			}
-
-			this.fitBounds(this.bounds);
 		},
 
 		addCircle: function(circle, fitBounds) {
-			var t = this;
-
 			this.circles.push(circle);
 			
 			if(_.isUndefined(fitBounds) || fitBounds) {
-				t.bounds.union(circle.getBounds());
+				this.bounds.union(circle.getBounds());
+				this.fitBounds(this.bounds);
 			}
-
-			this.fitBounds(this.bounds);
 		},
 
 		addGroundOverlay: function(overlay, fitBounds) {
-			var t = this;
-
 			this.groundOverlays.push(overlay);
 			
 			if(_.isUndefined(fitBounds) || fitBounds) {
-				t.bounds.union(overlay.getBounds());
+				this.bounds.union(overlay.getBounds());
+				this.fitBounds(this.bounds);
 			}
-
-			this.fitBounds(this.bounds);
 		},
 
 		addRoute: function(route, fitBounds) {
@@ -295,9 +288,9 @@ var GoogleMaps = {
 				_.each(route.getLocations(), function(location) {
 					t.bounds.extend(new google.maps.LatLng(location.lat, location.lng));
 				});
+				
+				this.fitBounds(this.bounds);
 			}
-			
-			this.fitBounds(this.bounds);
 		},
 
 		closeinfoWindows: function() {
@@ -387,7 +380,7 @@ var GoogleMaps = {
 
 		infoWindowOptions: {},
 
-		iconSize: false,
+		icon: null,
 
 		constructor: function(map, options) {
 			var t = this;
@@ -397,6 +390,18 @@ var GoogleMaps = {
 			this.map = map;
 
 			this.base(options);
+
+			if(_.isObject(this.options) && this.options.icon) {
+				var icon = this.options.icon;
+
+				if(!icon.url) {
+					icon.url = this.icon;
+				}
+
+				this.icon = icon;
+
+				delete this.options.icon;
+			}
 
 			if(this.lat && this.lng) {
 				this.api = new google.maps.Marker(_.extend({
@@ -430,6 +435,8 @@ var GoogleMaps = {
 					}
 				});
 			}
+
+			this.setIcon(this.icon);
 		},
 
 		shouldCluster: function() {
@@ -521,17 +528,25 @@ var GoogleMaps = {
 		},
 		
 		setIcon: function(value) {
-			if(this.iconSize) {
-				var icon = {
-					scaledSize: new google.maps.Size(this.iconSize[0], this.iconSize[1]),
-					url: value
-				};
-				
-				this.api.setIcon(icon);
+			if(_.isObject(value)) {
+				if(_.isArray(value.size)) {
+					value.size = new google.maps.Size(value.size[0], value.size[1]);
+				}
+
+				if(_.isArray(value.scaledSize)) {
+					value.scaledSize = new google.maps.Size(value.scaledSize[0], value.scaledSize[1]);
+				}
+
+				if(_.isArray(value.anchor)) {
+					value.anchor = new google.maps.Point(value.anchor[0], value.anchor[1]);
+				}
+
+				if(_.isArray(value.origin)) {
+					value.origin = new google.maps.Point(value.origin[0], value.origin[1]);
+				}
 			}
-			else {
-				this.api.setIcon(value);
-			}
+
+			this.api.setIcon(value);
 		},
 		
 		setMap: function(value) {
@@ -960,6 +975,8 @@ var GoogleMaps = {
 
 		markers: [],
 
+		markerOptions: {},
+
 		directionsRequestOptions: {},
 
 		directionsRendererOptions: {},
@@ -969,8 +986,6 @@ var GoogleMaps = {
 		lastResponse: false,
 
 		lastResponseStatus: false,
-
-		iconSize: [22, 40],
 
 		constructor: function(map, options) {
 			if(!options) {
@@ -984,6 +999,8 @@ var GoogleMaps = {
 			this.locations = [];
 
 			this.markers = [];
+
+			this.markerOptions = {};
 
 			this.directionsRequestOptions = {};
 
@@ -1006,23 +1023,18 @@ var GoogleMaps = {
 			var markers = [];
 
 			_.each(this.getMarkers(), function(marker) {
-				var icon = marker.icon;
-
 				marker = new GoogleMaps.Marker(map, {
 					lat: marker.lat,
 					lng: marker.lng,
 					content: marker.content,
 					fitBounds: t.fitBounds,
-					iconSize: marker.scaledWidth && marker.scaledHeight ? [marker.scaledWidth, marker.scaledHeight] : false
+					icon: marker.icon,
+					options: _.extend({
+						icon: {
+							scaledSize: marker.scaledWidth && marker.scaledHeight ? [marker.scaledWidth, marker.scaledHeight] : false
+						}
+					}, t.markerOptions)
 				});
-
-				if(t.iconSize) {
-					marker.iconSize = t.iconSize;
-				}
-
-				if(icon) {
-					marker.setIcon(icon);
-				}
 
 				markers.push(marker);
 			});
@@ -1046,7 +1058,6 @@ var GoogleMaps = {
 			this.locations = locations;
 
 			var marker = new GoogleMaps.Marker(this.map, {
-				iconSize: this.iconSize,
 				lat: location.lat,
 				lng: location.lng,
 				address: location.address,
@@ -1266,10 +1277,6 @@ var GoogleMaps = {
 
 		fitBounds: true,
 
-		markers: [],
-
-		iconSize: false,
-
 		objects: ['markers', 'polygons', 'polylines', 'routes', 'circles', 'groundOverlays'],
 
 		constructor: function(map, data, options) {
@@ -1281,24 +1288,15 @@ var GoogleMaps = {
 
 			if(data.markers && this.objects.indexOf('markers') >= 0) {
 				_.each(data.markers, function(marker, i) {
-					var icon = marker.icon;
-
 					marker = new GoogleMaps.Marker(map, {
 						lat: marker.lat,
 						lng: marker.lng,
 						content: marker.content,
 						fitBounds: t.fitBounds,
 						clustering: t.clustering,
-						iconSize: t.iconSize
+						icon: marker.icon,
+						options: t.markerOptions ? t.markerOptions : false
 					});
-
-					if(t.iconSize) {
-						marker.iconSize = t.iconSize;
-					}
-
-					if(icon) {
-						marker.setIcon(icon);
-					}
 				});
 			}
 

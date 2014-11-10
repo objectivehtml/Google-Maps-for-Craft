@@ -544,6 +544,10 @@ var GoogleMaps = {
 				if(_.isArray(value.origin)) {
 					value.origin = new google.maps.Point(value.origin[0], value.origin[1]);
 				}
+				
+				if(value.icon == '') {
+					value = false;
+				}
 			}
 
 			this.api.setIcon(value);

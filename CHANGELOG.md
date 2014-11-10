@@ -2,6 +2,23 @@
 
 ### Changelog
 
+#### 0.8.0
+##### 11/10/2014
+
+- (Feature) Added ability to define a scaled width and height for markers
+- (Feature) Added new parameter to make it possible to hide all the markers not within the a map's bounds
+- (Bug Fix) Fixed an issue that would cause the fieldtype to not appear correctly in the CP when the field was located on any tab aside from the default
+- (Refactor) Cleaned up old unused code
+- (Refactor) Removed iconSize properties from all classes.
+- (Refactor) Added ability to modify all the options to the map objects added to the map with the field type
+
+#### 0.7.1
+##### 09/16/2014
+
+- (Feature) Added support for GroundOverlays (called Images) within the fieldtype
+- (Feature) Added new template tag to add GroundOverlay objects to maps
+- (Bug Fix) Fixed an issue with the ground overlays not appearing on the map list view in the original 0.7.0 release Source code (zip)
+
 #### 0.7.0
 ##### 09/16/2014
 

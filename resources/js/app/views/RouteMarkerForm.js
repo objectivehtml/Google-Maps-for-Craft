@@ -7,7 +7,9 @@
 		submit: function() {
 			this.model.set({
 				title: this.$el.find('[name="title"]').val(),
-				content: this.$el.find('[name="content"]').val()
+				content: this.$el.find('[name="content"]').val(),
+				scaledWidth: parseInt(this.$el.find('[name="scaledWidth"]').val()),
+				scaledHeight: parseInt(this.$el.find('[name="scaledHeight"]').val())
 			});
 
 			if(this.model.get('content') != this.model.get('address').split(',').join('<br>')) {

@@ -6,10 +6,11 @@
 	<h2>Edit Marker</h2>
 {{/if}}
 
-<nav class="oh-google-map-tabs oh-google-map-clearfix oh-google-map-two-up">
+<nav class="oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up">
 	<ul>
 		<li><a class="oh-google-map-tab-trigger active" href="#oh-location-tab">Location</a></li>
 		<li><a class="oh-google-map-tab-trigger" href="#oh-content-tab">Content</a></li>
+		<li><a class="oh-google-map-tab-trigger" href="#oh-options-tab">Options</a></li>
 	</ul>
 </nav>
 
@@ -58,47 +59,20 @@
 
 <div id="oh-options-tab" class="oh-google-map-clearfix oh-google-map-tab">
 
-	<div class="oh-google-map-row">
-		<div class="oh-google-map-column oh-google-map-large-6">
-			<div class="oh-google-map-margin-bottom">
-				<label for="stroke-color">Stroke Color</label>
-				<input type="text" name="strokeColor" id="stroke-color" value="{{strokeColor}}" class="simple-color-picker text fullwidth" />
-			</div>
-		</div>
-		<div class="oh-google-map-column oh-google-map-large-6">
-			<div class="oh-google-map-margin-bottom">
-				<label for="stroke-color">Fill Color</label>
-				<input type="text" name="fillColor" id="fill-color" value="{{fillColor}}" class="simple-color-picker text fullwidth" />
-			</div>
-		</div>
-	</div>
+	<div class="oh-google-map-margin-bottom">
 
-	<div class="oh-google-map-row">
-		<div class="oh-google-map-column oh-google-map-large-6">
-			<div class="oh-google-map-margin-bottom">
-				<label for="stroke-opacity" class="oh-google-map-small-margin-bottom">Stroke Opacity</label>
-				<div class="slider" data-value="{{strokeOpacity}}" data-start=".6" data-step=".1" data-min="0" data-max="1"></div>
-				<input type="hidden" name="strokeOpacity" id="stroke-opacity" value="{{strokeOpacity}}" />
-			</div>
-		</div>
-		<div class="oh-google-map-column oh-google-map-large-6">
-			<div class="oh-google-map-margin-bottom">
-				<label for="fill-opacity" class="oh-google-map-small-margin-bottom">Fill Opacity</label>
-				<div class="slider" data-value="{{fillOpacity}}" data-start=".6" data-step=".1" data-min="0" data-max="1"></div>
-				<input type="hidden" name="fillOpacity" id="fill-opacity" value="{{fillOpacity}}" />
-			</div>
-		</div>
-	</div>
+		<b>Scaled Icon Size</b>
+		<p>Enter the scaled width and height of the icon to alter the size as it appears on the map.</p>
 
-	<div class="oh-google-map-row">
-		<div class="oh-google-map-column oh-google-map-large-6">
-			<div class="oh-google-map-margin-bottom">
-				<label for="stroke-opacity" class="oh-google-map-small-margin-bottom">Stroke Weight</label>
-				<div class="slider" data-value="{{strokeWeight}}" data-start="3" data-step="1" data-min="0" data-max="10"></div>
-				<input type="hidden" name="strokeWeight" id="stroke-weight" value="{{strokeWeight}}" />
+		<div class="oh-google-map-row">
+			<div class="oh-google-map-column oh-google-map-large-6">
+				<label for="icon-width">Width</label>
+				<input type="text" name="scaledWidth" id="icon-width" value="{{scaledWidth}}" class="text fullwidth" />
 			</div>
-		</div>
-		<div class="oh-google-map-column oh-google-map-large-6">
+			<div class="oh-google-map-column oh-google-map-large-6">
+				<label for="icon-height">Height</label>
+				<input type="text" name="scaledHeight" id="icon-height" value="{{scaledHeight}}" class="text fullwidth" />
+			</div>
 		</div>
 	</div>
 

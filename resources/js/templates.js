@@ -774,7 +774,7 @@ function program11(depth0,data) {
   buffer += "\n\n";
   stack1 = helpers['if'].call(depth0, (depth0 && depth0.isSavedToMap), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\n\n<nav class=\"oh-google-map-tabs oh-google-map-clearfix oh-google-map-two-up\">\n	<ul>\n		<li><a class=\"oh-google-map-tab-trigger active\" href=\"#oh-location-tab\">Location</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-content-tab\">Content</a></li>\n	</ul>\n</nav>\n\n<div id=\"oh-location-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-8\">\n			<p><b>Address:</b> <span class=\"address\">";
+  buffer += "\n\n<nav class=\"oh-google-map-tabs oh-google-map-clearfix oh-google-map-three-up\">\n	<ul>\n		<li><a class=\"oh-google-map-tab-trigger active\" href=\"#oh-location-tab\">Location</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-content-tab\">Content</a></li>\n		<li><a class=\"oh-google-map-tab-trigger\" href=\"#oh-options-tab\">Options</a></li>\n	</ul>\n</nav>\n\n<div id=\"oh-location-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-8\">\n			<p><b>Address:</b> <span class=\"address\">";
   if (helper = helpers.address) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.address); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
@@ -799,39 +799,15 @@ function program11(depth0,data) {
   if (helper = helpers.content) { stack1 = helper.call(depth0, {hash:{},data:data}); }
   else { helper = (depth0 && depth0.content); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "</textarea>\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<div id=\"oh-options-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-color\">Stroke Color</label>\n				<input type=\"text\" name=\"strokeColor\" id=\"stroke-color\" value=\"";
-  if (helper = helpers.strokeColor) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.strokeColor); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+    + "</textarea>\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<div id=\"oh-options-tab\" class=\"oh-google-map-clearfix oh-google-map-tab\">\n\n	<div class=\"oh-google-map-margin-bottom\">\n\n		<b>Scaled Icon Size</b>\n		<p>Enter the scaled width and height of the icon to alter the size as it appears on the map.</p>\n\n		<div class=\"oh-google-map-row\">\n			<div class=\"oh-google-map-column oh-google-map-large-6\">\n				<label for=\"icon-width\">Width</label>\n				<input type=\"text\" name=\"scaledWidth\" id=\"icon-width\" value=\"";
+  if (helper = helpers.scaledWidth) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.scaledWidth); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" class=\"simple-color-picker text fullwidth\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-color\">Fill Color</label>\n				<input type=\"text\" name=\"fillColor\" id=\"fill-color\" value=\"";
-  if (helper = helpers.fillColor) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.fillColor); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+    + "\" class=\"text fullwidth\" />\n			</div>\n			<div class=\"oh-google-map-column oh-google-map-large-6\">\n				<label for=\"icon-height\">Height</label>\n				<input type=\"text\" name=\"scaledHeight\" id=\"icon-height\" value=\"";
+  if (helper = helpers.scaledHeight) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.scaledHeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
-    + "\" class=\"simple-color-picker text fullwidth\" />\n			</div>\n		</div>\n	</div>\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-opacity\" class=\"oh-google-map-small-margin-bottom\">Stroke Opacity</label>\n				<div class=\"slider\" data-value=\"";
-  if (helper = helpers.strokeOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.strokeOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" data-start=\".6\" data-step=\".1\" data-min=\"0\" data-max=\"1\"></div>\n				<input type=\"hidden\" name=\"strokeOpacity\" id=\"stroke-opacity\" value=\"";
-  if (helper = helpers.strokeOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.strokeOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"fill-opacity\" class=\"oh-google-map-small-margin-bottom\">Fill Opacity</label>\n				<div class=\"slider\" data-value=\"";
-  if (helper = helpers.fillOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.fillOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" data-start=\".6\" data-step=\".1\" data-min=\"0\" data-max=\"1\"></div>\n				<input type=\"hidden\" name=\"fillOpacity\" id=\"fill-opacity\" value=\"";
-  if (helper = helpers.fillOpacity) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.fillOpacity); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" />\n			</div>\n		</div>\n	</div>\n\n	<div class=\"oh-google-map-row\">\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n			<div class=\"oh-google-map-margin-bottom\">\n				<label for=\"stroke-opacity\" class=\"oh-google-map-small-margin-bottom\">Stroke Weight</label>\n				<div class=\"slider\" data-value=\"";
-  if (helper = helpers.strokeWeight) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.strokeWeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" data-start=\"3\" data-step=\"1\" data-min=\"0\" data-max=\"10\"></div>\n				<input type=\"hidden\" name=\"strokeWeight\" id=\"stroke-weight\" value=\"";
-  if (helper = helpers.strokeWeight) { stack1 = helper.call(depth0, {hash:{},data:data}); }
-  else { helper = (depth0 && depth0.strokeWeight); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
-  buffer += escapeExpression(stack1)
-    + "\" />\n			</div>\n		</div>\n		<div class=\"oh-google-map-column oh-google-map-large-6\">\n		</div>\n	</div>\n\n</div>\n\n<footer>\n	";
+    + "\" class=\"text fullwidth\" />\n			</div>\n		</div>\n	</div>\n\n</div>\n\n<footer>\n	";
   stack1 = (helper = helpers.not || (depth0 && depth0.not),options={hash:{},inverse:self.noop,fn:self.program(9, program9, data),data:data},helper ? helper.call(depth0, (depth0 && depth0.isSavedToMap), options) : helperMissing.call(depth0, "not", (depth0 && depth0.isSavedToMap), options));
   if(stack1 || stack1 === 0) { buffer += stack1; }
   buffer += "\n\n	";

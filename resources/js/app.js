@@ -1738,57 +1738,8 @@ var GoogleMaps = {
 
 			this.directionsRequest(request, function(result, status) {
 				if(status == 'OK') {
-					//t.get('infowindow').setContent(t.buildInfoWindowContent());
 					t.setDirections(result);
 					t.setMap(t.get('map').api);
-
-					/*
-					var existing = this.get('markers');
-
-					if(existing) {
-						_.each(existing, function(marker) {
-							marker.setMap(null);
-						});
-					}
-
-					_.each(result.routes[0].legs, function(leg, i) {
-
-						if(i == 0) {
-							var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-a.png&ax=44&ay=48&scale=2';
-						}
-						else {
-							var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=2';
-						}
-
-						markers.push(new GoogleMaps.Models.RouteMarker({
-							scaledWidth: 22,
-							scaledHeight: 40,
-							icon: icon,
-							map: t.get('map'),
-							lat: leg.start_location.lat(),
-							lng: leg.start_location.lng(),
-							address: leg.start_address,
-							content: leg.start_address 
-						}));
-
-						if(i == result.routes[0].legs.length - 1) {
-							icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i + 1)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=2';
-						
-							markers.push(new GoogleMaps.Models.RouteMarker({
-								scaledWidth: 22,
-								scaledHeight: 40,
-								icon: icon,
-								map: t.get('map'),
-								lat: leg.end_location.lat(),
-								lng: leg.end_location.lng(),
-								address: leg.end_address,
-								content: leg.end_address 
-							}));
-						}
-					});
-
-					t.set('markers', markers);
-					*/
 				}
 			});
 		},
@@ -2154,18 +2105,6 @@ var GoogleMaps = {
 				}
 			});
 		}
-
-		/*
-		,
-
-		onClick: function() {
-			_.each(this.get('route').getMarkers(), function(marker) {
-				marker.get('infowindow').close();
-			});
-
-			this.get('infowindow').open(this.get('map').api, this.get('api'));
-		}
-		*/
 	});
 
 }());
@@ -4105,7 +4044,9 @@ var GoogleMaps = {
 		submit: function() {
 			this.model.set({
 				title: this.$el.find('[name="title"]').val(),
-				content: this.$el.find('[name="content"]').val()
+				content: this.$el.find('[name="content"]').val(),
+				scaledWidth: parseInt(this.$el.find('[name="scaledWidth"]').val()),
+				scaledHeight: parseInt(this.$el.find('[name="scaledHeight"]').val())
 			});
 
 			if(this.model.get('content') != this.model.get('address').split(',').join('<br>')) {
@@ -5051,7 +4992,9 @@ var GoogleMaps = {
 		submit: function() {
 			this.model.set({
 				title: this.$el.find('[name="title"]').val(),
-				content: this.$el.find('[name="content"]').val()
+				content: this.$el.find('[name="content"]').val(),
+				scaledWidth: parseInt(this.$el.find('[name="scaledWidth"]').val()),
+				scaledHeight: parseInt(this.$el.find('[name="scaledHeight"]').val())
 			});
 
 			if(this.model.get('content') != this.model.get('address').split(',').join('<br>')) {

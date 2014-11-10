@@ -58,18 +58,6 @@
 				}
 			});
 		}
-
-		/*
-		,
-
-		onClick: function() {
-			_.each(this.get('route').getMarkers(), function(marker) {
-				marker.get('infowindow').close();
-			});
-
-			this.get('infowindow').open(this.get('map').api, this.get('api'));
-		}
-		*/
 	});
 
 }());

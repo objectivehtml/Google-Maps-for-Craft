@@ -2,7 +2,12 @@
 
 ### Changelog
 
-#### 0.8.0
+#### 0.8.2
+##### 12/02/2014
+
+- (Bug Fix) Fixed an issue that would cause Craft to break when editing entries inline with Google Maps fields
+
+#### 0.8.1
 ##### 12/02/2014
 
 - (Bug Fix) Fixed an issue with a malformed url error being called

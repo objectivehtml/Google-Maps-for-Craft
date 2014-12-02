@@ -1035,11 +1035,7 @@ var GoogleMaps = {
 					content: marker.content,
 					fitBounds: t.fitBounds,
 					icon: marker.icon,
-					options: _.extend({
-						icon: {
-							scaledSize: marker.scaledWidth && marker.scaledHeight ? [marker.scaledWidth, marker.scaledHeight] : false
-						}
-					}, t.markerOptions)
+					options: t.markerOptions
 				});
 
 				markers.push(marker);

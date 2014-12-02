@@ -5,7 +5,16 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
 {
     public function scripts()
     {
-        craft()->templates->includeJsFile('//maps.google.com/maps/api/js?sensor=true&libraries=geometry');
+        if($this->isSecure())
+        {
+            $protocol = 'https://';
+        }
+        else 
+        {
+            $protocol = 'http://';
+        }
+
+        craft()->templates->includeJsFile($protocol . 'maps.google.com/maps/api/js?sensor=true&libraries=geometry');
         craft()->templates->includeJsResource('googlemaps/js/vendor/base.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/underscore.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/markerclusterer.js');
@@ -174,4 +183,12 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
             return str_replace(array('"', '\''), '', $match[0]);
         }, json_encode($data));
     }
+
+    public function isSecure()
+    {
+      return
+        (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+        || $_SERVER['SERVER_PORT'] == 443;
+    }
+    
 }

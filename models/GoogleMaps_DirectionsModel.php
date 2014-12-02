@@ -24,7 +24,10 @@ class GoogleMaps_DirectionsModel extends BaseModel
 					'content' => $leg->start_address,
 					'lat' => $leg->start_location->lat,
 					'lng' => $leg->start_location->lng,
-					'icon' => $icon
+					'icon' => array(
+						'url' => $icon,
+						'scaledSize' => array(22, 40)
+					)
 				);
 
 				if($index == count($route->legs) - 1)
@@ -35,7 +38,10 @@ class GoogleMaps_DirectionsModel extends BaseModel
 						'content' => $leg->end_address,
 						'lat' => $leg->end_location->lat,
 						'lng' => $leg->end_location->lng,
-						'icon' => $icon
+						'icon' => array(
+							'url' => $icon,
+							'scaledSize' => array(22, 40)
+						)
 					);
 
 					$locations[] = array(

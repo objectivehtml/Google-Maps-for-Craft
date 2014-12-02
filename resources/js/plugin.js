@@ -416,6 +416,8 @@ var GoogleMaps = {
 				this.map.addMarker(this, this.fitBounds);
 
 				this.createInfoWindow();
+
+				this.setIcon(this.icon);
 			}
 			else if(this.address) {
 				this.geocoder.geocode({address: this.address}, function(results, status) {
@@ -432,11 +434,11 @@ var GoogleMaps = {
 						t.map.addMarker(t, t.fitBounds);
 
 						t.createInfoWindow();
+
+						t.setIcon(t.icon);
 					}
 				});
 			}
-
-			this.setIcon(this.icon);
 		},
 
 		shouldCluster: function() {

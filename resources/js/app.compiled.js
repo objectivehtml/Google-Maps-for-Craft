@@ -11033,7 +11033,16 @@ function program2(depth0,data) {
 }());
 var GoogleMaps = {
 	Views: {},
-	Models: {}
+	Models: {},
+	data: [],
+	instances: [],
+	init: function() {
+		var t = this;
+		
+		_.each(this.data, function(data) {
+			t.instances.push(new GoogleMaps.Fieldtype(data[0], data[1]));
+		});
+	}
 };
 
 (function() {
@@ -11077,6 +11086,8 @@ var GoogleMaps = {
 
 			var App = new Backbone.Marionette.Application();
 
+			this.App = App;
+
 			App.options = options;
 
 			App.addRegions({
@@ -11097,6 +11108,8 @@ var GoogleMaps = {
 				showButtons: options.showButtons,
 				addressFields: options.addressFields
 			});
+
+			this.map = map;
 
 			App.addInitializer(function() {
 
@@ -11125,23 +11138,6 @@ var GoogleMaps = {
 
 
 }());
-
-/*
-
-(function() {
-
-	
-
-	GoogleMaps.App = new Backbone.Marionette.Application();
-	
-	GoogleMaps.App.addRegions({
-		content: ".oh-google-maps-wrapper"
-	});
-
-	GoogleMaps.App.start();
-
-}());
-*/
 (function() {
 
 	"use strict";

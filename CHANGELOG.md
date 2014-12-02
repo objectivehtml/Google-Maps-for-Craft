@@ -2,6 +2,11 @@
 
 ### Changelog
 
+#### 0.8.3
+##### 12/02/2014
+
+- (Bug Fix) Added API Key to plugin config file
+
 #### 0.8.2
 ##### 12/02/2014
 

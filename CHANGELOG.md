@@ -3,6 +3,14 @@
 ### Changelog
 
 #### 0.8.0
+##### 12/02/2014
+
+- (Bug Fix) Fixed an issue with a malformed url error being called
+- (Bug Fix) Fixed an issue causing a JS error when attempting to set an icon on a marker before the api property has been set
+- (Bug Fix) Removed legacy properties from the route object which was causing JS errors
+- (Bug Fix) Set a defined scaledSize for icons generated with the plot method
+
+#### 0.8.0
 ##### 11/10/2014
 
 - (Feature) Added ability to define a scaled width and height for markers

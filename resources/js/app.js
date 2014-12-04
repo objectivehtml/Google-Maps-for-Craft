@@ -3,12 +3,19 @@ var GoogleMaps = {
 	Models: {},
 	data: [],
 	instances: [],
-	init: function() {
+	init: function(data) {
 		var t = this;
-		
-		_.each(this.data, function(data) {
-			t.instances.push(new GoogleMaps.Fieldtype(data[0], data[1]));
-		});
+
+		if(data) {
+			new GoogleMaps.Fieldtype(data[0], data[1]);
+		}
+		else {
+			_.each(this.data, function(data) {
+				t.instances.push(new GoogleMaps.Fieldtype(data[0], data[1]));
+			});
+
+			this.data = [];
+		}
 	}
 };
 
@@ -62,6 +69,8 @@ var GoogleMaps = {
 			});
 		
 			var coord = options.center.split(',');
+
+			console.log(google.maps);
 
 			var map = new GoogleMaps.Views.Map({
 				fieldname: options.fieldname,
@@ -4100,8 +4109,6 @@ var GoogleMaps = {
 				    }
 				});
 				
-
-
 				e.preventDefault();
 			});
 

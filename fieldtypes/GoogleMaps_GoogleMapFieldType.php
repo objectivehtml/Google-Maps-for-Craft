@@ -214,13 +214,12 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         
         craft()->templates->includeJsResource('googlemaps/js/app.compiled.js');
         craft()->templates->includeCssResource('googlemaps/css/app.css');
-        craft()->templates->includeJsResource('googlemaps/js/callback.js');
         craft()->templates->includeJsFile('//maps.googleapis.com/maps/api/js?key=&sensor=false&callback=GoogleMaps.init');
 
         $addressFields = $this->getSettings()->addressFields;
 
         craft()->templates->includeJs("
-        GoogleMaps.data.push(['#$namespacedId-field .oh-google-map-wrapper', {
+        var data = ['#$namespacedId-field .oh-google-map-wrapper', {
             fieldname: '$name',
             savedData: ".(!empty($value) ? $value->toJson() : "false").",
             width: '".$this->getSettings()->defaultMapWidth."',
@@ -229,20 +228,14 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
             zoom: ".$this->getSettings()->defaultMapZoom.",
             showButtons: ".json_encode($this->getSettings()->displayButtons).",
             addressFields: ".($addressFields ? json_encode(explode("\r\n", $this->getSettings()->addressFields)) : 'false')."
-        }]);
-        
-        /*
-        new GoogleMaps.Fieldtype('#$namespacedId-field .oh-google-map-wrapper', {
-            fieldname: '$name',
-            savedData: ".(!empty($value) ? $value->toJson() : "false").",
-            width: '".$this->getSettings()->defaultMapWidth."',
-            height: '".$this->getSettings()->defaultMapHeight."',
-            center: '".$this->getSettings()->defaultMapCenter."',
-            zoom: ".$this->getSettings()->defaultMapZoom.",
-            showButtons: ".json_encode($this->getSettings()->displayButtons).",
-            addressFields: ".($addressFields ? json_encode(explode("\r\n", $this->getSettings()->addressFields)) : 'false')."
-        });
-        */");
+        }];
+
+        if(google.maps.Map) {
+            GoogleMaps.init(data);
+        }
+        else {
+            GoogleMaps.data.push(data);
+        }");
 
         return craft()->templates->render('googlemaps/fieldtype', array(
             'name' => $name

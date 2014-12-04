@@ -104,8 +104,6 @@
 				    }
 				});
 				
-
-
 				e.preventDefault();
 			});
 

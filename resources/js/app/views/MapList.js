@@ -8,6 +8,18 @@
 
 		template: GoogleMaps.Template('map-list'),
 
+		initialize: function(options) {
+			GoogleMaps.Views.ItemView.prototype.initialize.call(this, options);
+
+			var t = this;
+
+			if(this.getOption('showButtons')) {
+				_.each(this.getOption('showButtons'), function(button) {
+					t.model.set('show'+(button.charAt(0).toUpperCase() + button.slice(1)), true);
+				});
+			}
+		},
+
 		onRender: function() {
 			var t = this;
 

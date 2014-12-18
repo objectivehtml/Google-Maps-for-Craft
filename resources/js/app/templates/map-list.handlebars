@@ -1,75 +1,99 @@
-<h2>Markers</h2>
+{{#if showMarkers}}
+	
+	<h2>Markers</h2>
 
-<a href="#" class="cancel oh-google-map-close">&times; close</a>
+	<a href="#" class="cancel oh-google-map-close">&times; close</a>
 
-{{#not markers.length}}
-<p>There are no markers on the map.</p>
-{{/not}}
+	{{#not ../markers.length}}
+	<p>There are no markers on the map.</p>
+	{{/not}}
 
-<ol class="oh-google-map-ordered-list">
-{{#each markers}}
-	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="marker-center">{{this.address}}</a>{{#if this.deleted}}</span> <a href="#" class="marker-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="markers"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="markers"><span data-icon="trash"></span></a></span>{{/not}}</li>
-{{/each}}
-</ol>
+	<ol class="oh-google-map-ordered-list">
+	{{#each ../markers}}
+		<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="marker-center">{{this.address}}</a>{{#if this.deleted}}</span> <a href="#" class="marker-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="markers"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="markers"><span data-icon="trash"></span></a></span>{{/not}}</li>
+	{{/each}}
+	</ol>
 
-<h2>Routes</h2>
+{{/if}}
 
-<a href="#" class="cancel oh-google-map-close">&times; close</a>
+{{#if showRoutes}}
 
-{{#not routes.length}}
-<p>There are no routes on the map.</p>
-{{/not}}
+	<h2>Routes</h2>
 
-<ol class="oh-google-map-ordered-list">
-{{#forEach routes}}
-	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="route-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Route {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="route-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="routes"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="routes"><span data-icon="trash"></span></a></span>{{/not}}</li>
-{{/forEach}}
-</ol>
+	<a href="#" class="cancel oh-google-map-close">&times; close</a>
 
-<h2>Polygons</h2>
+	{{#not ../routes.length}}
+	<p>There are no routes on the map.</p>
+	{{/not}}
 
-{{#not polygons.length}}
-<p>There are no polygons on the map.</p>
-{{/not}}
+	<ol class="oh-google-map-ordered-list">
+	{{#forEach ../routes}}
+		<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="route-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Route {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="route-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="routes"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="routes"><span data-icon="trash"></span></a></span>{{/not}}</li>
+	{{/forEach}}
+	</ol>
 
-<ol class="oh-google-map-ordered-list">
-{{#forEach polygons}}
-	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="polygon-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Polygon {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="polygon-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="polygons"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="polygons"><span data-icon="trash"></span></a></span>{{/not}}</li>
-{{/forEach}}
-</ol>
+{{/if}}
 
-<h2>Polylines</h2>
+{{#if showPolygons}}
 
-{{#not polylines.length}}
-<p>There are no polylines on the map.</p>
-{{/not}}
+	<h2>Polygons</h2>
 
-<ol class="oh-google-map-ordered-list">
-{{#forEach polylines}}
-	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="polyline-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Polyline {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="polyline-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="polylines"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="polylines"><span data-icon="trash"></span></a></span>{{/not}}</li>
-{{/forEach}}
-</ol>
+	{{#not ../polygons.length}}
+	<p>There are no polygons on the map.</p>
+	{{/not}}
 
-<h2>Circles</h2>
+	<ol class="oh-google-map-ordered-list">
+	{{#forEach ../polygons}}
+		<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="polygon-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Polygon {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="polygon-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="polygons"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="polygons"><span data-icon="trash"></span></a></span>{{/not}}</li>
+	{{/forEach}}
+	</ol>
 
-{{#not circles.length}}
-<p>There are no circles on the map.</p>
-{{/not}}
+{{/if}}
 
-<ol class="oh-google-map-ordered-list">
-{{#forEach circles}}
-	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="circle-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Circle {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="circle-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="circles"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="circles"><span data-icon="trash"></span></a></span>{{/not}}</li>
-{{/forEach}}
-</ol>
+{{#if showPolylines}}
 
-<h2>Images</h2>
+	<h2>Polylines</h2>
 
-{{#not overlays.length}}
-<p>There are no images on the map.</p>
-{{/not}}
+	{{#not ../polylines.length}}
+		<p>There are no polylines on the map.</p>
+	{{/not}}
 
-<ol class="oh-google-map-ordered-list">
-{{#forEach overlays}}
-	<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="overlay-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Image {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="circle-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="groundOverlays"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="groundOverlays"><span data-icon="trash"></span></a></span>{{/not}}</li>
-{{/forEach}}
-</ol>
+	<ol class="oh-google-map-ordered-list">
+	{{#forEach ../polylines}}
+		<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="polyline-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Polyline {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="polyline-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="polylines"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="polylines"><span data-icon="trash"></span></a></span>{{/not}}</li>
+	{{/forEach}}
+	</ol>
+
+{{/if}}
+
+{{#if showCircles}}
+
+	<h2>Circles</h2>
+
+	{{#not ../circles.length}}
+		<p>There are no circles on the map.</p>
+	{{/not}}
+
+	<ol class="oh-google-map-ordered-list">
+	{{#forEach circles}}
+		<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="circle-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Circle {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="circle-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="circles"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="circles"><span data-icon="trash"></span></a></span>{{/not}}</li>
+	{{/forEach}}
+	</ol>
+
+{{/if}}
+
+{{#if showImages}}
+
+	<h2>Images</h2>
+
+	{{#not ../overlays.length}}
+		<p>There are no images on the map.</p>
+	{{/not}}
+
+	<ol class="oh-google-map-ordered-list">
+	{{#forEach ../overlays}}
+		<li>{{#if this.deleted}}<span class="oh-google-map-strike-out">{{/if}}<a href="#" class="overlay-center">{{#if this.title}}{{../this.title}}{{/if}}{{#not this.title}}Image {{../count}}{{/not}}</a>{{#if this.deleted}}</span> <a href="#" class="circle-undo oh-google-map-small-text">Undo Delete</a>{{/if}}{{#not this.deleted}}<span class="actions"><a href="#" class="edit" data-property="groundOverlays"><span data-icon="edit"></span></a> <a href="#" class="delete" data-property="groundOverlays"><span data-icon="trash"></span></a></span>{{/not}}</li>
+	{{/forEach}}
+	</ol>
+
+{{/if}}

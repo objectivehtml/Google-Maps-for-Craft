@@ -35,7 +35,20 @@
 
 			this.dblclickEvent = google.maps.event.addListener(this.map.api, 'dblclick', function(e) {
 				t.geocode({location: e.latLng}, function(results, status) {
-					t.responseHandler(results[0]);
+					if(results[0]) {
+						results[0].geometry.location = e.latLng;
+						t.responseHandler(results[0]);
+					}
+					else {
+						t.responseHandler({
+							formatted_address: '',
+							addressComponents: [],
+							geometry: {
+								location: e.latLng
+							}
+						});
+					}
+
 					t.lastResponse = results[0];
 				});				
 			});

@@ -376,7 +376,8 @@
 
 			var view = new GoogleMaps.Views.MapList({
 				map: this,
-				model: new Backbone.Model(data)
+				model: new Backbone.Model(data),
+				showButtons: this.showButtons
 			});
 
 			this.showModal(view);
@@ -408,7 +409,6 @@
  					label: 'Add Marker',
  					name: 'markers',
  					click: function(e) {
-
  						var view = new GoogleMaps.Views.MarkerForm({
  							map: t
  						});

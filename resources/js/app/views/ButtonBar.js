@@ -33,8 +33,8 @@
 		onRender: function() {
 			var t = this;
 
-			if(this.options.buttons) {
-				_.each(this.options.buttons, function(button, i) {
+			if(this.model.get('buttons')) {
+				_.each(this.model.get('buttons'), function(button, i) {
 					if(button.click) {
 						t.$el.find('a').eq(i).click(function(e) {
 							button.click.call(this, e);

@@ -2259,8 +2259,8 @@ var GoogleMaps = {
 		onRender: function() {
 			var t = this;
 
-			if(this.options.buttons) {
-				_.each(this.options.buttons, function(button, i) {
+			if(this.model.get('buttons')) {
+				_.each(this.model.get('buttons'), function(button, i) {
 					if(button.click) {
 						t.$el.find('a').eq(i).click(function(e) {
 							button.click.call(this, e);
@@ -2605,7 +2605,20 @@ var GoogleMaps = {
 
 			this.dblclickEvent = google.maps.event.addListener(this.map.api, 'dblclick', function(e) {
 				t.geocode({location: e.latLng}, function(results, status) {
-					t.responseHandler(results[0]);
+					if(results[0]) {
+						results[0].geometry.location = e.latLng;
+						t.responseHandler(results[0]);
+					}
+					else {
+						t.responseHandler({
+							formatted_address: '',
+							addressComponents: [],
+							geometry: {
+								location: e.latLng
+							}
+						});
+					}
+
 					t.lastResponse = results[0];
 				});				
 			});
@@ -3470,7 +3483,8 @@ var GoogleMaps = {
 
 			var view = new GoogleMaps.Views.MapList({
 				map: this,
-				model: new Backbone.Model(data)
+				model: new Backbone.Model(data),
+				showButtons: this.showButtons
 			});
 
 			this.showModal(view);
@@ -3502,7 +3516,6 @@ var GoogleMaps = {
  					label: 'Add Marker',
  					name: 'markers',
  					click: function(e) {
-
  						var view = new GoogleMaps.Views.MarkerForm({
  							map: t
  						});
@@ -3795,6 +3808,18 @@ var GoogleMaps = {
 		map: false,
 
 		template: GoogleMaps.Template('map-list'),
+
+		initialize: function(options) {
+			GoogleMaps.Views.ItemView.prototype.initialize.call(this, options);
+
+			var t = this;
+
+			if(this.getOption('showButtons')) {
+				_.each(this.getOption('showButtons'), function(button) {
+					t.model.set('show'+(button.charAt(0).toUpperCase() + button.slice(1)), true);
+				});
+			}
+		},
 
 		onRender: function() {
 			var t = this;

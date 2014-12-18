@@ -4,6 +4,10 @@
     box-sizing: border-box;   
 }
 
+.oh-google-map-wrapper .gm-style-iw > div {
+    width: auto !important;
+}
+
 .oh-google-map-close { position: absolute; right: 10px; top: 10px; font-size: 12px; }
 
 .oh-google-map-wrapper { position: relative; overflow: hidden; padding: 0 1px 10px 1px; }

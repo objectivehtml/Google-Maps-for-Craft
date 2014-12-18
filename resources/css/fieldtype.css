@@ -33,7 +33,7 @@
 
 .oh-google-map-button-bar li { display: inline-block; float: left; margin-right: 5px; }
 
-.oh-google-map-window { position: absolute; width: 60%; top: -100%; left: 20%; z-index: 100; background: white;  padding: 15px 12px; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); transition: top .25s; -webkit-transition: top .25s; -moz-transition: top .25s; -o-transition: top .25s; -ms-transition: top .25s; z-index: 100; background: white; overflow: visible; }
+.oh-google-map-window { position: absolute; width: 60%; top: -100%; left: 20%; z-index: 100; background: white;  padding: 15px 12px; box-shadow: 0 1px 3px rgba(0, 0, 0, .2); transition: top .25s; -webkit-transition: top .25s; -moz-transition: top .25s; -o-transition: top .25s; -ms-transition: top .25s; z-index: 100; background: white; overflow: auto; max-height: 400px; }
 .oh-google-map-window.show { top: 10px; }
 
 .oh-google-map-highlight-list { overflow-y: auto; }

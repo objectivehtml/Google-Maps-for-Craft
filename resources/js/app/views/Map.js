@@ -4,6 +4,8 @@
 
 	GoogleMaps.Views.Map = GoogleMaps.Views.LayoutView.extend({
 
+		availableButtons: [],
+
 		template: GoogleMaps.Template('map'),
 
   		api: false,
@@ -67,16 +69,6 @@
   			if(!this.model) {
   				this.model = new Backbone.Model();
   			}
-
-  			/*
-  			if(this.position) {
-  				this.mapOptions.center = this.position;
-  			}
-
-  			if(this.zoom) {
-  				this.mapOptions.zoom = this.zoom;
-  			}
-  			*/
 
   			this.model.set({
   				fieldname: this.fieldname,
@@ -386,9 +378,8 @@
 		buildButtonBar: function() {
 			var t = this;
 
-
 			this.buttonBar.show(new GoogleMaps.Views.ButtonBar({
-				showButtons: this.showButtons,
+				showButtons: (this.showButtons != '*' ? this.showButtons : this.availableButtons),
  				buttons: [{
  					icon: 'list',
  					name: 'list',

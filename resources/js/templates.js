@@ -1,5 +1,95 @@
 (function() {
 var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['address-fields'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\"oh-google-map-window\"></div>\n\n<div class=\"oh-google-map-address-field\">\n	\n	<a href=\"#\" class=\"oh-google-map-right hidden view-all\">View All Locations</a>\n\n	<div class=\"field\" id=\"fields-addressline1-field\">\n		<div class=\"input\">\n			<input class=\"text nicetext fullwidth line1\" type=\"text\" id=\"fields-addressline1\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][line1]\" value=\"";
+  if (helper = helpers.line1) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.line1); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"Address Line 1\">\n		</div>\n	</div>\n\n	<div class=\"field\" id=\"fields-addressline2-field\">\n		<div class=\"input\">\n			<input class=\"text nicetext fullwidth line2\" type=\"text\" id=\"fields-addressline2\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][line2]\" value=\"";
+  if (helper = helpers.line2) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.line2); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"Address Line 2\">\n		</div>\n	</div>\n\n	<div class=\"oh-google-map-city-state-zip oh-google-map-clearfix\">\n\n		<div class=\"oh-google-map-city\">\n			<div class=\"field\" id=\"fields-addresscity-field\">\n				<div class=\"input\">\n					<input class=\"text nicetext fullwidth city\" type=\"text\" id=\"fields-addresscity\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][city]\" value=\"";
+  if (helper = helpers.city) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.city); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"City\">\n				</div>\n			</div>\n		</div>\n\n		<div class=\"oh-google-map-state\">\n			<div class=\"field\" id=\"fields-addressstate-field\">\n				<div class=\"input\">\n					<input class=\"text nicetext fullwidth state\" type=\"text\" id=\"fields-addressstate\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][state]\" value=\"";
+  if (helper = helpers.state) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.state); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"State\">\n				</div>\n			</div>\n		</div>\n\n		<div class=\"oh-google-map-zipcode\">\n			<div class=\"field\" id=\"fields-addresszipcode-field\">\n				<div class=\"input\">\n					<input class=\"text nicetext fullwidth zipcode\" type=\"text\" id=\"fields-addresszipcode\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][zipcode]\" value=\"";
+  if (helper = helpers.zipcode) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.zipcode); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"Zip Code\">\n				</div>\n			</div>\n		</div>\n\n	</div>\n\n	<div class=\"field\" id=\"fields-addresscountry-field\">\n		<div class=\"input\">\n			<input class=\"text nicetext fullwidth country\" type=\"text\" id=\"fields-addresscountry\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][country]\" value=\"";
+  if (helper = helpers.country) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.country); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"Country\">\n		</div>\n	</div>\n\n\n	<div class=\"oh-google-map-coordinates oh-google-map-clearfix\">\n\n		<div class=\"oh-google-map-latitude\">\n			<div class=\"field\" id=\"fields-addresslatitude-field\">\n				<div class=\"input\">\n					<input class=\"text nicetext fullwidth latitude\" type=\"text\" id=\"fields-addresslatitude\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][latitude]\" value=\"";
+  if (helper = helpers.latitude) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.latitude); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"Latitude\">\n				</div>\n			</div>\n		</div>\n\n		<div class=\"oh-google-map-longitude\">\n			<div class=\"field\" id=\"fields-addresslongitude-field\">\n				<div class=\"input\">\n					<input class=\"text nicetext fullwidth longitude\" type=\"text\" id=\"fields-addresslongitude\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][longitude]\" value=\"";
+  if (helper = helpers.longitude) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.longitude); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" placeholder=\"Longitude\">\n				</div>\n			</div>\n		</div>\n\n	</div>\n\n	<textarea class=\"response\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][response]\" style=\"display:none\">";
+  if (helper = helpers.response) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.response); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "</textarea>\n	<input type=\"hidden\" name=\"fields[";
+  if (helper = helpers.fieldname) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.fieldname); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "][locationId]\" value=\"";
+  if (helper = helpers.locationId) { stack1 = helper.call(depth0, {hash:{},data:data}); }
+  else { helper = (depth0 && depth0.locationId); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
+  buffer += escapeExpression(stack1)
+    + "\" />\n\n</div>";
+  return buffer;
+  });
+
 templates['button-bar'] = template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -236,6 +326,30 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   else { helper = (depth0 && depth0.content); stack1 = typeof helper === functionType ? helper.call(depth0, {hash:{},data:data}) : helper; }
   buffer += escapeExpression(stack1)
     + "</textarea>\n\n<footer>\n	<button type=\"submit\" class=\"btn submit\">Save Changes</button>\n	<a href=\"#\" class=\"cancel\">Cancel</a>\n</footer>";
+  return buffer;
+  });
+
+templates['geocoder-list'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, helper, options, functionType="function", escapeExpression=this.escapeExpression, self=this, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\n							<tr>\n								<td>"
+    + escapeExpression(((stack1 = (depth0 && depth0.formatted_address)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</td>\n							</tr>\n						";
+  return buffer;
+  }
+
+  buffer += "<div class=\"body\">\n	<div class=\"content\">\n		<div class=\"main\">\n			<h3>Locations Found</h3>\n\n			<div class=\"elements\">\n				<div class=\"tableview\">\n					<table class=\"fullwidth data\">\n						<thead>\n							<tr>\n								<th>Address</th>\n							</tr>\n						</thead>\n						<tbody>\n						";
+  options={hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}
+  if (helper = helpers.locations) { stack1 = helper.call(depth0, options); }
+  else { helper = (depth0 && depth0.locations); stack1 = typeof helper === functionType ? helper.call(depth0, options) : helper; }
+  if (!helpers.locations) { stack1 = blockHelperMissing.call(depth0, stack1, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data}); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\n						</tbody>\n					</table>\n				</div>\n			</div>\n		</div>\n	</div>\n</div>\n<footer class=\"footer\">\n	<div class=\"buttons right\">\n		<button class=\"btn modal-cancel\">Cancel</button>\n	</div>\n</footer>";
   return buffer;
   });
 

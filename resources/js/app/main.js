@@ -1,20 +1,46 @@
 var GoogleMaps = {
 	Views: {},
 	Models: {},
-	data: [],
+	addressFieldData: [],
+	mapFieldData: [],
 	instances: [],
-	init: function(data) {
+	init: function() {
+		var t = this;
+
+		_.each(this.addressFieldData, function(data) {
+			t.initAddressField(data);
+		});
+
+		_.each(this.mapFieldData, function(data) {
+			t.initMapField(data);
+		});
+	},
+	initAddressField: function(data) {
 		var t = this;
 
 		if(data) {
-			new GoogleMaps.Fieldtype(data[0], data[1]);
+			new GoogleMaps.AddressFieldType(data[0], data[1]);
 		}
 		else {
-			_.each(this.data, function(data) {
-				t.instances.push(new GoogleMaps.Fieldtype(data[0], data[1]));
+			_.each(this.addressFieldData, function(data) {
+				t.instances.push(new GoogleMaps.AddressFieldType(data[0], data[1]));
 			});
 
-			this.data = [];
+			this.addressFieldData = [];
+		}
+	},
+	initMapField: function(data) {
+		var t = this;
+
+		if(data) {
+			new GoogleMaps.MapFieldType(data[0], data[1]);
+		}
+		else {
+			_.each(this.mapFieldData, function(data) {
+				t.instances.push(new GoogleMaps.MapFieldType(data[0], data[1]));
+			});
+
+			this.mapFieldData = [];
 		}
 	}
 };
@@ -51,7 +77,7 @@ var GoogleMaps = {
 		}
 	};
 
-	GoogleMaps.Fieldtype = Garnish.Base.extend({
+	GoogleMaps.MapFieldType = Garnish.Base.extend({
 
 		init: function($el, options) {
 			var t = this;
@@ -70,8 +96,6 @@ var GoogleMaps = {
 		
 			var coord = options.center.split(',');
 
-			console.log(google.maps);
-
 			var map = new GoogleMaps.Views.Map({
 				fieldname: options.fieldname,
 				savedData: options.savedData,
@@ -82,6 +106,7 @@ var GoogleMaps = {
 					zoom: options.zoom
 				},
 				showButtons: options.showButtons,
+				availableButtons: options.availableButtons,
 				addressFields: options.addressFields
 			});
 
@@ -108,6 +133,33 @@ var GoogleMaps = {
             });
 
 			App.start();
+		}
+
+	});
+
+	GoogleMaps.AddressFieldType = Garnish.Base.extend({
+
+		init: function($el, options) {
+			var t = this;
+
+			this.$container = $($el);
+
+			var App = new Backbone.Marionette.Application();
+
+			this.App = App;
+
+			App.options = options;
+
+			App.addRegions({
+				content: $el
+			});
+
+			var address = new GoogleMaps.Views.Address({
+				savedData: options.savedData,
+				fieldname: options.fieldname
+			});
+
+			App.content.show(address);
 		}
 
 	});

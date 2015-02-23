@@ -1,0 +1,31 @@
+<div class="body">
+	<div class="content">
+		<div class="main">
+			<h3>Locations Found</h3>
+
+			<div class="elements">
+				<div class="tableview">
+					<table class="fullwidth data">
+						<thead>
+							<tr>
+								<th>Address</th>
+							</tr>
+						</thead>
+						<tbody>
+						{{#locations}}
+							<tr>
+								<td>{{this.formatted_address}}</td>
+							</tr>
+						{{/locations}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<footer class="footer">
+	<div class="buttons right">
+		<button class="btn modal-cancel">Cancel</button>
+	</div>
+</footer>

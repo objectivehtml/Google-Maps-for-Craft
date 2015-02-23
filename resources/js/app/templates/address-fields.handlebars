@@ -1,0 +1,77 @@
+<div class="oh-google-map-window"></div>
+
+<div class="oh-google-map-address-field">
+	
+	<a href="#" class="oh-google-map-right hidden view-all">View All Locations</a>
+
+	<div class="field" id="fields-addressline1-field">
+		<div class="input">
+			<input class="text nicetext fullwidth line1" type="text" id="fields-addressline1" name="fields[{{fieldname}}][line1]" value="{{line1}}" placeholder="Address Line 1">
+		</div>
+	</div>
+
+	<div class="field" id="fields-addressline2-field">
+		<div class="input">
+			<input class="text nicetext fullwidth line2" type="text" id="fields-addressline2" name="fields[{{fieldname}}][line2]" value="{{line2}}" placeholder="Address Line 2">
+		</div>
+	</div>
+
+	<div class="oh-google-map-city-state-zip oh-google-map-clearfix">
+
+		<div class="oh-google-map-city">
+			<div class="field" id="fields-addresscity-field">
+				<div class="input">
+					<input class="text nicetext fullwidth city" type="text" id="fields-addresscity" name="fields[{{fieldname}}][city]" value="{{city}}" placeholder="City">
+				</div>
+			</div>
+		</div>
+
+		<div class="oh-google-map-state">
+			<div class="field" id="fields-addressstate-field">
+				<div class="input">
+					<input class="text nicetext fullwidth state" type="text" id="fields-addressstate" name="fields[{{fieldname}}][state]" value="{{state}}" placeholder="State">
+				</div>
+			</div>
+		</div>
+
+		<div class="oh-google-map-zipcode">
+			<div class="field" id="fields-addresszipcode-field">
+				<div class="input">
+					<input class="text nicetext fullwidth zipcode" type="text" id="fields-addresszipcode" name="fields[{{fieldname}}][zipcode]" value="{{zipcode}}" placeholder="Zip Code">
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="field" id="fields-addresscountry-field">
+		<div class="input">
+			<input class="text nicetext fullwidth country" type="text" id="fields-addresscountry" name="fields[{{fieldname}}][country]" value="{{country}}" placeholder="Country">
+		</div>
+	</div>
+
+
+	<div class="oh-google-map-coordinates oh-google-map-clearfix">
+
+		<div class="oh-google-map-latitude">
+			<div class="field" id="fields-addresslatitude-field">
+				<div class="input">
+					<input class="text nicetext fullwidth latitude" type="text" id="fields-addresslatitude" name="fields[{{fieldname}}][latitude]" value="{{latitude}}" placeholder="Latitude">
+				</div>
+			</div>
+		</div>
+
+		<div class="oh-google-map-longitude">
+			<div class="field" id="fields-addresslongitude-field">
+				<div class="input">
+					<input class="text nicetext fullwidth longitude" type="text" id="fields-addresslongitude" name="fields[{{fieldname}}][longitude]" value="{{longitude}}" placeholder="Longitude">
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<textarea class="response" name="fields[{{fieldname}}][response]" style="display:none">{{response}}</textarea>
+	<input type="hidden" name="fields[{{fieldname}}][locationId]" value="{{locationId}}" />
+
+</div>

@@ -1,20 +1,46 @@
 var GoogleMaps = {
 	Views: {},
 	Models: {},
-	data: [],
+	addressFieldData: [],
+	mapFieldData: [],
 	instances: [],
-	init: function(data) {
+	init: function() {
+		var t = this;
+
+		_.each(this.addressFieldData, function(data) {
+			t.initAddressField(data);
+		});
+
+		_.each(this.mapFieldData, function(data) {
+			t.initMapField(data);
+		});
+	},
+	initAddressField: function(data) {
 		var t = this;
 
 		if(data) {
-			new GoogleMaps.Fieldtype(data[0], data[1]);
+			new GoogleMaps.AddressFieldType(data[0], data[1]);
 		}
 		else {
-			_.each(this.data, function(data) {
-				t.instances.push(new GoogleMaps.Fieldtype(data[0], data[1]));
+			_.each(this.addressFieldData, function(data) {
+				t.instances.push(new GoogleMaps.AddressFieldType(data[0], data[1]));
 			});
 
-			this.data = [];
+			this.addressFieldData = [];
+		}
+	},
+	initMapField: function(data) {
+		var t = this;
+
+		if(data) {
+			new GoogleMaps.MapFieldType(data[0], data[1]);
+		}
+		else {
+			_.each(this.mapFieldData, function(data) {
+				t.instances.push(new GoogleMaps.MapFieldType(data[0], data[1]));
+			});
+
+			this.mapFieldData = [];
 		}
 	}
 };
@@ -51,7 +77,7 @@ var GoogleMaps = {
 		}
 	};
 
-	GoogleMaps.Fieldtype = Garnish.Base.extend({
+	GoogleMaps.MapFieldType = Garnish.Base.extend({
 
 		init: function($el, options) {
 			var t = this;
@@ -70,8 +96,6 @@ var GoogleMaps = {
 		
 			var coord = options.center.split(',');
 
-			console.log(google.maps);
-
 			var map = new GoogleMaps.Views.Map({
 				fieldname: options.fieldname,
 				savedData: options.savedData,
@@ -82,6 +106,7 @@ var GoogleMaps = {
 					zoom: options.zoom
 				},
 				showButtons: options.showButtons,
+				availableButtons: options.availableButtons,
 				addressFields: options.addressFields
 			});
 
@@ -108,6 +133,33 @@ var GoogleMaps = {
             });
 
 			App.start();
+		}
+
+	});
+
+	GoogleMaps.AddressFieldType = Garnish.Base.extend({
+
+		init: function($el, options) {
+			var t = this;
+
+			this.$container = $($el);
+
+			var App = new Backbone.Marionette.Application();
+
+			this.App = App;
+
+			App.options = options;
+
+			App.addRegions({
+				content: $el
+			});
+
+			var address = new GoogleMaps.Views.Address({
+				savedData: options.savedData,
+				fieldname: options.fieldname
+			});
+
+			App.content.show(address);
 		}
 
 	});
@@ -145,6 +197,15 @@ var GoogleMaps = {
 		isCoordinate: function(coord) {
 			return coord.match(/^([-\d.]+),(\s+)?([-\d.]+)$/);
 		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
+	GoogleMaps.Models.Address = GoogleMaps.Models.Base.extend({
 
 	});
 
@@ -2159,6 +2220,156 @@ var GoogleMaps = {
 
 	"use strict";
 
+	GoogleMaps.Views.Address = GoogleMaps.Views.LayoutView.extend({
+
+  		regions: {
+  			modal: '.oh-google-map-window' 
+  		},
+
+		template: GoogleMaps.Template('address-fields'),
+
+		initialize: function(options) {
+			GoogleMaps.Views.LayoutView.prototype.initialize.call(this, options);
+
+			if(!this.model && this.getOption('savedData')) {
+				this.model = new GoogleMaps.Models.Address(this.getOption('savedData'));
+			}
+
+			if(this.getOption('fieldname')) {
+				this.model.set('fieldname', this.getOption('fieldname'));
+			}
+		},
+
+		onDomRefresh: function() {
+			var t = this, value = false, geocoderResults = false, modal = false;
+
+			this.$el.find('.view-all').click(function(e) {
+				t.geocode(function(results, status) {
+					var list = new GoogleMaps.Views.GeocoderList({
+						model: new GoogleMaps.Models.Base({
+							locations: results
+						})
+					});
+
+					list.render();
+ 					
+					list.$el.find('.modal-cancel').click(function(e) {
+						modal.hide();
+					});
+
+ 					modal = new Garnish.Modal(list.$el)
+
+					list.on('select', function(model) {
+						t.setLatitude(model.geometry.location.lat());
+						t.setLongitude(model.geometry.location.lng());
+							
+						modal.hide();
+					});
+				});
+
+				e.preventDefault();
+			});
+
+			this.$el.find('input').focus(function() {
+				value = $(this).val();
+			});
+
+			this.$el.find('input').blur(function() {
+				if(value != $(this).val()) {
+					t.geocode(function(results, status) {
+						if(status == google.maps.GeocoderStatus.OK) {
+							geocoderResults = results;
+
+							t.setLatitude(results[0].geometry.location.lat());
+							t.setLongitude(results[0].geometry.location.lng());
+							t.setResponse(results[0]);
+
+							t.$el.find('.view-all').removeClass('hidden');
+						}
+						else {
+							t.$el.find('.view-all').addClass('hidden');
+						}
+					});
+				}
+			});
+
+			if(this.hasAddress()) {
+				this.$el.find('.view-all').removeClass('hidden');
+			}
+		},
+
+		getLatitude: function() {
+			return this.$el.find('.latitude').val();
+		},
+
+		setLatitude: function(latitude) {
+			this.$el.find('.latitude').val(latitude);
+		},
+
+		getLongitude: function() {
+			return this.$el.find('.longitude').val();
+		},
+
+		setLongitude: function(latitude) {
+			this.$el.find('.longitude').val(latitude);
+		},
+
+		getResponse: function() {
+			return this.$el.find('.response').val();
+		},
+
+		setResponse: function(response) {
+			if(!_.isString(response)) {
+				response = JSON.stringify(response);
+			}
+
+			this.$el.find('.response').val(response).html(response);
+		},
+
+		hasAddress: function() {
+			return this.getAddress() != '';
+		},
+
+		getAddress: function() {
+			return [
+				this.$el.find('.line1').val(),
+				this.$el.find('.line2').val(),
+				this.$el.find('.city').val(),
+				this.$el.find('.state').val(),
+				this.$el.find('.zipcode').val(),
+				this.$el.find('.country').val()
+			].join(' ').trim();
+		},
+
+		geocode: function(callback) {			
+ 			var api = new google.maps.Geocoder();
+ 			var address = this.getAddress();
+
+			api.geocode({address: address}, function(results, status) {
+				if(_.isFunction(callback)) {
+					callback(results, status);
+				};
+			});
+		},
+
+		showModal: function(view) {
+			this.modal.empty();
+			this.modal.show(view);
+			this.modal.$el.addClass('show');
+		},
+
+		hideModal: function(center) {
+			this.modal.$el.removeClass('show');
+			this.modal.empty();
+		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
 	GoogleMaps.Views.BaseForm = GoogleMaps.Views.ItemView.extend({
 
 		className: 'oh-google-map-form',
@@ -2230,7 +2441,7 @@ var GoogleMaps = {
 
 	GoogleMaps.Views.ButtonBar = GoogleMaps.Views.ItemView.extend({
 
-		className: 'oh-google-map-button-bar',
+		className: 'oh-google-map-button-bar oh-google-map-clearfix',
 
 		template: GoogleMaps.Template('button-bar'),
 
@@ -2754,6 +2965,36 @@ var GoogleMaps = {
 
 	"use strict";
 
+	GoogleMaps.Views.GeocoderList = GoogleMaps.Views.ItemView.extend({
+
+		template: GoogleMaps.Template('geocoder-list'),
+
+		className: 'oh-google-map-native-modal modal elementselectormodal',
+
+		initialize: function(options) {
+			GoogleMaps.Views.ItemView.prototype.initialize.call(this, options);
+		},
+
+		events: {
+			'click tbody tr': 'onClick'
+		},
+
+		onClick: function(e) {
+			var index = $(e.target).index();
+			var model = this.model.get('locations')[index];
+
+			this.trigger('select', model);
+
+			e.preventDefault();
+		}
+
+	});
+
+}());
+(function() {
+
+	"use strict";
+
 	GoogleMaps.Views.GroundOverlayForm = GoogleMaps.Views.BaseForm.extend({
 
 		template: GoogleMaps.Template('ground-overlay-form'),
@@ -3111,6 +3352,8 @@ var GoogleMaps = {
 
 	GoogleMaps.Views.Map = GoogleMaps.Views.LayoutView.extend({
 
+		availableButtons: [],
+
 		template: GoogleMaps.Template('map'),
 
   		api: false,
@@ -3174,16 +3417,6 @@ var GoogleMaps = {
   			if(!this.model) {
   				this.model = new Backbone.Model();
   			}
-
-  			/*
-  			if(this.position) {
-  				this.mapOptions.center = this.position;
-  			}
-
-  			if(this.zoom) {
-  				this.mapOptions.zoom = this.zoom;
-  			}
-  			*/
 
   			this.model.set({
   				fieldname: this.fieldname,
@@ -3493,9 +3726,8 @@ var GoogleMaps = {
 		buildButtonBar: function() {
 			var t = this;
 
-
 			this.buttonBar.show(new GoogleMaps.Views.ButtonBar({
-				showButtons: this.showButtons,
+				showButtons: (this.showButtons != '*' ? this.showButtons : this.availableButtons),
  				buttons: [{
  					icon: 'list',
  					name: 'list',

@@ -67,6 +67,14 @@ class GoogleMapsPlugin extends BasePlugin
     {
         $settings = $this->getSettings();
 
+/*
+        craft()->on('postmaster.init', function(Event $event) {
+            require_once 'GoogleMapsParcelType.php';
+
+            craft()->postmaster->registerParcelType('Craft\GoogleMapsParcelType');
+        });
+*/
+
         if($settings->enableGeocoder)
         {
             craft()->on('entries.saveEntry', function(Event $event) use ($settings)

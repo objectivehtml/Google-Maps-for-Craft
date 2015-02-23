@@ -5,6 +5,18 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 {
     protected $queryParams = false;
 
+    private $_results = array();
+
+    public function init()
+    {
+        $t = $this;
+
+        craft()->on('elements.populateElement', function(Event $event) use ($t)
+        {
+            $t->_results[$event->params['element']->id] = $event->params['result'];
+        });
+    }
+
     public function getName()
     {
         return Craft::t('Google Map');
@@ -185,8 +197,8 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
                 return null;
             }
     
-            $lat = $response->results[0]->geometry->location->lat;
-            $lng = $response->results[0]->geometry->location->lng;
+            $this->queryParams['lat'] = $lat = $response->results[0]->geometry->location->lat;
+            $this->queryParams['lng'] = $lng = $response->results[0]->geometry->location->lng;
         }
         elseif(isset($this->queryParams['lat']) && isset($this->queryParams['lng']))
         {            
@@ -196,11 +208,9 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
         if(isset($lat) && isset($lng))
         {
-            $query->addSelect($handle.'_googlemaps_locations.'.$handle.'_distance');
-            $query->join('(SELECT *, ROUND((((ACOS(SIN('.$lat.' * PI() / 180) * SIN('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) + COS('.$lat.' * PI() / 180) * COS('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) * COS(('.$lng.' - '.craft()->db->tablePrefix.'googlemaps_locations.lng) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) * 1), 1) AS '.$handle.'_distance FROM '.craft()->db->tablePrefix.'googlemaps_locations '.(isset($this->queryParams['distance']) ? 'HAVING '.$handle.'_distance ' . $this->queryParams['distanceOperator'] . ' ' . $this->queryParams['distance'] . ' OR ' . $handle .'_distance IS NULL' : '').' ORDER BY '.$handle.'_distance ASC) '.$handle.'_googlemaps_locations', 'elements.id='.$handle.'_googlemaps_locations.elementId');
+            $query->addSelect('distance');
+            $query->join('(SELECT *, ROUND((((ACOS(SIN('.$lat.' * PI() / 180) * SIN('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) + COS('.$lat.' * PI() / 180) * COS('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) * COS(('.$lng.' - '.craft()->db->tablePrefix.'googlemaps_locations.lng) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) * 1), 1) AS distance FROM '.craft()->db->tablePrefix.'googlemaps_locations '.(isset($this->queryParams['distance']) ? 'HAVING distance ' . $this->queryParams['distanceOperator'] . ' ' . $this->queryParams['distance'] . ' OR ' . 'distance IS NULL' : '').' ORDER BY distance ASC) googlemaps_locations', 'elements.id=googlemaps_locations.elementId');
         }
-        
-        // $query->order($handle.'_distance asc');
     }
 
     public function getInputHtml($name, $value)
@@ -226,20 +236,31 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
             height: '".$this->getSettings()->defaultMapHeight."',
             center: '".$this->getSettings()->defaultMapCenter."',
             zoom: ".$this->getSettings()->defaultMapZoom.",
+            availableButtons: ".$this->getAvailableButtons().",
             showButtons: ".json_encode($this->getSettings()->displayButtons).",
             addressFields: ".($addressFields ? json_encode(explode("\r\n", $this->getSettings()->addressFields)) : 'false')."
         }];
 
         if(google.maps.Map) {
-            GoogleMaps.init(data);
+            GoogleMaps.initMapField(data);
         }
         else {
-            GoogleMaps.data.push(data);
+            GoogleMaps.mapFieldData.push(data);
         }");
 
         return craft()->templates->render('googlemaps/fieldtype', array(
             'name' => $name
         ));
+    }
+
+    public function getAvailableButtons()
+    {
+        foreach(craft()->config->get('availableMapButtons', 'googlemaps') as $button)
+        {
+            $return[] = $button['value'];
+        }
+
+        return json_encode($return);
     }
 
     public function getSettingsHtml()

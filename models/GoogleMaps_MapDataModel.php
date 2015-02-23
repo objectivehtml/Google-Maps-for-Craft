@@ -28,7 +28,6 @@ class GoogleMaps_MapDataModel extends BaseModel
 
         $this->markers = $markers;
 
-
         $routes = array();
 
         foreach($this->routes as $route)
@@ -115,17 +114,18 @@ class GoogleMaps_MapDataModel extends BaseModel
 
         foreach($this->markers as $index => $marker)
         {
+            if(get_class($marker) != 'Craft\GoogleMaps_MarkerModel')
+            {
+                $marker = GoogleMaps_MarkerModel::populateModel((array) $marker);
+            }
+
             if($this->queryParams)
             {
-                if($marker->isWithinProximity($this->queryParams))
-                {
-                    $return[] = $marker;
-                }
+                $marker->isWithinProximity($this->queryParams);
+
             }
-            else
-            {
-                $return[] = $marker;
-            }
+
+            $return[] = $marker;
         }
 
         if($this->queryParams)

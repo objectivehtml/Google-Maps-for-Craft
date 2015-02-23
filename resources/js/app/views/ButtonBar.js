@@ -4,7 +4,7 @@
 
 	GoogleMaps.Views.ButtonBar = GoogleMaps.Views.ItemView.extend({
 
-		className: 'oh-google-map-button-bar',
+		className: 'oh-google-map-button-bar oh-google-map-clearfix',
 
 		template: GoogleMaps.Template('button-bar'),
 

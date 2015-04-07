@@ -122,7 +122,6 @@ class GoogleMaps_MapDataModel extends BaseModel
             if($this->queryParams)
             {
                 $marker->isWithinProximity($this->queryParams);
-
             }
 
             $return[] = $marker;

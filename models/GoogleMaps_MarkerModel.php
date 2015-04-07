@@ -20,11 +20,10 @@ class GoogleMaps_MarkerModel extends BaseModel
             return true;
         }
 
-        $distance = $this->_calculateDistance(
+        $distance = $this->getDistance(
             $params->lat, 
             $params->lng,
-            $this->lat,
-            $this->lng
+            $params->unit
         );
 
         $this->setAttribute('distance', $distance);
@@ -100,21 +99,21 @@ class GoogleMaps_MarkerModel extends BaseModel
         );
     }
 
-    private function _calculateDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo, $earthRadius = 6371000)
+    private function getDistance($latitudeFrom, $longitudeFrom, $unit = 'miles', $earthRadius = 6371000)
     {
         // convert from degrees to radians
         $latFrom = deg2rad($latitudeFrom);
         $lonFrom = deg2rad($longitudeFrom);
-        $latTo = deg2rad($latitudeTo);
-        $lonTo = deg2rad($longitudeTo);
+        $latTo = deg2rad($this->lat);
+        $lonTo = deg2rad($this->lng);
 
         $latDelta = $latTo - $latFrom;
         $lonDelta = $lonTo - $lonFrom;
 
-        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
-        cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + 
+            cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
         
-        return $angle * $earthRadius * 0.00062137;
+        return ($angle * $earthRadius * 0.00062137) * craft()->googleMaps->getUnitMultiplier($unit);
     }
 
     public static function defaultContent($content)

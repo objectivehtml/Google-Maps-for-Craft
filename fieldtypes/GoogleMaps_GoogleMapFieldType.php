@@ -181,6 +181,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
         }
 
         $defaultParams = array(
+            'distanceColumn' => 'distance',
             'distanceOperator' => '<=',
             'unit' => 'miles'
         );
@@ -209,8 +210,8 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
         if(isset($lat) && isset($lng))
         {
-            $query->addSelect('distance');
-            $query->join('(SELECT *, ROUND((((ACOS(SIN('.$lat.' * PI() / 180) * SIN('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) + COS('.$lat.' * PI() / 180) * COS('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) * COS(('.$lng.' - '.craft()->db->tablePrefix.'googlemaps_locations.lng) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) * '.craft()->googleMaps->getUnitMultiplier($this->queryParams['unit']).'), 1) AS distance FROM '.craft()->db->tablePrefix.'googlemaps_locations '.(isset($this->queryParams['distance']) ? 'HAVING distance ' . $this->queryParams['distanceOperator'] . ' ' . $this->queryParams['distance'] . ' OR ' . 'distance IS NULL' : '').' ORDER BY distance ASC) googlemaps_locations', 'elements.id=googlemaps_locations.elementId');
+            $query->addSelect($this->queryParams['distanceColumn']);
+            $query->join('(SELECT *, ROUND((((ACOS(SIN('.$lat.' * PI() / 180) * SIN('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) + COS('.$lat.' * PI() / 180) * COS('.craft()->db->tablePrefix.'googlemaps_locations.lat * PI() / 180) * COS(('.$lng.' - '.craft()->db->tablePrefix.'googlemaps_locations.lng) * PI() / 180)) * 180 / PI()) * 60 * 1.1515) * '.craft()->googleMaps->getUnitMultiplier($this->queryParams['unit']).'), 1) AS '.$this->queryParams['distanceColumn'].' FROM '.craft()->db->tablePrefix.'googlemaps_locations '.(isset($this->queryParams['distance']) ? 'HAVING '.$this->queryParams['distanceColumn'].' ' . $this->queryParams['distanceOperator'] . ' ' . $this->queryParams['distance'] . ' OR ' . $this->queryParams['distanceColumn'] . ' IS NULL' : '').' ORDER BY '.$this->queryParams['distanceColumn'].' ASC) googlemaps_locations', 'elements.id=googlemaps_locations.elementId');
         }
     }
 

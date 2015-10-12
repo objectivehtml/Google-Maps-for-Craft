@@ -129,8 +129,8 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
 
     public function polygon($id, $points, $options = array())
     {
-        craft()->templates->includeJs('new GoogleMaps.Polygon('.$id.','.$this->jsonEncode($points).','.$this->jsonEncode((object) $options).');');
-    }
+	    craft()->templates->includeJs('new GoogleMaps.Polygon('.$id.','.$this->jsonEncode($points).').setOptions('.$this->jsonEncode((object) $options).');');
+	}
 
     public function polyline($id, $points, $options = array())
     {

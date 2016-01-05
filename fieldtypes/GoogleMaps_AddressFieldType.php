@@ -32,15 +32,18 @@ class GoogleMaps_AddressFieldType extends BaseFieldType
 
         $response = $data->getResponse();
 
-        $location->address = $response->formatted_address;
-        $location->addressComponents = $response->address_components;
-        $location->title = $this->element->title;
-        $location->content = implode('<br>', explode(',', $response->formatted_address));
-        $location->lat = $data->latitude;
-        $location->lng = $data->longitude;
-        $location->save();
+	    if($response)
+	    {
+	        $location->address = $response->formatted_address;
+	        $location->addressComponents = $response->address_components;
+	        $location->title = $this->element->title;
+	        $location->content = implode('<br>', explode(',', $response->formatted_address));
+	        $location->lat = $data->latitude;
+	        $location->lng = $data->longitude;
+	        $location->save();
 
-        $data->locationId = $location->id;
+		    $data->locationId = $location->id;
+	    }
 
         $this->element->getContent()->setAttribute($handle, $data->toJson());
 

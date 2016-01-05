@@ -2,7 +2,7 @@
 namespace Craft;
 
 class GoogleMaps_AddressModel extends BaseModel
-{ 
+{
     public function toJson()
     {
         return json_encode($this->getAttributes());
@@ -23,15 +23,15 @@ class GoogleMaps_AddressModel extends BaseModel
     protected function defineAttributes()
     {
         return array(
-            'line1' => array(AttributeType::String, 'required' => true),
+            'line1' => array(AttributeType::String),
             'line2' => array(AttributeType::String),
-            'city' => array(AttributeType::String, 'required' => true),
+            'city' => array(AttributeType::String),
             'state' => array(AttributeType::String),
             'zipcode' => array(AttributeType::String),
             'country' => array(AttributeType::String),
-            'response' => array(AttributeType::String, 'required' => true),
-            'latitude' => array(AttributeType::Mixed, 'required' => true),
-            'longitude' => array(AttributeType::Mixed, 'required' => true),
+            'response' => array(AttributeType::String),
+            'latitude' => array(AttributeType::Mixed),
+            'longitude' => array(AttributeType::Mixed),
             'locationId' => array(AttributeType::Number)
         );
     }

@@ -10,7 +10,7 @@ class GoogleMapsPlugin extends BasePlugin
 
     public function getVersion()
     {
-        return '0.8.3';
+        return '0.8.4';
     }
 
     public function getDeveloper()
@@ -106,11 +106,29 @@ class GoogleMapsPlugin extends BasePlugin
 
                     $response = craft()->googleMaps_geocoder->geocode($address);
 
+                    $mapFields = $settings->mapFields;
+
                     if($response->status == 'OK')
                     {
                         $geocodeResponse = $response->results[0];
 
-                        foreach($settings->mapFields as $mapFieldId)
+                        if($mapFields == '*')
+                        {
+                            $fields = craft()->db->createCommand()
+                                ->select('f.*')
+                                ->from('fields f')
+                                ->where('f.type = :type', array(':type' => 'GoogleMaps_GoogleMap'))
+                                ->queryAll();
+
+                            $mapFields = array();
+
+                            foreach($fields as $field)
+                            {
+                                $mapFields[] = $field['id'];
+                            }
+                        }
+
+                        foreach($mapFields as $mapFieldId)
                         {
                             $mapField = craft()->fields->getFieldById($mapFieldId);
                             $mapData = json_decode($content->{$mapField->handle});

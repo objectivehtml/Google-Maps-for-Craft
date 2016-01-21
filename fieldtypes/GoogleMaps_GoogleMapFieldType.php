@@ -5,7 +5,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 {
     protected $queryParams = false;
 
-    private $_results = array();
+    public $results = array();
 
     public function init()
     {
@@ -13,7 +13,7 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
         craft()->on('elements.populateElement', function(Event $event) use ($t)
         {
-            $t->_results[$event->params['element']->id] = $event->params['result'];
+            $t->results[$event->params['element']->id] = $event->params['result'];
         });
     }
 

@@ -17,7 +17,7 @@ class GoogleMaps_StaticMapModel extends BaseModel
 			{
 				foreach($value as $obj)
 				{
-					$params[] = $obj->getStaticMapParameters();
+					$params[] = str_replace('#', '%23', $obj->getStaticMapParameters());
 				}
 			}
 		}

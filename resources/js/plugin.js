@@ -188,10 +188,6 @@ var GoogleMaps = {
 			return this.api.getBounds();
 		},
 
-		getCenter: function() {
-			return this.api.getCenter();
-		},
-
 		getDiv: function() {
 			return this.api.getDiv();
 		},

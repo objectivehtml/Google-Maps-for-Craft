@@ -188,6 +188,10 @@ var GoogleMaps = {
 			return this.api.getBounds();
 		},
 
+		getCenter: function() {
+			return this.api.getCenter();
+		},
+
 		getDiv: function() {
 			return this.api.getDiv();
 		},
@@ -1107,8 +1111,6 @@ var GoogleMaps = {
 		},
 
 		updateMarkerIcons: function() {
-			var t = this;
-
 			_.each(this.getMarkers(), function(marker, i) {
 				if(i < t.getMarkers().length - 1) {
 					var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-a.png&ax=44&ay=48&scale=2';
@@ -1117,10 +1119,10 @@ var GoogleMaps = {
 					var icon = 'http://mt.google.com/vt/icon/text='+String.fromCharCode(65 + i)+'&psize=16&font=fonts/arialuni_t.ttf&color=ff330000&name=icons/spotlight/spotlight-waypoint-b.png&ax=44&ay=48&scale=2';
 				}
 				
-				t.getLocation(i).icon = icon;
+				this.getLocation(i).icon = icon;
 
 				marker.setIcon(icon);
-			});
+			}, this);
 		},
 
 		directionsRequest: function(callback) {
@@ -1434,7 +1436,14 @@ var GoogleMaps = {
 
 		markerOptions: {},
 
+		positionOptions: {
+			enableHighAccuracy: true, 
+			maximumAge: 1000
+		},
+
 		map: false,
+
+		hasSetBounds: false,
 
 		constructor: function(map, options) {
 			this.map = map;
@@ -1446,7 +1455,10 @@ var GoogleMaps = {
 
 			this.base(options);
 
+			console.log(this.positionOptions);
+
 			this.api = new GeolocationMarker(this.map.api, this.circleOptions, this.markerOptions);
+			this.setPositionOptions(this.positionOptions);
 
 			this.bindEvents();
 		},
@@ -1516,9 +1528,10 @@ var GoogleMaps = {
 		onGeolocationError: function() {},
 
 		onPositionChanged: function() {
-			if(this.fitBounds) {
+			if(this.fitBounds && !this.hasSetBounds) {
 				this.map.bounds.extend(this.getPosition());
 				this.map.fitBounds(this.map.bounds);
+				this.hasSetBounds = true;
 			}
 		}
 

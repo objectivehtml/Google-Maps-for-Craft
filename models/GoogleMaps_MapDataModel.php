@@ -119,12 +119,14 @@ class GoogleMaps_MapDataModel extends BaseModel
                 $marker = GoogleMaps_MarkerModel::populateModel((array) $marker);
             }
 
-            if($this->queryParams)
+            if($this->queryParams && $marker->isWithinProximity($this->queryParams))
             {
-                $marker->isWithinProximity($this->queryParams);
+                $return[] = $marker;
             }
-
-            $return[] = $marker;
+            else if (!$this->queryParams)
+            {
+                $return[] = $marker;
+            }
         }
 
         if($this->queryParams)

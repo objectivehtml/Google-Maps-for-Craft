@@ -188,6 +188,18 @@ class GoogleMaps_GoogleMapFieldType extends BaseFieldType
 
         $this->queryParams = array_merge($defaultParams, $params);
 
+        if(isset($this->queryParams['latitude']))
+        {
+            $this->queryParams['lat'] = $this->queryParams['latitude'];
+            unset($this->queryParams['latitude']);
+        }
+
+        if(isset($this->queryParams['longitude']))
+        {
+            $this->queryParams['lng'] = $this->queryParams['longitude'];
+            unset($this->queryParams['longitude']);
+        }
+
         $handle = $this->model->handle;
 
         if(isset($this->queryParams['address']))

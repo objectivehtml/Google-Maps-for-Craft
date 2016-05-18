@@ -5,18 +5,10 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
 {
     public function scripts()
     {
-        if($this->isSecure())
-        {
-            $protocol = 'https://';
-        }
-        else 
-        {
-            $protocol = 'http://';
-        }
 
         $key = craft()->config->get('key', 'googlemaps');
 
-        craft()->templates->includeJsFile($protocol . 'maps.google.com/maps/api/js?sensor=true&libraries=geometry'.($key ? 'key='.$key : ''));
+        craft()->templates->includeJsFile('//maps.google.com/maps/api/js?sensor=true&libraries=geometry'.($key ? 'key='.$key : ''));
         craft()->templates->includeJsResource('googlemaps/js/vendor/base.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/underscore.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/markerclusterer.js');
@@ -186,9 +178,4 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
         }, json_encode($data));
     }
 
-    public function isSecure()
-    {
-      	return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT'] == 443 || $_SERVER['HTTP_X_FORWARDED_PORT'] == 443;
-    }
-    
 }

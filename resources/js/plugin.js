@@ -72,7 +72,7 @@ var GoogleMaps = {
 					(options.lat ? options.lat : 0), 
 					(options.lng ? options.lng : 0)
 				),
-				zoom: 10
+				zoom: (options.zoom ? options.zoom : 10)
 			};
 
 			this.el = node;

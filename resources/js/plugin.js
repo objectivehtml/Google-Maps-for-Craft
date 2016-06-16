@@ -68,11 +68,8 @@ var GoogleMaps = {
 			}
 
 			var defaultMapOptions = {
-				center: new google.maps.LatLng(
-					(options.lat ? options.lat : 0), 
-					(options.lng ? options.lng : 0)
-				),
-				zoom: (options.zoom ? options.zoom : 10)
+				center: new google.maps.LatLng(0,0),
+				zoom: 10
 			};
 
 			this.el = node;
@@ -91,7 +88,7 @@ var GoogleMaps = {
 			
 			this.base(options);
 
-			this.options = _.extend({}, defaultMapOptions, this.options);
+			this.options = _.extend({}, defaultMapOptions, options);
 
 			this.api = new google.maps.Map(node, this.options);
 

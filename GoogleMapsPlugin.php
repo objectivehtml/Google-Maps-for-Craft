@@ -30,7 +30,7 @@ class GoogleMapsPlugin extends BasePlugin
             'geocodeSections' => array(AttributeType::Mixed, 'label' => 'Geocode Sections', 'default' => array()),
             'geocodeFields' => array(AttributeType::String, 'label' => 'Geocode Fields'),
             'mapFields' => array(AttributeType::Mixed, 'label' => 'Google Maps Fields', 'default' => array()),
-            //'apiKey'   => array(AttributeType::String, 'required' => true, 'label' => 'API Key'),
+            'apiKey'   => array(AttributeType::String, 'required' => true, 'label' => 'API Key'),
         );
     }
 

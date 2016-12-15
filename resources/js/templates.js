@@ -920,7 +920,7 @@ function program5(depth0,data,depth1) {
 function program7(depth0,data) {
   
   
-  return "http://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=2";
+  return "https://mt.googleapis.com/vt/icon/name=icons/spotlight/spotlight-poi.png&scale=2";
   }
 
 function program9(depth0,data) {

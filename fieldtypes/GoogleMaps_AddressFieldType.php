@@ -64,12 +64,15 @@ class GoogleMaps_AddressFieldType extends BaseFieldType
     { 
         $id = craft()->templates->formatInputId($name);
 
+        $pluginSettings = craft()->plugins->getPlugin('GoogleMaps')->getSettings();
+        $key = $pluginSettings->apiKey;
+
         // Figure out what that ID is going to look like once it has been namespaced
         $namespacedId = craft()->templates->namespaceInputId($id);
         
         craft()->templates->includeJsResource('googlemaps/js/app.compiled.js');
         craft()->templates->includeCssResource('googlemaps/css/app.css');
-        craft()->templates->includeJsFile('//maps.googleapis.com/maps/api/js?key=&sensor=false&callback=GoogleMaps.init');
+        craft()->templates->includeJsFile('//maps.googleapis.com/maps/api/js?key='.$key.'&sensor=false&callback=GoogleMaps.init');
 
         craft()->templates->includeJs("
         var data = ['#$namespacedId-field .oh-google-map-wrapper', {

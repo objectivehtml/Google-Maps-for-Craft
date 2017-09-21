@@ -14,9 +14,10 @@ class GoogleMaps_TemplatesService extends BaseApplicationComponent
             $protocol = 'http://';
         }
 
-        $key = craft()->config->get('key', 'googlemaps');
+        $pluginSettings = craft()->plugins->getPlugin('GoogleMaps')->getSettings();
+        $key = $pluginSettings->apiKey;
 
-        craft()->templates->includeJsFile($protocol . 'maps.google.com/maps/api/js?sensor=true&libraries=geometry'.($key ? 'key='.$key : ''));
+        craft()->templates->includeJsFile($protocol . 'maps.google.com/maps/api/js?sensor=true&libraries=geometry'.($key ? '&key='.$key : ''));
         craft()->templates->includeJsResource('googlemaps/js/vendor/base.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/underscore.js');
         craft()->templates->includeJsResource('googlemaps/js/vendor/markerclusterer.js');

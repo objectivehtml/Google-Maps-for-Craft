@@ -42,3 +42,12 @@
 	value: settings.geocodeFields,
 	rows: 10
 }) }}
+
+{{ forms.textField({
+label: "API Key"|t,
+instructions: "Enter the Google API Key."|t,
+id: 'apiKey',
+name: 'apiKey',
+value: settings.apiKey,
+required: true
+}) }}

@@ -30,7 +30,7 @@ class GoogleMapsPlugin extends BasePlugin
             'geocodeSections' => array(AttributeType::Mixed, 'label' => 'Geocode Sections', 'default' => array()),
             'geocodeFields' => array(AttributeType::String, 'label' => 'Geocode Fields'),
             'mapFields' => array(AttributeType::Mixed, 'label' => 'Google Maps Fields', 'default' => array()),
-            //'apiKey'   => array(AttributeType::String, 'required' => true, 'label' => 'API Key'),
+            'apiKey'   => array(AttributeType::String, 'required' => true, 'label' => 'API Key'),
         );
     }
 
@@ -81,9 +81,10 @@ class GoogleMapsPlugin extends BasePlugin
             {    
                 $entry = $event->params['entry'];
                 $content = $entry->getContent();
+                $geocodeSettings = is_array($settings->geocodeSections) ? $settings->geocodeSections : [];
 
                 // If section being saved matches a section set in the geocode settings
-                if(in_array($entry->sectionId, $settings->geocodeSections))
+                if(in_array($entry->sectionId, $geocodeSettings))
                 {
                     $address = array();
 
